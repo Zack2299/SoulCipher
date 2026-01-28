@@ -1,9 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://bsebdlhti6148"]
+[gd_scene load_steps=7 format=3 uid="uid://bsebdlhti6148"]
 
 [ext_resource type="Texture2D" uid="uid://dgtjwxa7s4iu7" path="res://assets/environment/mansion_exterior.png" id="1_trkl4"]
 [ext_resource type="Texture2D" uid="uid://dqcj1b443vj8o" path="res://assets/ui/soul_cipher_logo.png" id="2_nr8di"]
 [ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="3_bsphc"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="3_wcn2r"]
+[ext_resource type="PackedScene" uid="uid://dsfr0tf8o28ld" path="res://ui/lobby/lobby.tscn" id="5_veixt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bsphc"]
 size = Vector2(239, 122)
@@ -34,3 +35,5 @@ shape = SubResource("RectangleShape2D_bsphc")
 
 [node name="Relocator" parent="." instance=ExtResource("3_wcn2r")]
 position = Vector2(108, 79)
+scene_to_switch_to = ExtResource("5_veixt")
+change_scene_to_packed = true

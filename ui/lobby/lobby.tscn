@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dsfr0tf8o28ld"]
+
+[ext_resource type="Texture2D" uid="uid://bslvrtcipln2a" path="res://assets/environment/lobby.png" id="1_l4sf2"]
+
+[node name="Lobby" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_l4sf2")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
