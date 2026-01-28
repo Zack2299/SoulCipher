@@ -18,6 +18,7 @@ config/icon="uid://bb7sv1iig47al"
 [autoload]
 
 Cursor="*res://autoload/cursor.tscn"
+SceneTransition="*res://autoload/scene_transition.tscn"
 
 [display]
 

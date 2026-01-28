@@ -1,15 +1,31 @@
-[gd_scene load_steps=6 format=3 uid="uid://gkef1oswnf8e"]
+[gd_scene load_steps=8 format=3 uid="uid://gkef1oswnf8e"]
 
 [ext_resource type="Script" uid="uid://dossvicya01dr" path="res://entities/relocator/relocator.gd" id="1_iayyg"]
 [ext_resource type="Texture2D" uid="uid://lu5kbnymdctv" path="res://assets/entities/relocator.png" id="1_iwgsx"]
 [ext_resource type="PackedScene" uid="uid://cq4v88u75nlbj" path="res://component/clickable_area.tscn" id="1_kytp6"]
 [ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="4_7e0wv"]
+[ext_resource type="AudioStream" uid="uid://lf5165ja3seq" path="res://assets/sounds/menu_24.wav" id="4_n6x5d"]
+[ext_resource type="AudioStream" uid="uid://hopxbshs06v3" path="res://assets/sounds/menu_25.wav" id="5_awoa7"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_iwgsx"]
 radius = 13.0
 
 [node name="Relocator" type="Node2D"]
 script = ExtResource("1_iayyg")
+
+[node name="ClickableArea" parent="." node_paths=PackedStringArray("area_2d", "exit_audio", "click_audio") instance=ExtResource("1_kytp6")]
+area_2d = NodePath("../Area2D")
+exit_audio = NodePath("../ExitAudioStreamPlayer")
+click_audio = NodePath("../ClickAudioStreamPlayer")
+
+[node name="HoverableArea" parent="." node_paths=PackedStringArray("area_2d") instance=ExtResource("4_7e0wv")]
+area_2d = NodePath("../Area2D")
+
+[node name="ExitAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_n6x5d")
+
+[node name="ClickAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_awoa7")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_iwgsx")
@@ -20,11 +36,6 @@ hframes = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_iwgsx")
 
-[node name="ClickableArea" parent="." node_paths=PackedStringArray("area_2d") instance=ExtResource("1_kytp6")]
-area_2d = NodePath("../Area2D")
-
-[node name="HoverableArea" parent="." node_paths=PackedStringArray("area_2d") instance=ExtResource("4_7e0wv")]
-area_2d = NodePath("../Area2D")
-
+[connection signal="mouse_clicked" from="ClickableArea" to="." method="_on_clickable_area_mouse_clicked"]
 [connection signal="mouse_entered_clickable_area" from="ClickableArea" to="." method="_on_clickable_area_mouse_entered_clickable_area"]
 [connection signal="mouse_exited_clickable_area" from="ClickableArea" to="." method="_on_clickable_area_mouse_exited_clickable_area"]

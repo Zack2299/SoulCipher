@@ -1,3 +1,8 @@
+# ---
+# Handles tween animations when hovering on an object.
+# ---
+
+
 extends Node
 
 @export var area_2d: Area2D
@@ -17,6 +22,7 @@ extends Node
 
 var tween: Tween
 
+
 func _ready() -> void:
 	if not parent is Node2D:
 		push_warning("HoverComponent: Parent must be a Node2D.")
@@ -25,11 +31,14 @@ func _ready() -> void:
 	area_2d.mouse_entered.connect(_on_mouse_entered)
 	area_2d.mouse_exited.connect(_on_mouse_exited)
 
+
 func _on_mouse_entered() -> void:
 	animate(hover_scale, enter_duration, enter_trans, enter_ease)
 
+
 func _on_mouse_exited() -> void:
 	animate(Vector2.ONE, exit_duration, exit_trans, exit_ease)
+
 
 func animate(target_scale: Vector2, duration: float, trans: Tween.TransitionType, easing: Tween.EaseType) -> void:
 	if tween:

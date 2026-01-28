@@ -1,11 +1,14 @@
 extends CanvasLayer
 
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
-	pass # Replace with function body.
-
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func change_scene(target_scene: PackedScene) -> void:
+	animation_player.play("fade") # fade to black
+	audio_stream_player.play()
+	
+	await animation_player.animation_finished
+	
+	get_tree().change_scene_to_packed(target_scene)
+	
+	animation_player.play_backwards("fade")
