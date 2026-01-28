@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqlix28q8dsj1"
-path="res://.godot/imported/title.png-801daee4c112e33ad23d76dc593ad1d0.ctex"
+uid="uid://dqcj1b443vj8o"
+path="res://.godot/imported/soul_cipher_logo.png-62754d2d5b26aff297090b056a30a9c0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/environment/title.png"
-dest_files=["res://.godot/imported/title.png-801daee4c112e33ad23d76dc593ad1d0.ctex"]
+source_file="res://assets/ui/soul_cipher_logo.png"
+dest_files=["res://.godot/imported/soul_cipher_logo.png-62754d2d5b26aff297090b056a30a9c0.ctex"]
 
 [params]
 
