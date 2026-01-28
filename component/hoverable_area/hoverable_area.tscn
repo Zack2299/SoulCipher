@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dlkp0eup1qydy"]
+
+[ext_resource type="Script" uid="uid://dhr1bu8ojl0nb" path="res://component/hoverable_area/hoverable_area.gd" id="1_4j0qv"]
+
+[node name="HoverableArea" type="Node"]
+script = ExtResource("1_4j0qv")

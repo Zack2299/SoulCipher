@@ -1,8 +1,12 @@
-[gd_scene load_steps=4 format=3 uid="uid://bsebdlhti6148"]
+[gd_scene load_steps=6 format=3 uid="uid://bsebdlhti6148"]
 
 [ext_resource type="Texture2D" uid="uid://dgtjwxa7s4iu7" path="res://assets/environment/mansion_exterior.png" id="1_trkl4"]
 [ext_resource type="Texture2D" uid="uid://dqcj1b443vj8o" path="res://assets/ui/soul_cipher_logo.png" id="2_nr8di"]
+[ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="3_bsphc"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="3_wcn2r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bsphc"]
+size = Vector2(239, 122)
 
 [node name="Titlescreen" type="Node2D"]
 
@@ -15,6 +19,18 @@ texture = ExtResource("1_trkl4")
 [node name="LogoSprite2D" type="Sprite2D" parent="."]
 position = Vector2(0, -37)
 texture = ExtResource("2_nr8di")
+
+[node name="HoverableArea" parent="LogoSprite2D" node_paths=PackedStringArray("area_2d") instance=ExtResource("3_bsphc")]
+area_2d = NodePath("../Area2D")
+hover_scale = Vector2(1.1, 1.1)
+enter_duration = 0.5
+exit_trans = 10
+
+[node name="Area2D" type="Area2D" parent="LogoSprite2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LogoSprite2D/Area2D"]
+position = Vector2(-2.5, -6)
+shape = SubResource("RectangleShape2D_bsphc")
 
 [node name="Relocator" parent="." instance=ExtResource("3_wcn2r")]
 position = Vector2(108, 79)

@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://gkef1oswnf8e"]
+[gd_scene load_steps=6 format=3 uid="uid://gkef1oswnf8e"]
 
 [ext_resource type="Script" uid="uid://dossvicya01dr" path="res://entities/relocator/relocator.gd" id="1_iayyg"]
 [ext_resource type="Texture2D" uid="uid://lu5kbnymdctv" path="res://assets/entities/relocator.png" id="1_iwgsx"]
 [ext_resource type="PackedScene" uid="uid://cq4v88u75nlbj" path="res://component/clickable_area.tscn" id="1_kytp6"]
+[ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="4_7e0wv"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_iwgsx"]
 radius = 13.0
@@ -20,6 +21,9 @@ hframes = 2
 shape = SubResource("CircleShape2D_iwgsx")
 
 [node name="ClickableArea" parent="." node_paths=PackedStringArray("area_2d") instance=ExtResource("1_kytp6")]
+area_2d = NodePath("../Area2D")
+
+[node name="HoverableArea" parent="." node_paths=PackedStringArray("area_2d") instance=ExtResource("4_7e0wv")]
 area_2d = NodePath("../Area2D")
 
 [connection signal="mouse_entered_clickable_area" from="ClickableArea" to="." method="_on_clickable_area_mouse_entered_clickable_area"]
