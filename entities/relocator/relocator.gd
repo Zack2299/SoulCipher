@@ -47,12 +47,12 @@ func spawn_and_switch() -> void:
 	elif room_name_to_switch_to != "": # otherwise just change visibility rather than destroying
 	
 		if set_parent_invisible:
-			var target_room = get_tree().root.find_child(room_name_to_switch_to, true, false)
+			var target_room = get_node("/root/World/RoomManager/" + room_name_to_switch_to)
 			var room_to_set_invisible = get_parent()
 			SceneTransition.change_scene_room_name(room_name_to_switch_to, target_room, room_to_set_invisible, set_parent_invisible)
 		else:
 			room_name_to_switch_to = SceneTransition.room_history_queue.pop_front()
-			var target_room = get_tree().root.find_child(room_name_to_switch_to, true, false)
+			var target_room = get_node("/root/World/RoomManager/" + room_name_to_switch_to)
 			var target_invis_room = get_tree().root.find_child(SceneTransition.current_room, true, false)
 			SceneTransition.change_scene_room_name(room_name_to_switch_to, target_room, target_invis_room, set_parent_invisible)
 		

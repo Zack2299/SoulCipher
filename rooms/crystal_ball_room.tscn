@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://cophnjcpxg3j2"]
 
-[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://rooms/room.tscn" id="1_te07q"]
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_te07q"]
 [ext_resource type="Texture2D" uid="uid://5eo6dw0je20s" path="res://assets/environment/crystal_ball_room.png" id="2_blawb"]
 
 [node name="CrystalBallRoom" instance=ExtResource("1_te07q")]

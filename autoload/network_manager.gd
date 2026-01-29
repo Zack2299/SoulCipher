@@ -49,10 +49,17 @@ func _on_connected_to_server():
 	var id = multiplayer.get_unique_id()
 	register_player_info.rpc(id, local_username)
 
-@rpc("any_peer", "call_local", "reliable")
+@rpc("any_peer", "reliable")
 func register_player_info(id: int, p_name: String):
-	player_info[id] = p_name
-	print("Registered: %s (%d)" % [p_name, id])
+	if multiplayer.is_server():
+		player_info[id] = p_name
+		# send updated dictionary to everyone
+		update_player_list.rpc(player_info)
+
+@rpc("authority", "reliable")
+func update_player_list(new_info: Dictionary):
+	player_info = new_info
+	print("Player list updated: ", player_info)
 
 func start_game_for_all():
 	if multiplayer.is_server():
@@ -60,4 +67,4 @@ func start_game_for_all():
 
 @rpc("any_peer", "call_local", "reliable")
 func rpc_load_game_scene():
-	SceneTransition.change_scene_packed(load("res://scenes/game.tscn"))
+	SceneTransition.change_scene_packed(load("uid://i0m57dlbwrbl"))

@@ -11,6 +11,7 @@ var rooms_array: Array[Node] = []
 
 
 func _ready() -> void:
+	NetworkManager.current_world_node = self
 	load_scenes_from_folder()
 	spawn_rooms_to_world(loaded_scenes)
 
@@ -49,7 +50,8 @@ func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 			else:
 				room_instance.visible = false
 
-	room_manager.generate_mansion(rooms_array)
+	if multiplayer.is_server():
+		room_manager.generate_mansion(rooms_array)
 
 func _process(_delta: float) -> void:
 	previous_room_relocator.room_name_to_switch_to = SceneTransition.previous_room

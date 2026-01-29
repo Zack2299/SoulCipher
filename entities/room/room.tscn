@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c3uh1wgf8tmll"]
 
-[ext_resource type="Script" uid="uid://bcqaf73bnbfuf" path="res://rooms/room.gd" id="1_nk0be"]
+[ext_resource type="Script" uid="uid://bcqaf73bnbfuf" path="res://entities/room/room.gd" id="1_nk0be"]
 
 [node name="Room" type="Node2D" groups=["room_group"]]
 script = ExtResource("1_nk0be")
