@@ -21,15 +21,17 @@ replication_config = SubResource("SceneReplicationConfig_kmqa5")
 zoom = Vector2(3, 3)
 
 [node name="PreviousRoomRelocator" parent="." instance=ExtResource("1_kmqa5")]
+visible = false
 z_index = 100
 z_as_relative = false
 position = Vector2(-295, -155)
 set_parent_invisible = false
+is_fixed_navigation = true
 
 [node name="RoomManager" parent="." instance=ExtResource("3_ul5md")]
 
 [node name="PlayersData" type="Node2D" parent="."]
 
 [node name="RoomMultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://c3uh1wgf8tmll", "uid://bk0ra72elai2u")
+_spawnable_scenes = PackedStringArray("uid://bk0ra72elai2u")
 spawn_path = NodePath("../RoomManager")

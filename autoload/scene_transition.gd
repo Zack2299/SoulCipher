@@ -30,13 +30,16 @@ func change_scene_packed(target_scene: PackedScene) -> void:
 
 
 func change_scene_room_name(target_room_name: String, target_room: Node, room_to_set_invisible: Node, set_parent_invisible: bool) -> void:
-	animation_player.play("fade") # fade to black
+	animation_player.play("fade")
 	woosh_audio_stream_player.play()
 	
 	await animation_player.animation_finished
 	
 	if set_parent_invisible:
+		# Before we change current_room, save it as previous_room
+		previous_room = current_room 
 		room_history_queue.push_front(current_room)
+		
 	current_room = target_room_name
 
 	# change scene (no deletion)

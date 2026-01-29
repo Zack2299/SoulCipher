@@ -40,10 +40,10 @@ func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 	for scene in scenes_array:
 		if scene:
 			var room_instance = scene.instantiate()
+			room_instance.name = scene.resource_path.get_file().get_basename()
 			room_manager.add_child(room_instance)
 			rooms_array.push_back(room_instance)
 			
-			room_instance.name = scene.resource_path.get_file().get_basename()
 			print(room_instance.name)
 			if room_instance.name == "staircase":
 				room_instance.visible = true
@@ -51,7 +51,8 @@ func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 				room_instance.visible = false
 
 	if multiplayer.is_server():
-		room_manager.generate_mansion(rooms_array)
+		# Give the clients a moment to finish their own loop before sending the map
+		get_tree().create_timer(0.5).timeout.connect(func(): room_manager.generate_mansion(rooms_array))
 
 func _process(_delta: float) -> void:
 	previous_room_relocator.room_name_to_switch_to = SceneTransition.previous_room

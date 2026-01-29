@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bkvei165h2wu6"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_5eq83"]
+[ext_resource type="Texture2D" uid="uid://8tukvjp5ghbr" path="res://assets/environment/bugcatcher's room.png" id="2_xw0qf"]
+
+[node name="BugcatchersRoom" instance=ExtResource("1_5eq83")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_xw0qf")

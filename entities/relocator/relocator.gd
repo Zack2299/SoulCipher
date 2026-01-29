@@ -1,18 +1,23 @@
 extends Node
 
+enum RelocatorSide { LEFT, RIGHT, NEUTRAL }
+@export var relocator_side: RelocatorSide = RelocatorSide.NEUTRAL
 @export var scene_to_switch_to: PackedScene
 @export var room_name_to_switch_to: String
 @export var set_parent_invisible: bool = true 
+@export var is_fixed_navigation: bool = false
 # ^ for when relocator is not in a room (the previous room relocator in world -- never want to set world invisible)
+@export var relocator_index: int
 
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var area_2d: Area2D = $Area2D
 @onready var clickable_area: Node = $ClickableArea
 
-var transition_time_with_buffer = 1.25
+var transition_time_with_buffer = 1.1
 
 
 func _ready() -> void:
+	
 	clickable_area.mouse_clicked.connect(_on_clickable_area_mouse_clicked)
 	clickable_area.mouse_entered_clickable_area.connect\
 		(_on_clickable_area_mouse_entered_clickable_area)
@@ -32,6 +37,10 @@ func _on_clickable_area_mouse_exited_clickable_area() -> void:
 
 
 func _on_clickable_area_mouse_clicked() -> void:
+	if room_name_to_switch_to == "" and not scene_to_switch_to:
+		print("Relocator clicked, but no target room assigned by RoomManager!")
+		return
+		
 	Cursor.is_hovering = false
 	area_2d.visible = false
 	spawn_and_switch()
