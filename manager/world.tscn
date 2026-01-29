@@ -1,10 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=3 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
+[ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_gfoh4")
 rooms_file_path = "res://rooms"
+
+[node name="PreviousRoomRelocator" parent="." instance=ExtResource("1_kmqa5")]
+z_index = 100
+z_as_relative = false
+position = Vector2(-295, -155)
+set_parent_invisible = false
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(3, 3)

@@ -1,7 +1,10 @@
 extends Node2D
 
 @onready var rooms_container = $Rooms
+@onready var previous_room_relocator: Node2D = $PreviousRoomRelocator
+
 @export_dir var rooms_file_path: String = "res://rooms/"
+
 var loaded_scenes: Array[PackedScene] = []
 
 
@@ -27,7 +30,7 @@ func load_scenes_from_folder() -> void:
 			
 			file_name = dir.get_next()
 	else:
-		print("An error occurred when trying to access the path.")
+		print("Couldn't access path.")
 
 
 func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
@@ -42,3 +45,12 @@ func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 				room_instance.visible = true
 			else:
 				room_instance.visible = false
+
+
+func _process(delta: float) -> void:
+	previous_room_relocator.room_name_to_switch_to = SceneTransition.previous_room
+	
+	if SceneTransition.current_room == "staircase":
+		previous_room_relocator.visible = false
+	else:
+		previous_room_relocator.visible = true

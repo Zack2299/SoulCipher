@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://c6qp6n46yxkmv"]
+[gd_scene load_steps=7 format=3 uid="uid://c6qp6n46yxkmv"]
 
 [ext_resource type="Script" uid="uid://biuy3kwkmk505" path="res://autoload/scene_transition.gd" id="1_iv46m"]
 [ext_resource type="AudioStream" uid="uid://6a7bf7qmh0wt" path="res://assets/sounds/Impact_2.wav" id="2_0pvkb"]
+[ext_resource type="AudioStream" uid="uid://ru2kucndjy3e" path="res://assets/sounds/doorclose0.mp3" id="3_myuox"]
 
 [sub_resource type="Animation" id="Animation_iv46m"]
 resource_name = "fade"
@@ -42,8 +43,11 @@ _data = {
 [node name="SceneTransition" type="CanvasLayer"]
 script = ExtResource("1_iv46m")
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="WooshAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_0pvkb")
+
+[node name="DoorAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_myuox")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 z_index = 100
