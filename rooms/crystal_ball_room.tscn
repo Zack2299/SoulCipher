@@ -1,8 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://cophnjcpxg3j2"]
+[gd_scene load_steps=3 format=3 uid="uid://cophnjcpxg3j2"]
 
-[ext_resource type="Texture2D" uid="uid://5eo6dw0je20s" path="res://assets/environment/crystal_ball_room.png" id="1_te07q"]
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://rooms/room.tscn" id="1_te07q"]
+[ext_resource type="Texture2D" uid="uid://5eo6dw0je20s" path="res://assets/environment/crystal_ball_room.png" id="2_blawb"]
 
-[node name="CrystalBallRoom" type="Node2D" groups=["room_group"]]
+[node name="CrystalBallRoom" instance=ExtResource("1_te07q")]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_te07q")
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_blawb")

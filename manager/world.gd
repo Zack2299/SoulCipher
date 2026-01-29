@@ -1,11 +1,13 @@
 extends Node2D
 
-@onready var rooms_container = $Rooms
+#@onready var rooms_container = $Rooms
+@onready var room_manager: Node2D = $RoomManager
 @onready var previous_room_relocator: Node2D = $PreviousRoomRelocator
 
 @export_dir var rooms_file_path: String = "res://rooms/"
 
 var loaded_scenes: Array[PackedScene] = []
+var rooms_array: Array[Node] = []
 
 
 func _ready() -> void:
@@ -37,7 +39,8 @@ func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 	for scene in scenes_array:
 		if scene:
 			var room_instance = scene.instantiate()
-			rooms_container.add_child(room_instance)
+			room_manager.add_child(room_instance)
+			rooms_array.push_back(room_instance)
 			
 			room_instance.name = scene.resource_path.get_file().get_basename()
 			print(room_instance.name)
@@ -46,8 +49,9 @@ func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 			else:
 				room_instance.visible = false
 
+	room_manager.generate_mansion(rooms_array)
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	previous_room_relocator.room_name_to_switch_to = SceneTransition.previous_room
 	
 	if SceneTransition.current_room == "staircase":

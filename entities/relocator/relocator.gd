@@ -9,7 +9,7 @@ extends Node
 @onready var area_2d: Area2D = $Area2D
 @onready var clickable_area: Node = $ClickableArea
 
-var transition_time_with_buffer = 1.1
+var transition_time_with_buffer = 1.25
 
 
 func _ready() -> void:
@@ -55,5 +55,12 @@ func spawn_and_switch() -> void:
 			var target_room = get_tree().root.find_child(room_name_to_switch_to, true, false)
 			var target_invis_room = get_tree().root.find_child(SceneTransition.current_room, true, false)
 			SceneTransition.change_scene_room_name(room_name_to_switch_to, target_room, target_invis_room, set_parent_invisible)
+		
+		# tell everyone where we are headed
+		var my_id = multiplayer.get_unique_id()
+		var my_data_node = get_node("/root/World/PlayersData/" + str(my_id))
+		if my_data_node:
+			my_data_node.change_room.rpc(room_name_to_switch_to)
+		
 	else:
 		print("Nothing assigned!")

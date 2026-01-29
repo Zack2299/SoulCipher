@@ -1,11 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=5 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
+[ext_resource type="PackedScene" uid="uid://bxp1idflyosfq" path="res://manager/room_manager.tscn" id="3_ul5md"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kmqa5"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_gfoh4")
 rooms_file_path = "res://rooms"
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_kmqa5")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
 
 [node name="PreviousRoomRelocator" parent="." instance=ExtResource("1_kmqa5")]
 z_index = 100
@@ -13,9 +22,10 @@ z_as_relative = false
 position = Vector2(-295, -155)
 set_parent_invisible = false
 
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(3, 3)
-
-[node name="Rooms" type="Node2D" parent="."]
+[node name="RoomManager" parent="." instance=ExtResource("3_ul5md")]
 
 [node name="PlayersData" type="Node2D" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://8k8cvx04knj7")
+spawn_path = NodePath("../PlayersData")

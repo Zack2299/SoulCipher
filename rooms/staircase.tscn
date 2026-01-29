@@ -1,23 +1,23 @@
-[gd_scene load_steps=3 format=3 uid="uid://bk0ra72elai2u"]
+[gd_scene load_steps=4 format=3 uid="uid://bk0ra72elai2u"]
 
-[ext_resource type="Texture2D" uid="uid://csfqiqooosreu" path="res://assets/environment/staircase.png" id="1_282k6"]
-[ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="2_liuqn"]
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://rooms/room.tscn" id="1_282k6"]
+[ext_resource type="Texture2D" uid="uid://csfqiqooosreu" path="res://assets/environment/staircase.png" id="2_liuqn"]
+[ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="3_m4j20"]
 
-[node name="Staircase" type="Node2D" groups=["room_group"]]
+[node name="Staircase" instance=ExtResource("1_282k6")]
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_282k6")
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_liuqn")
 
-[node name="Relocator" parent="." instance=ExtResource("2_liuqn")]
-position = Vector2(-227, -124)
+[node name="Relocator" parent="." index="1" instance=ExtResource("3_m4j20")]
+position = Vector2(228, -109)
 room_name_to_switch_to = "crystal_ball_room"
 
-[node name="Relocator2" parent="." instance=ExtResource("2_liuqn")]
-position = Vector2(229, -124)
-room_name_to_switch_to = "ballroom"
+[node name="Relocator2" parent="." index="2" instance=ExtResource("3_m4j20")]
+position = Vector2(-227, -111)
 
-[node name="Relocator3" parent="." instance=ExtResource("2_liuqn")]
-position = Vector2(-131, 28)
+[node name="Relocator3" parent="." index="3" instance=ExtResource("3_m4j20")]
+position = Vector2(-129, 29)
 
-[node name="Relocator4" parent="." instance=ExtResource("2_liuqn")]
-position = Vector2(133, 32)
+[node name="Relocator4" parent="." index="4" instance=ExtResource("3_m4j20")]
+position = Vector2(134, 31)

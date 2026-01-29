@@ -37,7 +37,7 @@ func change_scene_room_name(target_room_name: String, target_room: Node, room_to
 	
 	if set_parent_invisible:
 		room_history_queue.push_front(current_room)
-	SceneTransition.current_room = target_room_name
+	current_room = target_room_name
 
 	# change scene (no deletion)
 	if target_room:
@@ -46,6 +46,7 @@ func change_scene_room_name(target_room_name: String, target_room: Node, room_to
 	if room_to_set_invisible:
 		room_to_set_invisible.visible = false
 	
-	#door_audio_stream_player.play()
+	if current_room == "staircase":
+		door_audio_stream_player.play()
 	
 	animation_player.play_backwards("fade")

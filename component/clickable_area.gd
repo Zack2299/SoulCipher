@@ -23,7 +23,7 @@ func _ready() -> void:
 	area_2d.mouse_exited.connect(_on_mouse_exited)
 
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if is_locally_hovered and Input.is_action_just_pressed("click"):
 		mouse_clicked.emit()
 		
