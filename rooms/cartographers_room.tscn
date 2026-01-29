@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://356yenidxrdy"]
+
+[ext_resource type="Texture2D" uid="uid://dnf51ho10v0lf" path="res://assets/environment/cartographer's room.png" id="1_26ewc"]
+
+[node name="CartographersRoom" type="Node2D" groups=["room_group"]]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_26ewc")

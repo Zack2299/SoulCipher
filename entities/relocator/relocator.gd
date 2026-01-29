@@ -26,6 +26,8 @@ func _on_clickable_area_mouse_clicked() -> void:
 	Cursor.is_hovering = false
 	area_2d.visible = false
 	spawn_and_switch()
+	await get_tree().create_timer(1.1).timeout
+	area_2d.visible = true
 
 
 func spawn_and_switch() -> void:
