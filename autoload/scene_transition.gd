@@ -8,6 +8,12 @@ extends CanvasLayer
 var previous_room: String = "staircase"
 var current_room: String = "staircase"
 
+var room_history_queue: Array = []
+
+
+func _ready() -> void:
+	room_history_queue.push_front(current_room) # should never reach here
+
 
 func change_scene_packed(target_scene: PackedScene) -> void:
 	animation_player.play("fade") # fade to black
@@ -23,13 +29,14 @@ func change_scene_packed(target_scene: PackedScene) -> void:
 	animation_player.play_backwards("fade")
 
 
-func change_scene_room_name(target_room_name: String, target_room: Node, room_to_set_invisible: Node) -> void:
+func change_scene_room_name(target_room_name: String, target_room: Node, room_to_set_invisible: Node, set_parent_invisible: bool) -> void:
 	animation_player.play("fade") # fade to black
 	woosh_audio_stream_player.play()
 	
 	await animation_player.animation_finished
 	
-	SceneTransition.previous_room = SceneTransition.current_room
+	if set_parent_invisible:
+		room_history_queue.push_front(current_room)
 	SceneTransition.current_room = target_room_name
 
 	# change scene (no deletion)
