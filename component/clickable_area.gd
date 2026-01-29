@@ -1,6 +1,6 @@
 # ---
 # Handles cursor updates and sounds (if available)
-# Area2D necessary, audio can be left blank
+# Area2D necessary, audio ca
 # ---
 
 extends Node
@@ -14,6 +14,8 @@ signal mouse_entered_clickable_area
 signal mouse_exited_clickable_area
 signal mouse_clicked
 
+var is_locally_hovered: bool = false
+
 
 func _ready() -> void:
 	area_2d.input_pickable = true
@@ -22,7 +24,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if Cursor.is_hovering and Input.is_action_just_pressed("click"):
+	if is_locally_hovered and Input.is_action_just_pressed("click"):
 		mouse_clicked.emit()
 		
 		if click_audio:
@@ -30,6 +32,7 @@ func _process(delta: float) -> void:
 
 
 func _on_mouse_entered():
+	is_locally_hovered = true
 	Cursor.is_hovering = true
 	mouse_entered_clickable_area.emit()
 	
@@ -38,6 +41,7 @@ func _on_mouse_entered():
 
 
 func _on_mouse_exited():
+	is_locally_hovered = false
 	Cursor.is_hovering = false
 	mouse_exited_clickable_area.emit()
 	

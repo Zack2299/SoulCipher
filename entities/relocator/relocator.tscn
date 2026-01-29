@@ -8,6 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://hopxbshs06v3" path="res://assets/sounds/menu_25.wav" id="5_awoa7"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_iwgsx"]
+resource_local_to_scene = true
 radius = 13.0
 
 [node name="Relocator" type="Node2D"]
@@ -35,7 +36,3 @@ hframes = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("CircleShape2D_iwgsx")
-
-[connection signal="mouse_clicked" from="ClickableArea" to="." method="_on_clickable_area_mouse_clicked"]
-[connection signal="mouse_entered_clickable_area" from="ClickableArea" to="." method="_on_clickable_area_mouse_entered_clickable_area"]
-[connection signal="mouse_exited_clickable_area" from="ClickableArea" to="." method="_on_clickable_area_mouse_exited_clickable_area"]

@@ -1,5 +1,5 @@
 # ---
-# Handles tween animations when hovering on an object.
+# Handles tween animations when hovering an object.
 # ---
 
 

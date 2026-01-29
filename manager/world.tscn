@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://i0m57dlbwrbl"]
+
+[ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
+
+[node name="World" type="Node2D"]
+script = ExtResource("1_gfoh4")
+rooms_file_path = "res://rooms"
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
+
+[node name="Rooms" type="Node2D" parent="."]
+
+[node name="PlayersData" type="Node2D" parent="."]

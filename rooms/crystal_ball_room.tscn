@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cophnjcpxg3j2"]
+
+[ext_resource type="Texture2D" uid="uid://5eo6dw0je20s" path="res://assets/environment/crystal_ball_room.png" id="1_te07q"]
+
+[node name="CrystalBallRoom" type="Node2D" groups=["room_group"]]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_te07q")
