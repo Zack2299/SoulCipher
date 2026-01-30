@@ -16,4 +16,3 @@ relocator_side = 0
 [node name="Relocator2" parent="." index="2" instance=ExtResource("3_t6wro")]
 position = Vector2(0, 59)
 relocator_side = 1
-relocator_index = 1

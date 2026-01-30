@@ -1,0 +1,18 @@
+[gd_scene load_steps=4 format=3 uid="uid://c36hlrdfcoq0k"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_n7hdl"]
+[ext_resource type="Texture2D" uid="uid://bs2r5vynrq5bv" path="res://assets/environment/altar_room.png" id="2_l8cdg"]
+[ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="3_wxpam"]
+
+[node name="AltarRoom" instance=ExtResource("1_n7hdl")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_l8cdg")
+
+[node name="Relocator" parent="." index="1" instance=ExtResource("3_wxpam")]
+position = Vector2(-284, 17)
+relocator_side = 0
+
+[node name="Relocator2" parent="." index="2" instance=ExtResource("3_wxpam")]
+position = Vector2(317, 20)
+relocator_side = 1

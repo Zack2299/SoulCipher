@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://3doqavdm6wgi"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_0r5mh"]
+[ext_resource type="Texture2D" uid="uid://cwb0lcwl3eu0m" path="res://assets/environment/alchemy_room.png" id="2_4in71"]
+
+[node name="AlchemyRoom" instance=ExtResource("1_0r5mh")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_4in71")

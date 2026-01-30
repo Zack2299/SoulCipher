@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bwqcpjpgworkt"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_4saxh"]
+[ext_resource type="Texture2D" uid="uid://skwlomxuk5y1" path="res://assets/environment/dining_hall.png" id="2_coc8p"]
+[ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="3_4ysp7"]
+
+[node name="DiningHall" instance=ExtResource("1_4saxh")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_coc8p")
+
+[node name="Relocator" parent="." index="1" instance=ExtResource("3_4ysp7")]
+position = Vector2(-240, -27)
+relocator_side = 0
+
+[node name="Relocator2" parent="." index="2" instance=ExtResource("3_4ysp7")]
+position = Vector2(-53, -32)
+
+[node name="Relocator3" parent="." index="3" instance=ExtResource("3_4ysp7")]
+position = Vector2(262, -33)
+relocator_side = 1

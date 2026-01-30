@@ -16,14 +16,11 @@ relocator_side = 0
 [node name="Relocator2" parent="." index="2" instance=ExtResource("3_m4j20")]
 position = Vector2(230, -112)
 relocator_side = 1
-relocator_index = 1
 
 [node name="Relocator3" parent="." index="3" instance=ExtResource("3_m4j20")]
 position = Vector2(-129, 29)
 relocator_side = 0
-relocator_index = 2
 
 [node name="Relocator4" parent="." index="4" instance=ExtResource("3_m4j20")]
 position = Vector2(134, 31)
 relocator_side = 1
-relocator_index = 3

@@ -39,7 +39,7 @@ func change_scene_room_name(target_room_name: String, target_room: Node, room_to
 	
 	if set_parent_invisible:
 		# store the room we are leaving AND the door index used to leave it
-		room_history_queue.push_front({
+		room_history_queue.push_back({
 			"name": current_room,
 			"door_index": used_door_index
 		})

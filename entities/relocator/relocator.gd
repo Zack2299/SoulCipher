@@ -7,7 +7,7 @@ enum RelocatorSide { LEFT, RIGHT, NEUTRAL }
 @export var set_parent_invisible: bool = true 
 @export var is_fixed_navigation: bool = false
 # ^ for when relocator is not in a room (the previous room relocator in world -- never want to set world invisible)
-@export var relocator_index: int
+var relocator_index: int
 
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var area_2d: Area2D = $Area2D
@@ -17,6 +17,8 @@ var transition_time_with_buffer = 1.1
 
 
 func _ready() -> void:
+	if is_fixed_navigation:
+		sprite_2d.texture = preload("uid://cmnkt2q6uyoxj")
 	
 	clickable_area.mouse_clicked.connect(_on_clickable_area_mouse_clicked)
 	clickable_area.mouse_entered_clickable_area.connect\
@@ -64,7 +66,7 @@ func spawn_and_switch() -> void:
 		var leaving_room_name = SceneTransition.current_room
 		
 		# 2. Pop the target
-		var history_data = SceneTransition.room_history_queue.pop_front()
+		var history_data = SceneTransition.room_history_queue.pop_back()
 		target_name = history_data["name"]
 		var return_door_index = history_data["door_index"]
 		

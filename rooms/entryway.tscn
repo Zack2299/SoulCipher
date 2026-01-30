@@ -1,0 +1,31 @@
+[gd_scene load_steps=4 format=3 uid="uid://djnvq0ga7p0h8"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_36bp1"]
+[ext_resource type="Texture2D" uid="uid://b4dklm773jtbf" path="res://assets/environment/entryway.png" id="2_5wa4x"]
+[ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="3_alyp0"]
+
+[node name="Entryway" instance=ExtResource("1_36bp1")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_5wa4x")
+
+[node name="Relocator" parent="." index="1" instance=ExtResource("3_alyp0")]
+position = Vector2(-249, 51)
+relocator_side = 0
+room_name_to_switch_to = null
+set_parent_invisible = null
+is_fixed_navigation = null
+
+[node name="Relocator2" parent="." index="2" instance=ExtResource("3_alyp0")]
+position = Vector2(-53, 57)
+relocator_side = null
+room_name_to_switch_to = null
+set_parent_invisible = null
+is_fixed_navigation = null
+
+[node name="Relocator3" parent="." index="3" instance=ExtResource("3_alyp0")]
+position = Vector2(282, 73)
+relocator_side = 1
+room_name_to_switch_to = null
+set_parent_invisible = null
+is_fixed_navigation = null

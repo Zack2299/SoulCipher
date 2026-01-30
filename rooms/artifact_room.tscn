@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://chidj87nq4h71"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_7rxke"]
+[ext_resource type="Texture2D" uid="uid://ckr8ttbvnya8t" path="res://assets/environment/artifact_room.png" id="2_8btb8"]
+
+[node name="ArtifactRoom" instance=ExtResource("1_7rxke")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_8btb8")

@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://c8wpd0xf514qj"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_gi0kc"]
+[ext_resource type="Texture2D" uid="uid://bodjoihphg4cf" path="res://assets/environment/wine_cellar.png" id="2_1haol"]
+
+[node name="WineCellar" instance=ExtResource("1_gi0kc")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_1haol")
