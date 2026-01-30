@@ -17,9 +17,10 @@ func _ready() -> void:
 
 func change_scene_packed(target_scene: PackedScene) -> void:
 	animation_player.play("fade") # fade to black
-	woosh_audio_stream_player.play()
 	
 	await animation_player.animation_finished
+	
+	woosh_audio_stream_player.play()
 	
 	# change scene (deletion)
 	get_tree().change_scene_to_packed(target_scene)
@@ -29,27 +30,47 @@ func change_scene_packed(target_scene: PackedScene) -> void:
 	animation_player.play_backwards("fade")
 
 
-func change_scene_room_name(target_room_name: String, target_room: Node, room_to_set_invisible: Node, set_parent_invisible: bool) -> void:
+func change_scene_room_name(target_room_name: String, target_room: Node, room_to_set_invisible: Node, set_parent_invisible: bool, used_door_index: int = -1) -> void:
 	animation_player.play("fade")
-	woosh_audio_stream_player.play()
 	
 	await animation_player.animation_finished
 	
+	woosh_audio_stream_player.play()
+	
 	if set_parent_invisible:
-		# Before we change current_room, save it as previous_room
-		previous_room = current_room 
-		room_history_queue.push_front(current_room)
+		# store the room we are leaving AND the door index used to leave it
+		room_history_queue.push_front({
+			"name": current_room,
+			"door_index": used_door_index
+		})
+		previous_room = current_room
 		
 	current_room = target_room_name
 
-	# change scene (no deletion)
 	if target_room:
 		target_room.visible = true
-		
 	if room_to_set_invisible:
 		room_to_set_invisible.visible = false
 	
-	if current_room == "staircase":
-		door_audio_stream_player.play()
-	
 	animation_player.play_backwards("fade")
+
+
+func zoom_and_recenter(door_position: Vector2, room_center: Vector2, duration: float = 1.2):
+	var camera = get_viewport().get_camera_2d()
+	if not camera: return
+
+	# snap to door immediately while the screen is black
+	camera.position_smoothing_enabled = false # disable smoothing so it doesn't "slide" during the fade
+	camera.global_position = door_position
+	camera.zoom = Vector2(10, 10) # start very close
+
+
+	var tween = create_tween().set_parallel(true)
+	tween.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+
+	# tween both properties back to "normal"
+	tween.tween_property(camera, "global_position", room_center, duration)
+	tween.tween_property(camera, "zoom", Vector2(3.0, 3.0), duration)
+	
+	# re-enable smoothing once the movement is done
+	tween.chain().tween_callback(func(): camera.position_smoothing_enabled = true)

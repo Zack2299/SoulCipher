@@ -49,27 +49,77 @@ func _on_clickable_area_mouse_clicked() -> void:
 
 
 func spawn_and_switch() -> void:
-	# completely changes scene (so destroys current scene and switches)
-	# (for titlescreen)
 	if scene_to_switch_to:
 		SceneTransition.change_scene_packed(scene_to_switch_to)
-	elif room_name_to_switch_to != "": # otherwise just change visibility rather than destroying
+		return
+
+	var target_name = room_name_to_switch_to
+	var is_going_back = is_fixed_navigation
+	var back_button = get_node_or_null("/root/World/PreviousRoomRelocator")
 	
-		if set_parent_invisible:
-			var target_room = get_node("/root/World/RoomManager/" + room_name_to_switch_to)
-			var room_to_set_invisible = get_parent()
-			SceneTransition.change_scene_room_name(room_name_to_switch_to, target_room, room_to_set_invisible, set_parent_invisible)
-		else:
-			room_name_to_switch_to = SceneTransition.room_history_queue.pop_front()
-			var target_room = get_node("/root/World/RoomManager/" + room_name_to_switch_to)
-			var target_invis_room = get_tree().root.find_child(SceneTransition.current_room, true, false)
-			SceneTransition.change_scene_room_name(room_name_to_switch_to, target_room, target_invis_room, set_parent_invisible)
+	if is_going_back:
+		if SceneTransition.room_history_queue.is_empty(): return
 		
-		# tell everyone where we are headed
-		var my_id = multiplayer.get_unique_id()
-		var my_data_node = get_node("/root/World/PlayersData/" + str(my_id))
-		if my_data_node:
-			my_data_node.change_room.rpc(room_name_to_switch_to)
+		# 1. Capture current state
+		var leaving_room_name = SceneTransition.current_room
 		
+		# 2. Pop the target
+		var history_data = SceneTransition.room_history_queue.pop_front()
+		target_name = history_data["name"]
+		var return_door_index = history_data["door_index"]
+		
+		# 3. FIXED REVOLVING LOGIC
+		# Only swap if we are going to the staircase OR leaving it, 
+		# AND there's nothing else left in the history queue.
+		# This prevents the "Black Room" glitch during deep-path spamming.
+		if SceneTransition.room_history_queue.is_empty():
+			if target_name == "staircase" or leaving_room_name == "staircase":
+				var room_node = get_node_or_null("/root/World/RoomManager/" + leaving_room_name)
+				var current_exit_idx = 0 
+				
+				if room_node and "relocators" in room_node:
+					for i in range(room_node.relocators.size()):
+						if room_node.relocators[i].room_name_to_switch_to == target_name:
+							current_exit_idx = i
+							break
+				
+				# Push back the room we just left to keep the button active at the staircase
+				SceneTransition.room_history_queue.push_back({
+					"name": leaving_room_name,
+					"door_index": current_exit_idx
+				})
+
+		# 4. Standard navigation
+		var target_room = get_node("/root/World/RoomManager/" + target_name)
+		var room_to_hide = get_node("/root/World/RoomManager/" + SceneTransition.current_room)
+		
+		# Safety check for the "Black Room"
+		if not target_room:
+			print("CRITICAL: Target room ", target_name, " not found in RoomManager!")
+			return
+
+		SceneTransition.change_scene_room_name(target_name, target_room, room_to_hide, false)
+		
+		# Visuals and Camera
+		if target_room and "relocators" in target_room:
+			var back_door = target_room.relocators[return_door_index]
+			var center = target_room.global_position 
+			await get_tree().create_timer(1.0/3.0).timeout
+			
+			if back_button:
+				back_button.visible = !SceneTransition.room_history_queue.is_empty()
+			SceneTransition.zoom_and_recenter(back_door.global_position, center)
+			 
 	else:
-		print("Nothing assigned!")
+		# 5. FORWARD MOVEMENT RESET
+		if SceneTransition.current_room == "staircase":
+			SceneTransition.room_history_queue.clear()
+
+		var target_room = get_node("/root/World/RoomManager/" + target_name)
+		var room_to_hide = get_parent()
+
+		SceneTransition.change_scene_room_name(target_name, target_room, room_to_hide, true, relocator_index)
+		
+		await get_tree().create_timer(1.0/3.0).timeout
+		if back_button:
+			back_button.visible = true

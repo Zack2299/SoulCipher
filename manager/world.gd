@@ -9,6 +9,8 @@ extends Node2D
 var loaded_scenes: Array[PackedScene] = []
 var rooms_array: Array[Node] = []
 
+var havent_explored_rooms = true
+
 
 func _ready() -> void:
 	NetworkManager.current_world_node = self
@@ -57,7 +59,8 @@ func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 func _process(_delta: float) -> void:
 	previous_room_relocator.room_name_to_switch_to = SceneTransition.previous_room
 	
-	if SceneTransition.current_room == "staircase":
-		previous_room_relocator.visible = false
-	else:
-		previous_room_relocator.visible = true
+	#if SceneTransition.current_room == "staircase" and havent_explored_rooms:
+		#previous_room_relocator.visible = false
+	#else:
+	#if SceneTransition.current_room != "staircase":
+		#previous_room_relocator.visible = true
