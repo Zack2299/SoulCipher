@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bpjdd32skp05a"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_vht6p"]
+[ext_resource type="Texture2D" uid="uid://byauapbfi6cpg" path="res://assets/environment/balcony.png" id="2_eyb0g"]
+
+[node name="Balcony" instance=ExtResource("1_vht6p")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_eyb0g")

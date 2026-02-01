@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://bn3q07bkd5n53"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_rxmxh"]
+[ext_resource type="Texture2D" uid="uid://ccr2ccmytf28g" path="res://assets/environment/aviary.png" id="2_rr2rn"]
+
+[node name="Aviary" instance=ExtResource("1_rxmxh")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_rr2rn")

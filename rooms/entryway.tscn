@@ -12,20 +12,10 @@ texture = ExtResource("2_5wa4x")
 [node name="Relocator" parent="." index="1" instance=ExtResource("3_alyp0")]
 position = Vector2(-249, 51)
 relocator_side = 0
-room_name_to_switch_to = null
-set_parent_invisible = null
-is_fixed_navigation = null
 
 [node name="Relocator2" parent="." index="2" instance=ExtResource("3_alyp0")]
 position = Vector2(-53, 57)
-relocator_side = null
-room_name_to_switch_to = null
-set_parent_invisible = null
-is_fixed_navigation = null
 
 [node name="Relocator3" parent="." index="3" instance=ExtResource("3_alyp0")]
-position = Vector2(282, 73)
+position = Vector2(296, 71)
 relocator_side = 1
-room_name_to_switch_to = null
-set_parent_invisible = null
-is_fixed_navigation = null

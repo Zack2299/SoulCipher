@@ -1,14 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://vx23pklgbyn8"]
+[gd_scene load_steps=3 format=3 uid="uid://vx23pklgbyn8"]
 
 [ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_32a10"]
 [ext_resource type="Texture2D" uid="uid://blkg174y2hxw6" path="res://assets/environment/library.png" id="2_3hnl8"]
-[ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="3_w5md0"]
 
 [node name="Library" instance=ExtResource("1_32a10")]
 
 [node name="Sprite2D" parent="." index="0"]
 texture = ExtResource("2_3hnl8")
-
-[node name="Relocator" parent="." index="1" instance=ExtResource("3_w5md0")]
-position = Vector2(286, -157)
-relocator_side = 0

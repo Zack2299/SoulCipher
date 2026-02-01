@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://chblonsjwc8w4"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_yjfbi"]
+[ext_resource type="Texture2D" uid="uid://bibikupa751d5" path="res://assets/environment/organ_room.png" id="2_18yfb"]
+
+[node name="OrganRoom" instance=ExtResource("1_yjfbi")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_18yfb")

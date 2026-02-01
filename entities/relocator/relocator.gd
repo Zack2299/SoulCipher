@@ -12,6 +12,8 @@ var relocator_index: int
 @onready var sprite_2d: Sprite2D = $Sprite2D
 @onready var area_2d: Area2D = $Area2D
 @onready var clickable_area: Node = $ClickableArea
+@onready var exit_audio_stream_player: AudioStreamPlayer = $ExitAudioStreamPlayer
+@onready var click_audio_stream_player: AudioStreamPlayer = $ClickAudioStreamPlayer
 
 var transition_time_with_buffer = 1.1
 
@@ -19,6 +21,7 @@ var transition_time_with_buffer = 1.1
 func _ready() -> void:
 	if is_fixed_navigation:
 		sprite_2d.texture = preload("uid://cmnkt2q6uyoxj")
+		click_audio_stream_player.stream = preload("uid://c6dfmgtico5f0")
 	
 	clickable_area.mouse_clicked.connect(_on_clickable_area_mouse_clicked)
 	clickable_area.mouse_entered_clickable_area.connect\

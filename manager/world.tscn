@@ -1,8 +1,9 @@
-[gd_scene load_steps=5 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=6 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
 [ext_resource type="PackedScene" uid="uid://bxp1idflyosfq" path="res://manager/room_manager.tscn" id="3_ul5md"]
+[ext_resource type="PackedScene" uid="uid://buw0vf7q7nr6e" path="res://entities/player_container/player_container.tscn" id="4_eo02o"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_kmqa5"]
 
@@ -33,5 +34,27 @@ is_fixed_navigation = true
 [node name="PlayersData" type="Node2D" parent="."]
 
 [node name="RoomMultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://bk0ra72elai2u")
 spawn_path = NodePath("../RoomManager")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+layer = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -230.0
+offset_right = 230.0
+offset_bottom = 40.0
+grow_horizontal = 2
+size_flags_horizontal = 4
+alignment = 1
+
+[node name="PlayerContainer" parent="CanvasLayer/HBoxContainer" instance=ExtResource("4_eo02o")]
+layout_mode = 2
+
+[node name="PlayerContainer2" parent="CanvasLayer/HBoxContainer" instance=ExtResource("4_eo02o")]
+layout_mode = 2
+
+[node name="PlayerContainer3" parent="CanvasLayer/HBoxContainer" instance=ExtResource("4_eo02o")]
+layout_mode = 2

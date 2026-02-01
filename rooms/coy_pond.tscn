@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://c1louc1gn7t4g"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_8gj8u"]
+[ext_resource type="Texture2D" uid="uid://c613xph5ys8qe" path="res://assets/environment/coy_pond.png" id="2_5ar3b"]
+
+[node name="CoyPond" instance=ExtResource("1_8gj8u")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_5ar3b")

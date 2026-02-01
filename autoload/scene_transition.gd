@@ -20,7 +20,7 @@ func change_scene_packed(target_scene: PackedScene) -> void:
 	
 	await animation_player.animation_finished
 	
-	woosh_audio_stream_player.play()
+	#woosh_audio_stream_player.play()
 	
 	# change scene (deletion)
 	get_tree().change_scene_to_packed(target_scene)
@@ -35,7 +35,7 @@ func change_scene_room_name(target_room_name: String, target_room: Node, room_to
 	
 	await animation_player.animation_finished
 	
-	woosh_audio_stream_player.play()
+	#woosh_audio_stream_player.play()
 	
 	if set_parent_invisible:
 		# store the room we are leaving AND the door index used to leave it
@@ -44,8 +44,13 @@ func change_scene_room_name(target_room_name: String, target_room: Node, room_to
 			"door_index": used_door_index
 		})
 		previous_room = current_room
+	else:
+		woosh_audio_stream_player.play()
 		
 	current_room = target_room_name
+	
+	#if current_room == "staircase":
+		#door_audio_stream_player.play()
 
 	if target_room:
 		target_room.visible = true
