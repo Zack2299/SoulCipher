@@ -13,6 +13,9 @@ func _ready():
 	multiplayer.peer_disconnected.connect(_on_player_disconnected)
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 
+	local_username = "Player"
+	local_avatar_id = randi_range(0,8)
+
 func host_game(port: int):
 	var error = peer.create_server(port)
 	if error != OK:
