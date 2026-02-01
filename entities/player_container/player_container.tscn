@@ -1,9 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://buw0vf7q7nr6e"]
+[gd_scene load_steps=3 format=3 uid="uid://buw0vf7q7nr6e"]
 
 [ext_resource type="Texture2D" uid="uid://1i1mvyeb7c50" path="res://assets/entities/fortune_tellers.png" id="1_3o6gp"]
+[ext_resource type="Script" uid="uid://oxsubbq4xqju" path="res://entities/player_container/player_container.gd" id="1_wfgxx"]
 
 [node name="PlayerContainer" type="CenterContainer"]
 custom_minimum_size = Vector2(228, 0)
+script = ExtResource("1_wfgxx")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(114, 126)
