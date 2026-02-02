@@ -36,6 +36,11 @@ func debug_player_paths():
 		print("UI Node: ", u.name, " | Full Path: ", u.get_path())
 	print("-------------------------------------------\n")
 
+
+func refresh_all_ui_visibility():
+	get_tree().call_group("player_uis", "update_visibility")
+
+
 func load_scenes_from_folder() -> void:
 	var dir = DirAccess.open(rooms_file_path)
 	if dir:

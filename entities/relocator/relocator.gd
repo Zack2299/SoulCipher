@@ -119,6 +119,9 @@ func spawn_and_switch() -> void:
 			if back_button:
 				back_button.visible = !SceneTransition.room_history_queue.is_empty()
 			SceneTransition.zoom_and_recenter(back_door.global_position, center)
+			
+			var world = get_node_or_null("/root/World")
+			if world: world.refresh_all_ui_visibility()
 			 
 	else:
 		# FORWARD MOVEMENT RESET
@@ -139,3 +142,6 @@ func spawn_and_switch() -> void:
 		await get_tree().create_timer(1.0/3.0).timeout
 		if back_button:
 			back_button.visible = true
+			
+		var world = get_node_or_null("/root/World")
+		if world: world.refresh_all_ui_visibility()
