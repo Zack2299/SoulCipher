@@ -8,11 +8,16 @@ signal update_player_ui(id: int, avatar: int)
 
 func _ready():
 	add_to_group("players")
+	# This will reveal the truth in the console
+	print("NODE ONLINE: ", get_path(), " | Peer ID: ", multiplayer.get_unique_id())
+	
 	if multiplayer.is_server():
-		# Start the loop immediately
 		broadcast_loop()
 
 func broadcast_loop():
+	# Keep the hammer swinging every 1 second
+	get_tree().create_timer(1.0).timeout.connect(broadcast_loop)
+	
 	# Get info from the NetworkManager source of truth
 	var info = NetworkManager.player_info.get(player_id)
 	
@@ -23,9 +28,6 @@ func broadcast_loop():
 		
 		# Hammer every client (including server) with the data AND the ID
 		sync_data_to_clients.rpc(player_id, info["name"], info["avatar"])
-	
-	# Keep the hammer swinging every 1 second
-	get_tree().create_timer(1.0).timeout.connect(broadcast_loop)
 
 @rpc("authority", "call_local", "reliable")
 func sync_data_to_clients(id_from_server: int, new_name: String, new_avatar: int):

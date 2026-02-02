@@ -71,39 +71,37 @@ func _process(_delta: float) -> void:
 func spawn_player(id: int):
 	if players_data.has_node(str(id)): return
 	
-	var p_data = preload("res://manager/player_data.tscn").instantiate()
+	# 1. Spawn the UI FIRST
+	var p_ui = preload("res://entities/player_container/player_container.tscn").instantiate()
+	p_ui.name = "UI_" + str(id) 
+	player_ui_hbox.add_child(p_ui)
 	
-	# 1. SET THE DATA FIRST (while it's still just an object in memory)
+	# 2. Setup Data Node
+	var p_data = preload("res://manager/player_data.tscn").instantiate()
 	p_data.name = str(id)
 	p_data.player_id = id
 	
 	if multiplayer.is_server():
 		var info = NetworkManager.player_info.get(id, {"name": "Guest", "avatar": 0})
 		p_data.player_name = info["name"]
-		p_data.avatar_id = info["avatar"] # Now the hammer starts with the RIGHT number
+		p_data.avatar_id = info["avatar"]
 	
-	# 2. CONNECT SIGNAL
 	p_data.update_player_ui.connect(_on_update_player_ui)
 	
-	# 3. ADD TO TREE (This triggers _ready() and the Hammer loop)
+	# 3. Add Data to tree LAST
 	players_data.add_child(p_data, true)
-
-	# 4. SPAWN UI
-	var p_ui = preload("res://entities/player_container/player_container.tscn").instantiate()
-	p_ui.name = "UI_" + str(id) 
-	player_ui_hbox.add_child(p_ui)
+	
+	# 4. Initialize the UI with whatever data we have now
 	p_ui.setup(p_data)
 
 
 func _on_update_player_ui(id: int, avatar_index: int):
-	# Construct the name (e.g., "UI_1")
 	var ui_node_name = "UI_" + str(id)
 	var ui_node = player_ui_hbox.get_node_or_null(ui_node_name)
 	
-	if ui_node:
+	if ui_node and ui_node.is_inside_tree():
 		if ui_node.sprite_2d:
 			ui_node.sprite_2d.frame = avatar_index
-			# print("UI Updated for ID: ", id, " to frame: ", avatar_index)
 	else:
-		# If this prints, your UI naming convention doesn't match
-		print("Hammer hit, but couldn't find node: ", ui_node_name)
+		# If it fails, we wait for the next 'Hammer' hit.
+		pass
