@@ -19,10 +19,10 @@ func _ready() -> void:
 	load_scenes_from_folder()
 	spawn_rooms_to_world(loaded_scenes)
 	
-	if multiplayer.is_server():
-		print("Server is spawning existing players...")
-		for id in NetworkManager.connected_ids:
-			spawn_player(id)
+	# EVERYONE (Server and Clients) should spawn the players that are already connected
+	print("Spawning existing players for Peer: ", multiplayer.get_unique_id())
+	for id in NetworkManager.connected_ids:
+		spawn_player(id)
 
 
 func load_scenes_from_folder() -> void:
