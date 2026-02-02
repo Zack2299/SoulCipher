@@ -11,6 +11,7 @@ var loaded_scenes: Array[PackedScene] = []
 var rooms_array: Array[Node] = []
 var havent_explored_rooms = true
 
+
 func _ready() -> void:
 	NetworkManager.current_world_node = self
 	load_scenes_from_folder()
@@ -24,6 +25,7 @@ func _ready() -> void:
 		spawn_player(id)
 		
 	debug_player_paths()
+
 
 func debug_player_paths():
 	await get_tree().create_timer(2.0).timeout 
@@ -56,6 +58,7 @@ func load_scenes_from_folder() -> void:
 	else:
 		print("Couldn't access path.")
 
+
 func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 	for scene in scenes_array:
 		if scene:
@@ -72,12 +75,13 @@ func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 	if multiplayer.is_server():
 		get_tree().create_timer(0.5).timeout.connect(func(): room_manager.generate_mansion(rooms_array))
 
+
 func _process(_delta: float) -> void:
 	if SceneTransition.previous_room != "":
 		previous_room_relocator.room_name_to_switch_to = SceneTransition.previous_room
 
+
 func spawn_player(id: int):
-	# Crucial: Check for duplicates to avoid ERR_INVALID_DATA
 	if players_data.has_node(str(id)): 
 		return
 	

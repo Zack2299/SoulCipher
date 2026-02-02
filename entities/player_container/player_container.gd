@@ -14,8 +14,6 @@ func setup(p_data: Node):
 		# Listen for when this player changes rooms
 		data_node.room_changed.connect(_on_player_room_changed)
 		
-		# Also, we need to refresh whenever WE move.
-		# We'll use a simple group call for that.
 		add_to_group("player_uis")
 		
 		# Initial visibility check

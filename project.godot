@@ -31,6 +31,10 @@ window/stretch/mode="viewport"
 
 relocator_group=""
 
+[gui]
+
+theme/custom="uid://cw08vbvg0d6km"
+
 [input]
 
 click={

@@ -18,9 +18,10 @@ var is_locally_hovered: bool = false
 
 
 func _ready() -> void:
-	area_2d.input_pickable = true
-	area_2d.mouse_entered.connect(_on_mouse_entered)
-	area_2d.mouse_exited.connect(_on_mouse_exited)
+	if area_2d:
+		area_2d.input_pickable = true
+		area_2d.mouse_entered.connect(_on_mouse_entered)
+		area_2d.mouse_exited.connect(_on_mouse_exited)
 
 
 func _process(_delta: float) -> void:

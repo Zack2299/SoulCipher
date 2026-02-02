@@ -28,6 +28,10 @@ func _ready() -> void:
 		push_warning("HoverComponent: Parent must be a Node2D.")
 		return
 		
+	if area_2d == null:
+		# Try to find it manually if the export failed
+		area_2d = get_node_or_null("Area2D")
+		
 	area_2d.mouse_entered.connect(_on_mouse_entered)
 	area_2d.mouse_exited.connect(_on_mouse_exited)
 

@@ -1,8 +1,11 @@
 extends Node2D
 
-@onready var host_button: Button = $HBoxContainer/HostButton
-@onready var join_button: Button = $HBoxContainer/JoinButton
-@onready var start_button: Button = $StartButton
+#@onready var host_button: Button = $HBoxContainer/HostButton
+#@onready var join_button: Button = $HBoxContainer/JoinButton
+#@onready var start_button: Button = $StartButton
+@onready var host_button: TextureButton = $Node2D/VBoxContainer/HostButton
+@onready var join_button: TextureButton = $Node2D/VBoxContainer/JoinButton
+@onready var start_button: TextureButton = $Node2D/VBoxContainer/StartButton
 
 @onready var relocator: Node2D = $Relocator
 
