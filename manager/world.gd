@@ -1,6 +1,5 @@
 extends Node2D
 
-#@onready var rooms_container = $Rooms
 @onready var room_manager: Node2D = $RoomManager
 @onready var previous_room_relocator: Node2D = $PreviousRoomRelocator
 @onready var players_data: Node2D = $PlayersData
@@ -10,40 +9,47 @@ extends Node2D
 
 var loaded_scenes: Array[PackedScene] = []
 var rooms_array: Array[Node] = []
-
 var havent_explored_rooms = true
-
 
 func _ready() -> void:
 	NetworkManager.current_world_node = self
 	load_scenes_from_folder()
 	spawn_rooms_to_world(loaded_scenes)
 	
-	# EVERYONE (Server and Clients) should spawn the players that are already connected
-	print("Spawning existing players for Peer: ", multiplayer.get_unique_id())
+	# Small delay ensures the sync_connected_ids RPC has landed on clients
+	await get_tree().process_frame
+	
+	print("World ready. Spawning connected players: ", NetworkManager.connected_ids)
 	for id in NetworkManager.connected_ids:
 		spawn_player(id)
+		
+	debug_player_paths()
 
+func debug_player_paths():
+	await get_tree().create_timer(2.0).timeout 
+	print("\n--- NODE PATH DEBUG (Peer ", multiplayer.get_unique_id(), ") ---")
+	for p in players_data.get_children():
+		print("Player Node: ", p.name, " | Full Path: ", p.get_path())
+	
+	print("UI Nodes:")
+	for u in player_ui_hbox.get_children():
+		print("UI Node: ", u.name, " | Full Path: ", u.get_path())
+	print("-------------------------------------------\n")
 
 func load_scenes_from_folder() -> void:
 	var dir = DirAccess.open(rooms_file_path)
-	
 	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
-		
 		while file_name != "":
 			if !dir.current_is_dir() and file_name.ends_with(".tscn"):
 				var full_path = rooms_file_path + "/" + file_name
 				var scene_resource = load(full_path)
 				if scene_resource is PackedScene:
 					loaded_scenes.append(scene_resource)
-					print("Loaded scene: ", file_name)
-			
 			file_name = dir.get_next()
 	else:
 		print("Couldn't access path.")
-
 
 func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 	for scene in scenes_array:
@@ -53,32 +59,31 @@ func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 			room_manager.add_child(room_instance)
 			rooms_array.push_back(room_instance)
 			
-			print(room_instance.name)
 			if room_instance.name == "staircase":
 				room_instance.visible = true
 			else:
 				room_instance.visible = false
 
 	if multiplayer.is_server():
-		# give the clients a moment to finish their own loop before sending the map
 		get_tree().create_timer(0.5).timeout.connect(func(): room_manager.generate_mansion(rooms_array))
 
-
 func _process(_delta: float) -> void:
-	previous_room_relocator.room_name_to_switch_to = SceneTransition.previous_room
-
+	if SceneTransition.previous_room != "":
+		previous_room_relocator.room_name_to_switch_to = SceneTransition.previous_room
 
 func spawn_player(id: int):
-	if players_data.has_node(str(id)): return
+	# Crucial: Check for duplicates to avoid ERR_INVALID_DATA
+	if players_data.has_node(str(id)): 
+		return
 	
-	# 1. Spawn the UI FIRST
+	# 1. Spawn UI
 	var p_ui = preload("res://entities/player_container/player_container.tscn").instantiate()
 	p_ui.name = "UI_" + str(id) 
 	player_ui_hbox.add_child(p_ui)
 	
 	# 2. Setup Data Node
 	var p_data = preload("res://manager/player_data.tscn").instantiate()
-	p_data.name = str(id)
+	p_data.name = str(id) # Name matches peer ID exactly
 	p_data.player_id = id
 	
 	if multiplayer.is_server():
@@ -88,12 +93,11 @@ func spawn_player(id: int):
 	
 	p_data.update_player_ui.connect(_on_update_player_ui)
 	
-	# 3. Add Data to tree LAST
-	players_data.add_child(p_data, true)
+	# 3. Add to tree (without the 'true' flag to keep path predictable)
+	players_data.add_child(p_data)
 	
-	# 4. Initialize the UI with whatever data we have now
+	# 4. Initialize UI
 	p_ui.setup(p_data)
-
 
 func _on_update_player_ui(id: int, avatar_index: int):
 	var ui_node_name = "UI_" + str(id)
@@ -102,6 +106,3 @@ func _on_update_player_ui(id: int, avatar_index: int):
 	if ui_node and ui_node.is_inside_tree():
 		if ui_node.sprite_2d:
 			ui_node.sprite_2d.frame = avatar_index
-	else:
-		# If it fails, we wait for the next 'Hammer' hit.
-		pass

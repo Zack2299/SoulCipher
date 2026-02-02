@@ -4,7 +4,7 @@ var peer = ENetMultiplayerPeer.new()
 var player_info: Dictionary = {} 
 var local_username: String = "Player"
 var local_avatar_id: int = 0
-var connected_ids: Array[int]
+var connected_ids: Array[int] = []
 
 var current_world_node = null 
 
@@ -14,7 +14,7 @@ func _ready():
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
 
 	local_username = "Player"
-	local_avatar_id = randi_range(0,7)
+	local_avatar_id = randi_range(0, 7)
 
 func host_game(port: int):
 	var error = peer.create_server(port)
@@ -38,23 +38,25 @@ func join_game(ip_address: String, port: int):
 
 func _on_player_connected(id: int):
 	print("Player connected: %d" % id)
-	if not connected_ids.has(id):
-		connected_ids.append(id)
-	
-	# IF THE GAME IS ALREADY RUNNING:
-	# tell the world to spawn a data node for this new person
-	if multiplayer.is_server() and current_world_node != null:
-		current_world_node.spawn_player(id)
+	if multiplayer.is_server():
+		if not connected_ids.has(id):
+			connected_ids.append(id)
+		
+		# Sync the list to everyone and spawn the player if the world is active
+		sync_connected_ids.rpc(connected_ids)
+		if current_world_node != null:
+			current_world_node.spawn_player(id)
 
 func _on_player_disconnected(id: int):
 	print("Player disconnected: %d" % id)
-	connected_ids.erase(id)
-	player_info.erase(id)
-	update_player_list.rpc(player_info)
+	if multiplayer.is_server():
+		connected_ids.erase(id)
+		player_info.erase(id)
+		sync_connected_ids.rpc(connected_ids)
+		update_player_list.rpc(player_info)
 
 func _on_connected_to_server():
 	var id = multiplayer.get_unique_id()
-		# Send a dictionary of our local choices to the server
 	var my_data = {
 		"name": local_username,
 		"avatar": local_avatar_id
@@ -66,11 +68,20 @@ func register_player_info(id: int, info: Dictionary):
 	if multiplayer.is_server():
 		player_info[id] = info
 		update_player_list.rpc(player_info)
+		sync_connected_ids.rpc(connected_ids)
 
-@rpc("authority", "reliable")
+@rpc("authority", "call_local", "reliable")
 func update_player_list(new_info: Dictionary):
 	player_info = new_info
 	print("Global Player Info Updated: ", player_info)
+
+@rpc("authority", "call_local", "reliable")
+func sync_connected_ids(server_list: Array):
+	connected_ids = Array(server_list, TYPE_INT, &"", null)
+	# If the world is already loaded, ensure all peers in the list are spawned
+	if current_world_node:
+		for id in connected_ids:
+			current_world_node.spawn_player(id)
 
 func start_game_for_all():
 	if multiplayer.is_server():

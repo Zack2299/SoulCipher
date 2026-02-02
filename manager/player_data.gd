@@ -14,27 +14,29 @@ func _ready():
 	if multiplayer.is_server():
 		broadcast_loop()
 
+
 func broadcast_loop():
-	# Keep the hammer swinging every 1 second
+	if not is_inside_tree(): return
+	
+	# 1. ONLY the server runs the logic to send data
+	if multiplayer.is_server():
+		var info = NetworkManager.player_info.get(player_id)
+		if info:
+			# Server updates its own variables
+			self.player_name = info["name"]
+			self.avatar_id = info["avatar"]
+			# Server forces every client to update
+			sync_data_to_clients.rpc(player_id, info["name"], info["avatar"])
+	
+	# 2. Re-run the loop (on both, though only server does work)
 	get_tree().create_timer(1.0).timeout.connect(broadcast_loop)
-	
-	# Get info from the NetworkManager source of truth
-	var info = NetworkManager.player_info.get(player_id)
-	
-	if info:
-		# Update server's local variables
-		self.player_name = info["name"]
-		self.avatar_id = info["avatar"]
-		
-		# Hammer every client (including server) with the data AND the ID
-		sync_data_to_clients.rpc(player_id, info["name"], info["avatar"])
+
 
 @rpc("authority", "call_local", "reliable")
 func sync_data_to_clients(id_from_server: int, new_name: String, new_avatar: int):
-	# Update local variables
 	self.player_id = id_from_server
 	self.player_name = new_name
 	self.avatar_id = new_avatar
 	
-	# Tell the World to update the UI using the ID the server just gave us
+	# Signal the world to update the UI
 	update_player_ui.emit(self.player_id, self.avatar_id)

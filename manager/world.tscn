@@ -8,14 +8,6 @@
 script = ExtResource("1_gfoh4")
 rooms_file_path = "res://rooms"
 
-[node name="PlayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://8k8cvx04knj7")
-spawn_path = NodePath("../PlayersData")
-
-[node name="PlayerContainerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://buw0vf7q7nr6e")
-spawn_path = NodePath("../CanvasLayer/PlayerUIHbox")
-
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(3, 3)
 
