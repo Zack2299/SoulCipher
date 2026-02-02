@@ -16,7 +16,7 @@ var ip = LOCAL_HOST
 var port = DEFAULT_PORT
 
 func _ready() -> void:
-	#avatar.frame = NetworkManager.local_avatar_id
+	avatar.frame = NetworkManager.local_avatar_id
 	relocator.visible = false
 	start_button.visible = false
 	host_button.pressed.connect(_on_host_button_pressed)

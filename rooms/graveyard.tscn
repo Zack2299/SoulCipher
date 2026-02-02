@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://dtbu8j0whngjc"]
+
+[ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_a2c3q"]
+[ext_resource type="Texture2D" uid="uid://cq64drarb3sdv" path="res://assets/environment/graveyard.png" id="2_u70ho"]
+
+[node name="Graveyard" instance=ExtResource("1_a2c3q")]
+
+[node name="Sprite2D" parent="." index="0"]
+texture = ExtResource("2_u70ho")

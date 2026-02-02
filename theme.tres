@@ -1,7 +1,13 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://cw08vbvg0d6km"]
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://cw08vbvg0d6km"]
 
-[ext_resource type="FontFile" uid="uid://cfhhg4tl0iujn" path="res://assets/font/NicerNightie.ttf" id="1_e1x85"]
+[ext_resource type="FontFile" uid="uid://pnn0wes51khd" path="res://assets/font/cc.yal.7w7.block.ttf" id="1_e1x85"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cjfk0"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_e1x85"]
 
 [resource]
 default_font = ExtResource("1_e1x85")
-default_font_size = 32
+default_font_size = 16
+LineEdit/styles/focus = SubResource("StyleBoxEmpty_cjfk0")
+LineEdit/styles/normal = SubResource("StyleBoxEmpty_e1x85")

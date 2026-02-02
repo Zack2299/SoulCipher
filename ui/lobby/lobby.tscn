@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dsfr0tf8o28ld"]
+[gd_scene load_steps=18 format=3 uid="uid://dsfr0tf8o28ld"]
 
 [ext_resource type="Script" uid="uid://ceykfnjt41r56" path="res://ui/lobby/lobby.gd" id="1_kamvt"]
 [ext_resource type="Texture2D" uid="uid://bslvrtcipln2a" path="res://assets/environment/lobby.png" id="1_l4sf2"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://c3h2lvt0h7af0" path="res://assets/ui/start_button_hovered.png" id="14_j28t3"]
 [ext_resource type="Texture2D" uid="uid://1i1mvyeb7c50" path="res://assets/entities/fortune_tellers.png" id="15_tnne6"]
 [ext_resource type="PackedScene" uid="uid://xi0qesshmf8m" path="res://ui/arrow/arrow.tscn" id="16_j28t3"]
+[ext_resource type="Texture2D" uid="uid://ytepcaqia06i" path="res://assets/ui/banner_fixed.png" id="17_vh3be"]
 
 [node name="Lobby" type="Node2D"]
 script = ExtResource("1_kamvt")
@@ -147,11 +148,75 @@ hframes = 8
 [node name="LeftArrow" parent="." instance=ExtResource("16_j28t3")]
 position = Vector2(-58, -138)
 
-[node name="Sprite2D" parent="LeftArrow" index="2"]
+[node name="Sprite2D" parent="LeftArrow" index="3"]
 flip_h = true
 
 [node name="RightArrow" parent="." instance=ExtResource("16_j28t3")]
 position = Vector2(58, -138)
+
+[node name="PlayerName" type="Node2D" parent="."]
+position = Vector2(0, -88)
+
+[node name="LineEdit" type="LineEdit" parent="PlayerName"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -44.5
+offset_top = -19.0
+offset_right = 44.5
+offset_bottom = 19.0
+grow_horizontal = 2
+grow_vertical = 2
+placeholder_text = "Player Name"
+alignment = 1
+expand_to_text_length = true
+caret_blink = true
+
+[node name="Banner" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(201, -77)
+texture = ExtResource("17_vh3be")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Banner"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -257.5
+offset_top = -171.0
+offset_right = -148.5
+offset_bottom = -109.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Banner/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label" type="Label" parent="Banner/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "IP:"
+
+[node name="LineEdit" type="LineEdit" parent="Banner/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+placeholder_text = "127.0.0.1"
+expand_to_text_length = true
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="Banner/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="Label2" type="Label" parent="Banner/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Port:"
+
+[node name="LineEdit2" type="LineEdit" parent="Banner/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+placeholder_text = "8080"
 
 [connection signal="pressed" from="HBoxContainer/HostButton" to="." method="_on_button_pressed"]
 [connection signal="mouse_clicked" from="LeftArrow/ClickableArea" to="." method="_on_left_arrow_clicked"]
