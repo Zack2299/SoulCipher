@@ -23,10 +23,6 @@ is_fixed_navigation = true
 
 [node name="PlayersData" type="Node2D" parent="."]
 
-[node name="RoomMultiplayerSpawner" type="MultiplayerSpawner" parent="."]
-_spawnable_scenes = PackedStringArray("uid://c3uh1wgf8tmll")
-spawn_path = NodePath("../RoomManager")
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 layer = 0
 
