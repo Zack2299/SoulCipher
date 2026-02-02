@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dsfr0tf8o28ld"]
+[gd_scene load_steps=17 format=3 uid="uid://dsfr0tf8o28ld"]
 
 [ext_resource type="Script" uid="uid://ceykfnjt41r56" path="res://ui/lobby/lobby.gd" id="1_kamvt"]
 [ext_resource type="Texture2D" uid="uid://bslvrtcipln2a" path="res://assets/environment/lobby.png" id="1_l4sf2"]
@@ -14,6 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://ydy4fbco45u5" path="res://assets/ui/start_button_normal.png" id="12_hjb5n"]
 [ext_resource type="Texture2D" uid="uid://cgjxqn16vuovo" path="res://assets/ui/start_button_pressed.png" id="13_tnne6"]
 [ext_resource type="Texture2D" uid="uid://c3h2lvt0h7af0" path="res://assets/ui/start_button_hovered.png" id="14_j28t3"]
+[ext_resource type="Texture2D" uid="uid://1i1mvyeb7c50" path="res://assets/entities/fortune_tellers.png" id="15_tnne6"]
+[ext_resource type="PackedScene" uid="uid://xi0qesshmf8m" path="res://ui/arrow/arrow.tscn" id="16_j28t3"]
 
 [node name="Lobby" type="Node2D"]
 script = ExtResource("1_kamvt")
@@ -98,10 +100,10 @@ horizontal_alignment = 1
 visible = false
 position = Vector2(-82, -2)
 
-[node name="Node2D" type="Node2D" parent="."]
+[node name="NetworkButtons" type="Node2D" parent="."]
 position = Vector2(-82, -8)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Node2D"]
+[node name="VBoxContainer" type="VBoxContainer" parent="NetworkButtons"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -115,21 +117,21 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="HostButton" type="TextureButton" parent="Node2D/VBoxContainer"]
+[node name="HostButton" type="TextureButton" parent="NetworkButtons/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture_normal = ExtResource("6_jvewa")
 texture_pressed = ExtResource("7_2ofhp")
 texture_hover = ExtResource("7_nvow0")
 
-[node name="JoinButton" type="TextureButton" parent="Node2D/VBoxContainer"]
+[node name="JoinButton" type="TextureButton" parent="NetworkButtons/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture_normal = ExtResource("8_2ofhp")
 texture_pressed = ExtResource("10_gw1g6")
 texture_hover = ExtResource("9_gw1g6")
 
-[node name="StartButton" type="TextureButton" parent="Node2D/VBoxContainer"]
+[node name="StartButton" type="TextureButton" parent="NetworkButtons/VBoxContainer"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
@@ -137,4 +139,23 @@ texture_normal = ExtResource("12_hjb5n")
 texture_pressed = ExtResource("13_tnne6")
 texture_hover = ExtResource("14_j28t3")
 
+[node name="Avatar" type="Sprite2D" parent="."]
+position = Vector2(0, -138)
+texture = ExtResource("15_tnne6")
+hframes = 8
+
+[node name="LeftArrow" parent="." instance=ExtResource("16_j28t3")]
+position = Vector2(-58, -138)
+
+[node name="Sprite2D" parent="LeftArrow" index="2"]
+flip_h = true
+
+[node name="RightArrow" parent="." instance=ExtResource("16_j28t3")]
+position = Vector2(58, -138)
+
 [connection signal="pressed" from="HBoxContainer/HostButton" to="." method="_on_button_pressed"]
+[connection signal="mouse_clicked" from="LeftArrow/ClickableArea" to="." method="_on_left_arrow_clicked"]
+[connection signal="mouse_clicked" from="RightArrow/ClickableArea" to="." method="_on_right_arrow_clicked"]
+
+[editable path="LeftArrow"]
+[editable path="RightArrow"]

@@ -1,0 +1,24 @@
+[gd_scene load_steps=5 format=3 uid="uid://xi0qesshmf8m"]
+
+[ext_resource type="PackedScene" uid="uid://cq4v88u75nlbj" path="res://component/clickable_area.tscn" id="1_ne6as"]
+[ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="2_6kqm5"]
+[ext_resource type="Texture2D" uid="uid://bmq8gxga32a5s" path="res://assets/ui/arrow.png" id="3_emo4h"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tnne6"]
+radius = 12.0
+
+[node name="Arrow" type="Node2D"]
+
+[node name="ClickableArea" parent="." node_paths=PackedStringArray("area_2d") instance=ExtResource("1_ne6as")]
+area_2d = NodePath("../Area2D")
+
+[node name="HoverableArea" parent="." node_paths=PackedStringArray("area_2d") instance=ExtResource("2_6kqm5")]
+area_2d = NodePath("../Area2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("3_emo4h")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_tnne6")
