@@ -11,13 +11,15 @@ extends Node2D
 @onready var non_settings: Node2D = $NonSettings
 @onready var settings_area_2d: Area2D = $NonSettings/SettingsBook/Area2D
 @onready var book_open_audio_stream_player: AudioStreamPlayer = $Settings/BookOpenAudioStreamPlayer
-@onready var ip_line_edit: LineEdit = $Settings/VBoxContainer/IPContainer2/IPLineEdit
+@onready var ip_line_edit: LineEdit = $Settings/VBoxContainer/IPContainer/IPLineEdit
 @onready var port_line_edit: LineEdit = $Settings/VBoxContainer/PortContainer/PortLineEdit
 
+const NUM_AVATARS = 8
 const LOCAL_HOST = "127.0.0.1"
 const DEFAULT_PORT = "8080"
 var ip = LOCAL_HOST
 var port = DEFAULT_PORT
+
 
 func _ready() -> void:
 	avatar.frame = NetworkManager.local_avatar_id
@@ -49,15 +51,15 @@ func _on_start_button_pressed():
 
 func _on_left_arrow_clicked() -> void:
 	if avatar.frame == 0:
-		avatar.frame = 7
+		avatar.frame = NUM_AVATARS - 1
 	else:
 		avatar.frame -= 1
-	#avatar.frame = (avatar.frame - 1) % 8
+	#avatar.frame = (avatar.frame - 1) % NUM_AVATARS
 	NetworkManager.local_avatar_id = avatar.frame
 
 
 func _on_right_arrow_clicked() -> void:
-	avatar.frame = (avatar.frame + 1) % 8
+	avatar.frame = (avatar.frame + 1) % NUM_AVATARS
 	NetworkManager.local_avatar_id = avatar.frame
 
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dsfr0tf8o28ld"]
+[gd_scene load_steps=22 format=3 uid="uid://dsfr0tf8o28ld"]
 
 [ext_resource type="Script" uid="uid://ceykfnjt41r56" path="res://ui/lobby/lobby.gd" id="1_kamvt"]
 [ext_resource type="Texture2D" uid="uid://bs7wnkuonh60h" path="res://assets/environment/LOBBY_FINAL.png" id="2_vdu1l"]
@@ -21,12 +21,6 @@
 [ext_resource type="AudioStream" uid="uid://dv1gjbphpt4y7" path="res://assets/sounds/closing-a-book-14771.mp3" id="21_1etha"]
 [ext_resource type="Texture2D" uid="uid://byymsdsrtscvs" path="res://assets/environment/book_open.png" id="21_jcpg8"]
 [ext_resource type="AudioStream" uid="uid://dkbo3veaxmy3j" path="res://assets/sounds/freesounds123-book-opening-345808.mp3" id="21_vdu1l"]
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_x2gyi"]
-radius = 51.2
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_vdu1l"]
-size = Vector2(202.40002, 100.80002)
 
 [node name="Lobby" type="Node2D"]
 script = ExtResource("1_kamvt")
@@ -262,12 +256,7 @@ texture = ExtResource("20_1etha")
 [node name="Area2D" type="Area2D" parent="NonSettings/SettingsBook"]
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="NonSettings/SettingsBook/Area2D"]
-visible = false
-build_mode = 1
-polygon = PackedVector2Array(-10, -46, 91, -36, 91, -4, 31, 44, -88, 28, -88, -4)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="NonSettings/SettingsBook/Area2D"]
-shape = SubResource("CircleShape2D_x2gyi")
+polygon = PackedVector2Array(-10, -46, 91, -36, 92, -3, 31, 46, -91, 30, -92, -5)
 
 [node name="Settings" type="Node2D" parent="."]
 visible = false
@@ -304,9 +293,9 @@ texture = ExtResource("21_jcpg8")
 [node name="Area2D" type="Area2D" parent="Settings/OpenBook"]
 position = Vector2(0, 89.60001)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Settings/OpenBook/Area2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Settings/OpenBook/Area2D"]
 position = Vector2(0.39999393, 4.0000153)
-shape = SubResource("RectangleShape2D_vdu1l")
+polygon = PackedVector2Array(-86.00001, -48.800014, -16.399996, -55.200016, 1.2000064, -46.400013, 18.00001, -55.200016, 86.00002, -49.600014, 105.20002, 55.199997, -103.60001, 52.800003)
 
 [node name="Settings" type="Node2D" parent="Settings"]
 position = Vector2(0, -88)
