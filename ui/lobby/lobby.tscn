@@ -1,9 +1,7 @@
-[gd_scene load_steps=22 format=3 uid="uid://dsfr0tf8o28ld"]
+[gd_scene load_steps=24 format=3 uid="uid://dsfr0tf8o28ld"]
 
 [ext_resource type="Script" uid="uid://ceykfnjt41r56" path="res://ui/lobby/lobby.gd" id="1_kamvt"]
-[ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="2_8l8ni"]
-[ext_resource type="Texture2D" uid="uid://85kw68y5mdpe" path="res://assets/environment/lobby_alt.png" id="2_x2gyi"]
-[ext_resource type="PackedScene" uid="uid://i0m57dlbwrbl" path="res://manager/world.tscn" id="3_8l8ni"]
+[ext_resource type="Texture2D" uid="uid://bs7wnkuonh60h" path="res://assets/environment/LOBBY_FINAL.png" id="2_vdu1l"]
 [ext_resource type="PackedScene" uid="uid://ctfeboj0wqkqx" path="res://ui/crystal_ball/crystal_ball.tscn" id="5_qp8cv"]
 [ext_resource type="Texture2D" uid="uid://dxi30y27hhynw" path="res://assets/ui/host_button_normal.png" id="6_jvewa"]
 [ext_resource type="Texture2D" uid="uid://bo7iiwgb7pcl4" path="res://assets/ui/host_button_pressed.png" id="7_2ofhp"]
@@ -20,24 +18,40 @@
 [ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="18_jcpg8"]
 [ext_resource type="PackedScene" uid="uid://cq4v88u75nlbj" path="res://component/clickable_area.tscn" id="19_vdu1l"]
 [ext_resource type="Texture2D" uid="uid://dsubqb17jeasx" path="res://assets/ui/settings.png" id="20_1etha"]
+[ext_resource type="AudioStream" uid="uid://dv1gjbphpt4y7" path="res://assets/sounds/closing-a-book-14771.mp3" id="21_1etha"]
+[ext_resource type="Texture2D" uid="uid://byymsdsrtscvs" path="res://assets/environment/book_open.png" id="21_jcpg8"]
+[ext_resource type="AudioStream" uid="uid://dkbo3veaxmy3j" path="res://assets/sounds/freesounds123-book-opening-345808.mp3" id="21_vdu1l"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_x2gyi"]
 radius = 51.2
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vdu1l"]
+size = Vector2(202.40002, 100.80002)
+
 [node name="Lobby" type="Node2D"]
 script = ExtResource("1_kamvt")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_x2gyi")
+[node name="NonSettings" type="Node2D" parent="."]
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="TextureButton" type="TextureButton" parent="NonSettings"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -352.0
+offset_top = -188.0
+offset_right = 352.0
+offset_bottom = 188.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+texture_normal = ExtResource("2_vdu1l")
+
+[node name="Camera2D" type="Camera2D" parent="NonSettings"]
 zoom = Vector2(3, 3)
 
-[node name="Relocator" parent="." instance=ExtResource("2_8l8ni")]
-position = Vector2(-299, -161)
-scene_to_switch_to = ExtResource("3_8l8ni")
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="HBoxContainer" type="HBoxContainer" parent="NonSettings"]
 visible = false
 anchors_preset = 8
 anchor_left = 0.5
@@ -55,15 +69,15 @@ size_flags_vertical = 4
 theme_override_constants/separation = 50
 alignment = 1
 
-[node name="HostButton" type="Button" parent="HBoxContainer"]
+[node name="HostButton" type="Button" parent="NonSettings/HBoxContainer"]
 layout_mode = 2
 text = "Host"
 
-[node name="JoinButton" type="Button" parent="HBoxContainer"]
+[node name="JoinButton" type="Button" parent="NonSettings/HBoxContainer"]
 layout_mode = 2
 text = "Join"
 
-[node name="StartButton" type="Button" parent="."]
+[node name="StartButton" type="Button" parent="NonSettings"]
 visible = false
 offset_left = 123.0
 offset_top = -167.0
@@ -71,7 +85,7 @@ offset_right = 184.0
 offset_bottom = -126.0
 text = "Start"
 
-[node name="Label" type="Label" parent="."]
+[node name="Label" type="Label" parent="NonSettings"]
 visible = false
 anchors_preset = 5
 anchor_left = 0.5
@@ -87,7 +101,7 @@ text = "Start Game"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Label2" type="Label" parent="."]
+[node name="Label2" type="Label" parent="NonSettings"]
 visible = false
 anchors_preset = 5
 anchor_left = 0.5
@@ -103,14 +117,14 @@ theme_override_constants/line_spacing = 0
 text = "Edit Player"
 horizontal_alignment = 1
 
-[node name="CrystalBall" parent="." instance=ExtResource("5_qp8cv")]
+[node name="CrystalBall" parent="NonSettings" instance=ExtResource("5_qp8cv")]
 visible = false
 position = Vector2(-82, -2)
 
-[node name="NetworkButtons" type="Node2D" parent="."]
+[node name="NetworkButtons" type="Node2D" parent="NonSettings"]
 position = Vector2(-82, -8)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="NetworkButtons"]
+[node name="VBoxContainer" type="VBoxContainer" parent="NonSettings/NetworkButtons"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -124,21 +138,21 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="HostButton" type="TextureButton" parent="NetworkButtons/VBoxContainer"]
+[node name="HostButton" type="TextureButton" parent="NonSettings/NetworkButtons/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture_normal = ExtResource("6_jvewa")
 texture_pressed = ExtResource("7_2ofhp")
 texture_hover = ExtResource("7_nvow0")
 
-[node name="JoinButton" type="TextureButton" parent="NetworkButtons/VBoxContainer"]
+[node name="JoinButton" type="TextureButton" parent="NonSettings/NetworkButtons/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 texture_normal = ExtResource("8_2ofhp")
 texture_pressed = ExtResource("10_gw1g6")
 texture_hover = ExtResource("9_gw1g6")
 
-[node name="StartButton" type="TextureButton" parent="NetworkButtons/VBoxContainer"]
+[node name="StartButton" type="TextureButton" parent="NonSettings/NetworkButtons/VBoxContainer"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 4
@@ -146,46 +160,48 @@ texture_normal = ExtResource("12_hjb5n")
 texture_pressed = ExtResource("13_tnne6")
 texture_hover = ExtResource("14_j28t3")
 
-[node name="Avatar" type="Sprite2D" parent="."]
+[node name="Avatar" type="Sprite2D" parent="NonSettings"]
 position = Vector2(0, -138)
 texture = ExtResource("15_tnne6")
 hframes = 8
 
-[node name="LeftArrow" parent="." instance=ExtResource("16_j28t3")]
+[node name="LeftArrow" parent="NonSettings" instance=ExtResource("16_j28t3")]
 position = Vector2(-58, -138)
 
-[node name="Sprite2D" parent="LeftArrow" index="3"]
+[node name="Sprite2D" parent="NonSettings/LeftArrow" index="3"]
 flip_h = true
 
-[node name="RightArrow" parent="." instance=ExtResource("16_j28t3")]
+[node name="RightArrow" parent="NonSettings" instance=ExtResource("16_j28t3")]
 position = Vector2(58, -138)
 
-[node name="PlayerName" type="Node2D" parent="."]
+[node name="PlayerName" type="Node2D" parent="NonSettings"]
 position = Vector2(0, -88)
 
-[node name="LineEdit" type="LineEdit" parent="PlayerName"]
+[node name="PlayerNameLineEdit" type="LineEdit" parent="NonSettings/PlayerName"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -44.5
-offset_top = -19.0
-offset_right = 44.5
-offset_bottom = 19.0
+offset_left = -38.0
+offset_top = -8.5
+offset_right = 38.074997
+offset_bottom = 6.5
 grow_horizontal = 2
 grow_vertical = 2
-placeholder_text = "Player Name"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+placeholder_text = "Player"
 alignment = 1
 expand_to_text_length = true
 caret_blink = true
 
-[node name="Banner" type="Sprite2D" parent="."]
+[node name="Banner" type="Sprite2D" parent="NonSettings"]
 visible = false
 position = Vector2(201, -77)
 texture = ExtResource("17_vh3be")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Banner"]
+[node name="VBoxContainer" type="VBoxContainer" parent="NonSettings/Banner"]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -199,59 +215,148 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Banner/VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="NonSettings/Banner/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label" type="Label" parent="Banner/VBoxContainer/HBoxContainer"]
+[node name="Label" type="Label" parent="NonSettings/Banner/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 text = "IP:"
 
-[node name="LineEdit" type="LineEdit" parent="Banner/VBoxContainer/HBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="NonSettings/Banner/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 placeholder_text = "127.0.0.1"
 expand_to_text_length = true
 
-[node name="HBoxContainer2" type="HBoxContainer" parent="Banner/VBoxContainer"]
+[node name="HBoxContainer2" type="HBoxContainer" parent="NonSettings/Banner/VBoxContainer"]
 layout_mode = 2
 alignment = 1
 
-[node name="Label2" type="Label" parent="Banner/VBoxContainer/HBoxContainer2"]
+[node name="Label2" type="Label" parent="NonSettings/Banner/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 text = "Port:"
 
-[node name="LineEdit2" type="LineEdit" parent="Banner/VBoxContainer/HBoxContainer2"]
+[node name="LineEdit2" type="LineEdit" parent="NonSettings/Banner/VBoxContainer/HBoxContainer2"]
 layout_mode = 2
 placeholder_text = "8080"
 
-[node name="SettingsBook" type="Node2D" parent="."]
+[node name="SettingsBook" type="Node2D" parent="NonSettings"]
 position = Vector2(61, 68)
 
-[node name="HoverableArea" parent="SettingsBook" node_paths=PackedStringArray("area_2d") instance=ExtResource("18_jcpg8")]
+[node name="HoverableArea" parent="NonSettings/SettingsBook" node_paths=PackedStringArray("area_2d") instance=ExtResource("18_jcpg8")]
 area_2d = NodePath("../Area2D")
 hover_scale = Vector2(1.05, 1.05)
 exit_duration = 0.25
 exit_trans = 7
 
-[node name="ClickableArea" parent="SettingsBook" node_paths=PackedStringArray("area_2d") instance=ExtResource("19_vdu1l")]
+[node name="ClickableArea" parent="NonSettings/SettingsBook" node_paths=PackedStringArray("area_2d", "click_audio") instance=ExtResource("19_vdu1l")]
 area_2d = NodePath("../Area2D")
+click_audio = NodePath("../BookOpenAudioStreamPlayer")
 
-[node name="Sprite2D" type="Sprite2D" parent="SettingsBook"]
+[node name="BookOpenAudioStreamPlayer" type="AudioStreamPlayer" parent="NonSettings/SettingsBook"]
+stream = ExtResource("21_vdu1l")
+
+[node name="Sprite2D" type="Sprite2D" parent="NonSettings/SettingsBook"]
 texture = ExtResource("20_1etha")
 
-[node name="Area2D" type="Area2D" parent="SettingsBook"]
+[node name="Area2D" type="Area2D" parent="NonSettings/SettingsBook"]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="SettingsBook/Area2D"]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="NonSettings/SettingsBook/Area2D"]
 visible = false
 build_mode = 1
 polygon = PackedVector2Array(-10, -46, 91, -36, 91, -4, 31, 44, -88, 28, -88, -4)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="SettingsBook/Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NonSettings/SettingsBook/Area2D"]
 shape = SubResource("CircleShape2D_x2gyi")
 
-[connection signal="pressed" from="HBoxContainer/HostButton" to="." method="_on_button_pressed"]
-[connection signal="mouse_clicked" from="LeftArrow/ClickableArea" to="." method="_on_left_arrow_clicked"]
-[connection signal="mouse_clicked" from="RightArrow/ClickableArea" to="." method="_on_right_arrow_clicked"]
+[node name="Settings" type="Node2D" parent="."]
+visible = false
+scale = Vector2(1.25, 1.25)
 
-[editable path="LeftArrow"]
-[editable path="RightArrow"]
+[node name="TextureButton" type="TextureButton" parent="Settings"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -352.0
+offset_top = -184.0
+offset_right = 352.0
+offset_bottom = 184.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture_normal = ExtResource("21_jcpg8")
+
+[node name="OpenBook" type="Node2D" parent="Settings"]
+scale = Vector2(0.9999998, 0.9999998)
+
+[node name="ClickableArea" parent="Settings/OpenBook" node_paths=PackedStringArray("area_2d", "click_audio") instance=ExtResource("19_vdu1l")]
+area_2d = NodePath("../Area2D")
+click_audio = NodePath("../BookCloseAudioStreamPlayer")
+
+[node name="BookCloseAudioStreamPlayer" type="AudioStreamPlayer" parent="Settings/OpenBook"]
+stream = ExtResource("21_1etha")
+
+[node name="Sprite2D" type="Sprite2D" parent="Settings/OpenBook"]
+texture = ExtResource("21_jcpg8")
+
+[node name="Area2D" type="Area2D" parent="Settings/OpenBook"]
+position = Vector2(0, 89.60001)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Settings/OpenBook/Area2D"]
+position = Vector2(0.39999393, 4.0000153)
+shape = SubResource("RectangleShape2D_vdu1l")
+
+[node name="Settings" type="Node2D" parent="Settings"]
+position = Vector2(0, -88)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Settings/Settings"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -42.0
+offset_top = -20.0
+offset_right = 42.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="IPContainer" type="HBoxContainer" parent="Settings/Settings/VBoxContainer"]
+layout_mode = 2
+
+[node name="IPLabel" type="Label" parent="Settings/Settings/VBoxContainer/IPContainer"]
+layout_mode = 2
+text = "IP:"
+
+[node name="IPLineEdit" type="LineEdit" parent="Settings/Settings/VBoxContainer/IPContainer"]
+layout_mode = 2
+placeholder_text = "127.0.0.1"
+alignment = 1
+expand_to_text_length = true
+
+[node name="PortContainer" type="HBoxContainer" parent="Settings/Settings/VBoxContainer"]
+layout_mode = 2
+
+[node name="PortLabel" type="Label" parent="Settings/Settings/VBoxContainer/PortContainer"]
+layout_mode = 2
+text = "Port:"
+
+[node name="PortLineEdit" type="LineEdit" parent="Settings/Settings/VBoxContainer/PortContainer"]
+layout_mode = 2
+placeholder_text = "8080"
+alignment = 1
+expand_to_text_length = true
+caret_blink = true
+
+[connection signal="pressed" from="NonSettings/HBoxContainer/HostButton" to="." method="_on_button_pressed"]
+[connection signal="mouse_clicked" from="NonSettings/LeftArrow/ClickableArea" to="." method="_on_left_arrow_clicked"]
+[connection signal="mouse_clicked" from="NonSettings/RightArrow/ClickableArea" to="." method="_on_right_arrow_clicked"]
+[connection signal="text_changed" from="NonSettings/PlayerName/PlayerNameLineEdit" to="." method="_on_player_name_line_edit_text_changed"]
+[connection signal="mouse_clicked" from="NonSettings/SettingsBook/ClickableArea" to="." method="_on_settings_clicked"]
+[connection signal="mouse_clicked" from="Settings/OpenBook/ClickableArea" to="." method="_on_open_book_clicked"]
+
+[editable path="NonSettings/LeftArrow"]
+[editable path="NonSettings/RightArrow"]

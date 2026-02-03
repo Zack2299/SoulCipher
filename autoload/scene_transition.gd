@@ -30,6 +30,20 @@ func change_scene_packed(target_scene: PackedScene) -> void:
 	animation_player.play_backwards("fade")
 
 
+func reveal_hide_transition(target_reveal: Node = null, target_hide: Node = null):
+	animation_player.play("fade")
+	
+	await animation_player.animation_finished
+	
+	if target_reveal:
+		target_reveal.visible = true
+		
+	if target_hide:
+		target_hide.visible = false
+		
+	animation_player.play_backwards("fade")
+
+
 func change_scene_room_name(target_room_name: String, target_room: Node, room_to_set_invisible: Node, set_parent_invisible: bool, used_door_index: int = -1) -> void:
 	animation_player.play("fade")
 	

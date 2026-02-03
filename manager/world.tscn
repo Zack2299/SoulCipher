@@ -17,7 +17,7 @@ z_index = 100
 z_as_relative = false
 position = Vector2(-295, -155)
 set_parent_invisible = false
-is_fixed_navigation = true
+is_going_back = true
 
 [node name="RoomManager" parent="." instance=ExtResource("3_ul5md")]
 

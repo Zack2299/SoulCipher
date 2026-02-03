@@ -5,7 +5,7 @@ enum RelocatorSide { LEFT, RIGHT, NEUTRAL }
 @export var scene_to_switch_to: PackedScene
 @export var room_name_to_switch_to: String
 @export var set_parent_invisible: bool = true 
-@export var is_fixed_navigation: bool = false
+@export var is_going_back: bool = false
 # ^ for when relocator is not in a room (the previous room relocator in world -- never want to set world invisible)
 var relocator_index: int
 
@@ -19,7 +19,7 @@ var transition_time_with_buffer = 1.1
 
 
 func _ready() -> void:
-	if is_fixed_navigation:
+	if is_going_back:
 		sprite_2d.texture = preload("uid://cmnkt2q6uyoxj")
 		click_audio_stream_player.stream = preload("uid://c6dfmgtico5f0")
 	
@@ -59,7 +59,7 @@ func spawn_and_switch() -> void:
 		return
 
 	var target_name = room_name_to_switch_to
-	var is_going_back = is_fixed_navigation
+	#var is_going_back = is_fixed_navigation
 	var back_button = get_node_or_null("/root/World/PreviousRoomRelocator")
 	
 	if is_going_back:
