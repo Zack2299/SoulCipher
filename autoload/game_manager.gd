@@ -89,8 +89,7 @@ func _ghost_turn_leave():
 
 # --- GHOST HELPERS ---
 func _set_ghost_ui(show: bool):
-	#world_node
-	pass
+	world_node.ghost_ui.visible = show
 
 
 func _set_investigator_waiting_ui(show: bool):

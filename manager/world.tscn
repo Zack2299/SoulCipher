@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=5 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
 [ext_resource type="PackedScene" uid="uid://bxp1idflyosfq" path="res://manager/room_manager.tscn" id="3_ul5md"]
+[ext_resource type="Texture2D" uid="uid://doekbp5g40i8o" path="res://assets/ui/red_border.png" id="4_eo02o"]
 
 [node name="World" type="Node2D"]
 script = ExtResource("1_gfoh4")
@@ -23,10 +24,10 @@ is_going_back = true
 
 [node name="PlayersData" type="Node2D" parent="."]
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="PlayerUI" type="CanvasLayer" parent="."]
 layer = 0
 
-[node name="PlayerUIHbox" type="HBoxContainer" parent="CanvasLayer"]
+[node name="PlayerUIHbox" type="HBoxContainer" parent="PlayerUI"]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -37,4 +38,11 @@ grow_horizontal = 2
 size_flags_horizontal = 4
 alignment = 1
 
-[node name="Node2D" type="Node2D" parent="."]
+[node name="GhostUI" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="TextureRect" type="TextureRect" parent="GhostUI"]
+offset_right = 40.0
+offset_bottom = 40.0
+scale = Vector2(3, 3)
+texture = ExtResource("4_eo02o")

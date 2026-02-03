@@ -3,7 +3,8 @@ extends Node2D
 @onready var room_manager: Node2D = $RoomManager
 @onready var previous_room_relocator: Node2D = $PreviousRoomRelocator
 @onready var players_data: Node2D = $PlayersData
-@onready var player_ui_hbox: HBoxContainer = $CanvasLayer/PlayerUIHbox
+@onready var player_ui_hbox: HBoxContainer = $PlayerUI/PlayerUIHbox
+@onready var ghost_ui: CanvasLayer = $GhostUI
 
 @export_dir var rooms_file_path: String = "res://rooms/"
 
