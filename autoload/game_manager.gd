@@ -20,7 +20,7 @@ func _ready():
 
 
 func _setup_states():
-	state_machine.add_states(_state_waiting, _on_waiting_enter, Callable())
+	state_machine.add_states(_state_waiting, _on_waiting_enter, _on_waiting_leave)
 	state_machine.add_states(_ghost_turn, _ghost_turn_enter, _ghost_turn_leave)
 	state_machine.add_states(_player_turn, Callable(), Callable())
 	
@@ -61,8 +61,23 @@ func _state_waiting():
 
 
 func _on_waiting_leave():
-	print("GAME MANAGER: ID [%d] left WAITING state." % multiplayer.get_unique_id())
+	var local_id = multiplayer.get_unique_id()
+	print("GAME MANAGER: ID [%d] left WAITING state." % local_id)
+	
+		# logic to differentiate UI
+	if local_id == ghost_id:
+		_set_ghost_ui(true)
+	else:
+		_set_player_ui(true)
 
+
+# --- GHOST HELPERS ---
+func _set_ghost_ui(show: bool):
+	world_node.ghost_ui.visible = show
+
+
+func _set_player_ui(show: bool):
+	world_node.player_ui.visible = show
 
 # --- GHOST TURN STATE ---
 func _ghost_turn_enter():
@@ -71,7 +86,7 @@ func _ghost_turn_enter():
 	
 	# logic to differentiate UI
 	if local_id == ghost_id:
-		_set_ghost_ui(true)
+		_set_ghost_turn_ui(true)
 	else:
 		_set_investigator_waiting_ui(true)
 
@@ -82,14 +97,14 @@ func _ghost_turn():
 
 func _ghost_turn_leave():
 	print("GAME MANAGER: ID [%d] left GHOST TURN." % multiplayer.get_unique_id())
-	_set_ghost_ui(false)
+	_set_ghost_turn_ui(false)
 	_set_investigator_waiting_ui(false)
 
 
 
 # --- GHOST HELPERS ---
-func _set_ghost_ui(show: bool):
-	world_node.ghost_ui.visible = show
+func _set_ghost_turn_ui(show: bool):
+	pass
 
 
 func _set_investigator_waiting_ui(show: bool):

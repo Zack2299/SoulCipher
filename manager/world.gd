@@ -5,6 +5,7 @@ extends Node2D
 @onready var players_data: Node2D = $PlayersData
 @onready var player_ui_hbox: HBoxContainer = $PlayerUI/PlayerUIHbox
 @onready var ghost_ui: CanvasLayer = $GhostUI
+@onready var player_ui: CanvasLayer = $PlayerUI
 
 @export_dir var rooms_file_path: String = "res://rooms/"
 

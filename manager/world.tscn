@@ -26,6 +26,7 @@ is_going_back = true
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 layer = 0
+visible = false
 
 [node name="PlayerUIHbox" type="HBoxContainer" parent="PlayerUI"]
 anchors_preset = 5
