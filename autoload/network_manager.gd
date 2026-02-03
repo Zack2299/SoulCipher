@@ -6,7 +6,7 @@ var local_username: String = "Player"
 var local_avatar_id: int = 0
 var connected_ids: Array[int] = []
 
-var current_world_node = null 
+var world_node = null 
 
 
 func _ready():
@@ -48,8 +48,8 @@ func _on_player_connected(id: int):
 		
 		# Sync the list to everyone and spawn the player if the world is active
 		sync_connected_ids.rpc(connected_ids)
-		if current_world_node != null:
-			current_world_node.spawn_player(id)
+		if world_node != null:
+			world_node.spawn_player(id)
 
 
 func _on_player_disconnected(id: int):
@@ -88,9 +88,9 @@ func update_player_list(new_info: Dictionary):
 func sync_connected_ids(server_list: Array):
 	connected_ids = Array(server_list, TYPE_INT, &"", null)
 	# If the world is already loaded, ensure all peers in the list are spawned
-	if current_world_node:
+	if world_node:
 		for id in connected_ids:
-			current_world_node.spawn_player(id)
+			world_node.spawn_player(id)
 
 
 func start_game_for_all():

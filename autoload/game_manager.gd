@@ -1,14 +1,17 @@
 extends Node
 
 var state_machine: CallableStateMachine 
-var current_world_node: Node = null
+var world_node: Node = null
 
 # game state
 var current_track: int = 1
 var current_subround: int = 1
+var current_round: int = 1
 var ghost_id: int = -1
 
+# config
 var random_ghost = true
+var total_rounds: int = 14
 
 
 func _ready():
@@ -37,7 +40,7 @@ func start_match(assigned_ghost_id: int):
 @rpc("authority", "call_local", "reliable")
 func sync_match_start(id: int):
 	ghost_id = id
-	state_machine.set_initial_state(_ghost_turn) 
+	state_machine.change_state(_ghost_turn)
 
 
 @rpc("authority", "call_local", "reliable")

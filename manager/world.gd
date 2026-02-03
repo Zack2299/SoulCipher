@@ -13,8 +13,8 @@ var havent_explored_rooms = true
 
 
 func _ready() -> void:
-	NetworkManager.current_world_node = self
-	GameManager.current_world_node = self
+	NetworkManager.world_node = self
+	GameManager.world_node = self
 	
 	load_scenes_from_folder()
 	spawn_rooms_to_world(loaded_scenes)

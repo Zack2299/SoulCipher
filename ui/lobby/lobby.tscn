@@ -249,6 +249,7 @@ click_audio = NodePath("../BookOpenAudioStreamPlayer")
 
 [node name="BookOpenAudioStreamPlayer" type="AudioStreamPlayer" parent="NonSettings/SettingsBook"]
 stream = ExtResource("21_vdu1l")
+volume_db = 5.0
 
 [node name="Sprite2D" type="Sprite2D" parent="NonSettings/SettingsBook"]
 texture = ExtResource("20_1etha")
