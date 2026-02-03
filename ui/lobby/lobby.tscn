@@ -239,7 +239,7 @@ position = Vector2(61, 68)
 
 [node name="HoverableArea" parent="NonSettings/SettingsBook" node_paths=PackedStringArray("area_2d") instance=ExtResource("18_jcpg8")]
 area_2d = NodePath("../Area2D")
-hover_scale = Vector2(1, 1)
+hover_scale = Vector2(1.02, 1.02)
 exit_duration = 0.25
 exit_trans = 7
 

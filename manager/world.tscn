@@ -74,3 +74,5 @@ offset_right = 40.0
 offset_bottom = 40.0
 scale = Vector2(3, 3)
 texture = ExtResource("4_eo02o")
+
+[node name="Sprite2D" type="Sprite2D" parent="GhostUI"]

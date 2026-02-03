@@ -29,9 +29,14 @@ func update_visibility():
 	var my_id = multiplayer.get_unique_id()
 	var my_data = get_node_or_null("/root/World/PlayersData/" + str(my_id))
 	
+	while GameManager.ghost_id == -1:
+		await get_tree().create_timer(0.1).timeout
+	
 	if my_data:
-		# 2. Only show if this player's room matches our room
-		self.visible = (data_node.current_room == my_data.current_room)
+		# 2. Only show if this player's room matches our room and they are not the ghost
+		self.visible = (data_node.current_room == my_data.current_room) and data_node.player_id != GameManager.ghost_id
 	else:
-		# Safety: if we can't find ourselves yet, just show everyone
-		self.visible = true
+		if data_node.player_id != GameManager.ghost_id:
+			self.visible = true # Safety: if we can't find ourselves yet, just show everyone
+		else:
+			self.visible = false
