@@ -14,6 +14,7 @@ var relocator_index: int
 @onready var clickable_area: Node = $ClickableArea
 @onready var exit_audio_stream_player: AudioStreamPlayer = $ExitAudioStreamPlayer
 @onready var click_audio_stream_player: AudioStreamPlayer = $ClickAudioStreamPlayer
+@onready var door_locked_audio_stream_player: AudioStreamPlayer = $DoorLockedAudioStreamPlayer
 
 var transition_time_with_buffer = 1.1
 
@@ -44,6 +45,8 @@ func _on_clickable_area_mouse_exited_clickable_area() -> void:
 func _on_clickable_area_mouse_clicked() -> void:
 	if room_name_to_switch_to == "" and not scene_to_switch_to:
 		print("Relocator clicked, but no target room assigned by RoomManager!")
+		self.visible = false
+		door_locked_audio_stream_player.play()
 		return
 		
 	Cursor.is_hovering = false

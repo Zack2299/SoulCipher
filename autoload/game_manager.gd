@@ -21,7 +21,7 @@ func _ready():
 
 func _setup_states():
 	state_machine.add_states(_state_waiting, _on_waiting_enter, Callable())
-	state_machine.add_states(_ghost_turn, _ghost_turn_enter, Callable())
+	state_machine.add_states(_ghost_turn, _ghost_turn_enter, _ghost_turn_leave)
 	state_machine.add_states(_player_turn, Callable(), Callable())
 	
 	state_machine.set_initial_state(_state_waiting)
@@ -47,24 +47,56 @@ func sync_match_start(id: int):
 func change_game_phase(phase_name: String):
 	if phase_name == "player":
 		state_machine.change_state(_player_turn)
+	elif phase_name == "ghost":
+		state_machine.change_state(_ghost_turn)
 
 
-# STATE FUNCTIONS
+# --- WAITING STATE ---
 func _on_waiting_enter():
-	print("GAME MANAGER [%d]: Waiting for server to initiate match..." % multiplayer.get_unique_id())
+	print("GAME MANAGER: [%d] entered WAITING state." % multiplayer.get_unique_id())
 
 
 func _state_waiting():
 	pass
 
 
+func _on_waiting_leave():
+	print("GAME MANAGER: ID [%d] left WAITING state." % multiplayer.get_unique_id())
+
+
+# --- GHOST TURN STATE ---
 func _ghost_turn_enter():
-	print("GAME MANAGER [%d]: Starting ghost turn!" % multiplayer.get_unique_id())
+	var local_id = multiplayer.get_unique_id()
+	print("GAME MANAGER: ID [%d] entered GHOST TURN." % local_id)
+	
+	# logic to differentiate UI
+	if local_id == ghost_id:
+		_set_ghost_ui(true)
+	else:
+		_set_investigator_waiting_ui(true)
 
 
 func _ghost_turn():
 	pass
 
 
+func _ghost_turn_leave():
+	print("GAME MANAGER: ID [%d] left GHOST TURN." % multiplayer.get_unique_id())
+	_set_ghost_ui(false)
+	_set_investigator_waiting_ui(false)
+
+
+
+# --- GHOST HELPERS ---
+func _set_ghost_ui(show: bool):
+	#world_node
+	pass
+
+
+func _set_investigator_waiting_ui(show: bool):
+	pass
+
+
+# --- PLAYER TURN STATE ---
 func _player_turn():
 	pass

@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://gkef1oswnf8e"]
+[gd_scene load_steps=9 format=3 uid="uid://gkef1oswnf8e"]
 
 [ext_resource type="Script" uid="uid://dossvicya01dr" path="res://entities/relocator/relocator.gd" id="1_iayyg"]
 [ext_resource type="Texture2D" uid="uid://lu5kbnymdctv" path="res://assets/entities/relocator.png" id="1_iwgsx"]
 [ext_resource type="PackedScene" uid="uid://cq4v88u75nlbj" path="res://component/clickable_area.tscn" id="1_kytp6"]
 [ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="4_7e0wv"]
 [ext_resource type="AudioStream" uid="uid://hopxbshs06v3" path="res://assets/sounds/menu_25.wav" id="5_awoa7"]
+[ext_resource type="AudioStream" uid="uid://cip3beydl4y04" path="res://assets/sounds/door_locked.wav" id="6_47jqt"]
 [ext_resource type="AudioStream" uid="uid://b2dbvqfg1ngnx" path="res://assets/sounds/Click_Combo_Pitched_Up.wav" id="6_x3ev0"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_iwgsx"]
@@ -32,6 +33,9 @@ stream = ExtResource("5_awoa7")
 
 [node name="EnterAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_x3ev0")
+
+[node name="DoorLockedAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_47jqt")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_iwgsx")
