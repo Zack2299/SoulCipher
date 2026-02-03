@@ -14,29 +14,36 @@ var havent_explored_rooms = true
 
 func _ready() -> void:
 	NetworkManager.current_world_node = self
+	GameManager.current_world_node = self
+	
 	load_scenes_from_folder()
 	spawn_rooms_to_world(loaded_scenes)
 	
-	# Small delay ensures the sync_connected_ids RPC has landed on clients
+	# small delay ensures the sync_connected_ids RPC has landed on clients
 	await get_tree().process_frame
 	
 	print("World ready. Spawning connected players: ", NetworkManager.connected_ids)
 	for id in NetworkManager.connected_ids:
 		spawn_player(id)
 		
-	debug_player_paths()
+	if multiplayer.is_server():
+		_server_initialize_match()
 
 
-func debug_player_paths():
-	await get_tree().create_timer(2.0).timeout 
-	print("\n--- NODE PATH DEBUG (Peer ", multiplayer.get_unique_id(), ") ---")
-	for p in players_data.get_children():
-		print("Player Node: ", p.name, " | Full Path: ", p.get_path())
+func _server_initialize_match():
+	# ensure we have players
+	var player_ids = NetworkManager.connected_ids
+	if player_ids.is_empty():
+		return
 	
-	print("UI Nodes:")
-	for u in player_ui_hbox.get_children():
-		print("UI Node: ", u.name, " | Full Path: ", u.get_path())
-	print("-------------------------------------------\n")
+	var ghost_id = 1 # server is ghost as default
+	if GameManager.random_ghost:
+		ghost_id = player_ids[randi() % player_ids.size()]
+	
+	print("SERVER: Match starting. Ghost: ", ghost_id)
+	
+	# start global game manager state machine
+	GameManager.start_match(ghost_id)
 
 
 func refresh_all_ui_visibility():

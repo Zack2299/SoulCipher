@@ -8,6 +8,7 @@ var connected_ids: Array[int] = []
 
 var current_world_node = null 
 
+
 func _ready():
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.peer_disconnected.connect(_on_player_disconnected)
@@ -15,6 +16,7 @@ func _ready():
 
 	local_username = "Player"
 	local_avatar_id = randi_range(0, 7)
+
 
 func host_game(port: int):
 	var error = peer.create_server(port)
@@ -28,6 +30,7 @@ func host_game(port: int):
 	register_player_info(1, info)
 	print("Server started on port %d" % port)
 
+
 func join_game(ip_address: String, port: int):
 	var error = peer.create_client(ip_address, port)
 	if error != OK:
@@ -35,6 +38,7 @@ func join_game(ip_address: String, port: int):
 		return
 		
 	multiplayer.multiplayer_peer = peer
+
 
 func _on_player_connected(id: int):
 	print("Player connected: %d" % id)
@@ -47,6 +51,7 @@ func _on_player_connected(id: int):
 		if current_world_node != null:
 			current_world_node.spawn_player(id)
 
+
 func _on_player_disconnected(id: int):
 	print("Player disconnected: %d" % id)
 	if multiplayer.is_server():
@@ -54,6 +59,7 @@ func _on_player_disconnected(id: int):
 		player_info.erase(id)
 		sync_connected_ids.rpc(connected_ids)
 		update_player_list.rpc(player_info)
+
 
 func _on_connected_to_server():
 	var id = multiplayer.get_unique_id()
@@ -63,6 +69,7 @@ func _on_connected_to_server():
 	}
 	register_player_info.rpc(id, my_data)
 
+
 @rpc("any_peer", "reliable")
 func register_player_info(id: int, info: Dictionary):
 	if multiplayer.is_server():
@@ -70,10 +77,12 @@ func register_player_info(id: int, info: Dictionary):
 		update_player_list.rpc(player_info)
 		sync_connected_ids.rpc(connected_ids)
 
+
 @rpc("authority", "call_local", "reliable")
 func update_player_list(new_info: Dictionary):
 	player_info = new_info
 	print("Global Player Info Updated: ", player_info)
+
 
 @rpc("authority", "call_local", "reliable")
 func sync_connected_ids(server_list: Array):
@@ -83,9 +92,11 @@ func sync_connected_ids(server_list: Array):
 		for id in connected_ids:
 			current_world_node.spawn_player(id)
 
+
 func start_game_for_all():
 	if multiplayer.is_server():
 		rpc_load_game_scene.rpc()
+
 
 @rpc("any_peer", "call_local", "reliable")
 func rpc_load_game_scene():
