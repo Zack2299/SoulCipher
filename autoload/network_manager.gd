@@ -100,4 +100,4 @@ func start_game_for_all():
 
 @rpc("any_peer", "call_local", "reliable")
 func rpc_load_game_scene():
-	SceneTransition.change_scene_packed(load("uid://i0m57dlbwrbl"))
+	SceneTransition.change_scene_packed(load("uid://i0m57dlbwrbl"), 1.0)

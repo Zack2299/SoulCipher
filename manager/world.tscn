@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=11 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://doekbp5g40i8o" path="res://assets/ui/red_border.png" id="4_eo02o"]
 [ext_resource type="Texture2D" uid="uid://3klghqtw3dj" path="res://assets/environment/shop.png" id="4_wn2f2"]
 [ext_resource type="Shader" uid="uid://k1pfmdb6llbu" path="res://shader/ghost.gdshader" id="4_ym8sf"]
+[ext_resource type="Texture2D" uid="uid://bji036jqt72p5" path="res://assets/environment/ghost_room.png" id="5_hggar"]
 
 [sub_resource type="Gradient" id="Gradient_ym8sf"]
 colors = PackedColorArray(0, 0.83137256, 0.75686276, 0.5176471, 1, 1, 1, 1)
@@ -54,8 +55,10 @@ visible = false
 texture = ExtResource("4_wn2f2")
 
 [node name="CardSelect" type="Node2D" parent="."]
+visible = false
 
 [node name="Sprite2D" type="Sprite2D" parent="CardSelect"]
+texture = ExtResource("5_hggar")
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 layer = 0

@@ -57,6 +57,19 @@ func _on_player_turn_over():
 	rpc("change_game_phase", "end_round")
 
 
+@rpc("any_peer", "call_local", "reliable")
+func request_end_ghost_turn():
+	if multiplayer.is_server():
+		#if multiplayer.get_remote_sender_id() == ghost_id:
+		change_game_phase.rpc("player")
+
+## This is called to tell the server the player round is over
+@rpc("any_peer", "call_local", "reliable")
+func request_end_player_turn():
+	if multiplayer.is_server():
+		change_game_phase.rpc("end_round")
+
+
 @rpc("authority", "call_local", "reliable")
 func sync_match_start(id: int):
 	ghost_id = id
@@ -90,7 +103,7 @@ func _on_waiting_leave():
 	if local_id == ghost_id:
 		_set_ghost_ui(true)
 	else:
-		_set_player_ui(true)
+		_set_player_ui(false)
 
 
 # --- GHOST HELPERS ---
@@ -98,8 +111,11 @@ func _set_ghost_ui(show: bool):
 	world_node.ghost_ui.visible = show
 
 
-func _set_player_ui(show: bool):
-	world_node.player_ui.visible = show
+func _set_player_ui(show: bool, wait: float = 1.0/3.0):
+	var local_id = multiplayer.get_unique_id()
+	await get_tree().create_timer(wait).timeout
+	if local_id != ghost_id:
+		world_node.player_ui.visible = show
 
 
 # --- GHOST TURN STATE ---
@@ -129,6 +145,7 @@ func _ghost_turn_leave():
 	#print("GAME MANAGER: ID [%d] left GHOST TURN." % multiplayer.get_unique_id())
 	_set_ghost_turn_ui(false)
 	_set_investigator_waiting_ui(false)
+	_set_player_ui(true)
 
 
 # --- GHOST HELPERS ---

@@ -19,13 +19,26 @@ var havent_explored_rooms = true
 
 
 # --- DEBUG ---
-signal ghost_turn_over # when ghost has placed hint and all players are done in the shop
-signal player_turn_over # when the timer runs out
+signal ghost_turn_over
+signal player_turn_over
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("one"):
-		ghost_turn_over.emit()
+		# We send the request to the server
+		request_phase_change.rpc("ghost")
 	elif event.is_action_pressed("two"):
+		request_phase_change.rpc("player")
+
+
+@rpc("any_peer", "call_local", "reliable")
+func request_phase_change(type: String):
+	# ONLY the server should emit these signals
+	if not multiplayer.is_server():
+		return
+		
+	if type == "ghost":
+		ghost_turn_over.emit()
+	elif type == "player":
 		player_turn_over.emit()
 # --- DEBUG ---
 

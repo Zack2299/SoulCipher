@@ -8,6 +8,8 @@ extends CanvasLayer
 var previous_room: String = "staircase"
 var current_room: String = "staircase"
 
+var default_speed: float = 3.0
+
 var room_history_queue: Array = []
 
 
@@ -19,7 +21,8 @@ func _ready() -> void:
 	current_room = "staircase"
 
 
-func change_scene_packed(target_scene: PackedScene) -> void:
+func change_scene_packed(target_scene: PackedScene, speed_scale = 3.0) -> void:
+	animation_player.speed_scale = speed_scale
 	animation_player.play("fade") # fade to black
 	
 	await animation_player.animation_finished
@@ -31,6 +34,10 @@ func change_scene_packed(target_scene: PackedScene) -> void:
 	
 	#door_audio_stream_player.play()
 	animation_player.play_backwards("fade")
+	
+	await animation_player.animation_finished
+	animation_player.speed_scale = default_speed
+	
 
 
 func reveal_hide_transition(target_reveal: Node = null, target_hide: Node = null):
