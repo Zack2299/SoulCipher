@@ -51,13 +51,27 @@ is_going_back = true
 [node name="Shop" type="Node2D" parent="."]
 visible = false
 
+[node name="Panel" type="Panel" parent="Shop"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="TextureRect" type="Sprite2D" parent="Shop"]
 texture = ExtResource("4_wn2f2")
 
 [node name="CardSelect" type="Node2D" parent="."]
 visible = false
 
-[node name="Sprite2D" type="Sprite2D" parent="CardSelect"]
+[node name="Panel" type="Panel" parent="CardSelect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="Sprite2D" parent="CardSelect"]
 texture = ExtResource("5_hggar")
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]

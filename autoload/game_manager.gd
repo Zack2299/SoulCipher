@@ -60,7 +60,6 @@ func _on_player_turn_over():
 @rpc("any_peer", "call_local", "reliable")
 func request_end_ghost_turn():
 	if multiplayer.is_server():
-		#if multiplayer.get_remote_sender_id() == ghost_id:
 		change_game_phase.rpc("player")
 
 ## This is called to tell the server the player round is over

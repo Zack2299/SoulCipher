@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://cufgndfdbc357"]
+
+[ext_resource type="Texture2D" uid="uid://bji036jqt72p5" path="res://assets/environment/ghost_room.png" id="1_mf8xo"]
+
+[node name="CardSelect" type="Node2D"]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_mf8xo")

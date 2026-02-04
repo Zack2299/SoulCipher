@@ -57,6 +57,17 @@ func _ready() -> void:
 		
 	if multiplayer.is_server():
 		_server_initialize_match()
+		
+	card_select.visibility_changed.connect(_on_card_select_visibility_changed)
+	shop.visibility_changed.connect(_on_shop_visibility_changed)
+
+
+func _on_card_select_visibility_changed():
+	room_manager.visible = !card_select.visible
+
+
+func _on_shop_visibility_changed():
+	room_manager.visible = !shop.visible
 
 
 func _server_initialize_match():
