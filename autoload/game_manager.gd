@@ -1,7 +1,7 @@
 extends Node
 
 var state_machine: CallableStateMachine 
-var world_node: Node = null:
+var world_node: World = null:
 	set(value):
 		world_node = value
 		if world_node != null:
@@ -12,6 +12,7 @@ var current_track: int = 1
 #var current_subround: int = 1
 var current_round: int = 1
 var ghost_id: int = -1
+var game_just_started = true
 
 # config
 var random_ghost = true
@@ -107,10 +108,17 @@ func _ghost_turn_enter():
 	print("GAME MANAGER: ID [%d] entered GHOST TURN." % local_id)
 	
 	# logic to differentiate UI
-	if local_id == ghost_id:
-		_set_ghost_turn_ui(true)
+	if game_just_started:
+		if local_id == ghost_id:
+			world_node.card_select.visible = true
+		else:
+			world_node.shop.visible = true
+		game_just_started = false
 	else:
-		_set_investigator_waiting_ui(true)
+		if local_id == ghost_id:
+			_set_ghost_turn_ui(true)
+		else:
+			_set_investigator_waiting_ui(true)
 
 
 func _ghost_turn():
@@ -123,14 +131,16 @@ func _ghost_turn_leave():
 	_set_investigator_waiting_ui(false)
 
 
-
 # --- GHOST HELPERS ---
 func _set_ghost_turn_ui(show: bool):
-	pass
+	SceneTransition.set_visibility_transition(world_node.card_select, show)
 
 
 func _set_investigator_waiting_ui(show: bool):
-	pass
+	var local_id = multiplayer.get_unique_id()
+	if local_id != ghost_id:
+		SceneTransition.set_visibility_transition(world_node.player_ui, !show)
+	SceneTransition.set_visibility_transition(world_node.shop, show)
 
 
 # --- PLAYER TURN STATE ---
@@ -154,7 +164,8 @@ func _end_round_enter():
 	print("GAME MANAGER: ID [%d] entered END OF ROUND." % local_id)
 	
 	current_round += 1
-	print("Round ", current_round)
+	print("")
+	print("----- Round ", current_round, " -----")
 	
 	# if correctly guessed weapon/person/place
 	# current_track += 1

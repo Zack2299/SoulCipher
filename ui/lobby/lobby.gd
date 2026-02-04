@@ -72,5 +72,6 @@ func _on_open_book_clicked() -> void:
 	SceneTransition.reveal_hide_transition(non_settings, settings)
 	settings_area_2d.visible = true
 
+
 func _on_player_name_line_edit_text_changed(new_text: String) -> void:
 	NetworkManager.local_username = new_text
