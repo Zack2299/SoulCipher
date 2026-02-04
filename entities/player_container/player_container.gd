@@ -29,7 +29,7 @@ func update_visibility():
 	var my_id = multiplayer.get_unique_id()
 	var my_data = get_node_or_null("/root/World/PlayersData/" + str(my_id))
 	
-	while GameManager.ghost_id == -1:
+	while GameManager.ghost_id < 1:
 		await get_tree().create_timer(0.1).timeout
 	
 	if my_data:

@@ -14,6 +14,18 @@ var rooms_array: Array[Node] = []
 var havent_explored_rooms = true
 
 
+# --- DEBUG ---
+signal ghost_turn_over # when ghost has placed hint and all players are done in the shop
+signal player_turn_over # when the timer runs out
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("one"):
+		ghost_turn_over.emit()
+	elif event.is_action_pressed("two"):
+		player_turn_over.emit()
+# --- DEBUG ---
+
+
 func _ready() -> void:
 	NetworkManager.world_node = self
 	GameManager.world_node = self
