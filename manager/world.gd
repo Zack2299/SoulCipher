@@ -24,7 +24,6 @@ signal player_turn_over
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("one"):
-		# We send the request to the server
 		request_phase_change.rpc("ghost")
 	elif event.is_action_pressed("two"):
 		request_phase_change.rpc("player")
@@ -32,7 +31,6 @@ func _input(event: InputEvent) -> void:
 
 @rpc("any_peer", "call_local", "reliable")
 func request_phase_change(type: String):
-	# ONLY the server should emit these signals
 	if not multiplayer.is_server():
 		return
 		

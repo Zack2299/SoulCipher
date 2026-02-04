@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
 [ext_resource type="PackedScene" uid="uid://bxp1idflyosfq" path="res://manager/room_manager.tscn" id="3_ul5md"]
-[ext_resource type="Texture2D" uid="uid://doekbp5g40i8o" path="res://assets/ui/red_border.png" id="4_eo02o"]
 [ext_resource type="Texture2D" uid="uid://3klghqtw3dj" path="res://assets/environment/shop.png" id="4_wn2f2"]
 [ext_resource type="Shader" uid="uid://k1pfmdb6llbu" path="res://shader/ghost.gdshader" id="4_ym8sf"]
 [ext_resource type="Texture2D" uid="uid://bji036jqt72p5" path="res://assets/environment/ghost_room.png" id="5_hggar"]
+[ext_resource type="Script" uid="uid://bsnl8s6kc8wga" path="res://entities/tint/tint.gd" id="7_hggar"]
 
 [sub_resource type="Gradient" id="Gradient_ym8sf"]
 colors = PackedColorArray(0, 0.83137256, 0.75686276, 0.5176471, 1, 1, 1, 1)
@@ -79,7 +79,7 @@ alignment = 1
 layer = 0
 visible = false
 
-[node name="ColorRect" type="ColorRect" parent="GhostUI"]
+[node name="Rays" type="ColorRect" parent="GhostUI"]
 z_as_relative = false
 material = SubResource("ShaderMaterial_wn2f2")
 anchors_preset = 15
@@ -89,9 +89,13 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="TextureRect" type="TextureRect" parent="GhostUI"]
+[node name="Tint" type="ColorRect" parent="GhostUI"]
 visible = false
-offset_right = 40.0
-offset_bottom = 40.0
-scale = Vector2(3, 3)
-texture = ExtResource("4_eo02o")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0.6117647, 0.8901961, 0.12156863)
+script = ExtResource("7_hggar")
