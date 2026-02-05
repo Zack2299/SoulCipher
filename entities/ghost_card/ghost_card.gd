@@ -8,15 +8,16 @@ signal card_selected
 @onready var card_frame: NinePatchRect = $CardFrame
 @onready var card_flip_audio_stream_player: AudioStreamPlayer = $CardFlipAudioStreamPlayer
 
-# Config
+# config
 var front_texture: Texture2D
 var back_spritesheet: Texture2D = preload("uid://c0ewypdlrhiqr")
 var back_frame: int
 var is_revealed: bool = false
 var anchor_point: Vector2
 var bounds_rect: Rect2
+var top_z_index: int = 0
 
-# Dragging variables
+# dragging variables
 var is_dragging: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
 
@@ -30,7 +31,6 @@ var noise_time: float = 0.0
 @export_group("Physics")
 @export var repulsion_radius: float = 200.0
 @export var repulsion_strength: float = 5.0
-# --- ADDED MISSING EXPORTS BELOW ---
 @export var border_margin: float = 50.0
 @export var border_push_strength: float = 3.0
 
@@ -57,7 +57,7 @@ func setup(back_tex: Texture2D, frame_idx: int, front_tex: Texture2D, start_pos:
 	if clue_art:
 		clue_art.texture = front_texture
 	
-	# Initial Hitbox Size (Matching the back texture)
+	# initial hitbox size (matching the back texture)
 	var back_size = Vector2(texture.get_width() / hframes, texture.get_height())
 	hitbox.size = back_size
 	hitbox.position = -back_size / 2
@@ -158,9 +158,14 @@ func _input(event):
 	var is_over = hitbox.get_rect().has_point(local_mouse)
 
 	if event.pressed:
-		if is_over:
-			print("GHOST: Click detected on ", name)
-			get_tree().set_group("ghost_cards", "z_index", 0)
+		# check if we are over the card AND if we are the highest Z-index under the mouse
+		if is_over and _is_top_card():
+			var cards = get_tree().get_nodes_in_group("ghost_cards")
+			for card in cards:
+				# lower everyone by 1 -- keeps relative order but makes room for the new 10
+				card.z_index = max(0, card.z_index - 1)
+				
+			# put this card on top (next top one has z_index of 9)
 			z_index = 10
 
 			if event.button_index == MOUSE_BUTTON_LEFT:
@@ -174,5 +179,24 @@ func _input(event):
 	
 	elif event.button_index == MOUSE_BUTTON_LEFT:
 		if is_dragging:
-			print("GHOST: Released card")
 			is_dragging = false
+
+# helper function to find if this card is visually on top
+func _is_top_card() -> bool:
+	var mouse_pos = get_global_mouse_position()
+	var cards = get_tree().get_nodes_in_group("ghost_cards")
+	
+	var top_card = self
+	var max_z = z_index
+	
+	for card in cards:
+		# check if the other card is also under the mouse
+		if card.hitbox.get_rect().has_point(card.to_local(mouse_pos)):
+			# if the other card has a higher Z, or same Z but is later in the tree
+			if card.z_index > max_z:
+				return false
+			elif card.z_index == max_z and card.get_index() > get_index():
+				# this handles cards with the same Z-index (standard tree order)
+				return false
+				
+	return true
