@@ -10,6 +10,8 @@ extends Node2D
 
 const NUM_CARDS: int = 6
 
+var card_count = 0
+
 var available_fronts: Array[Texture2D] = []
 
 func _ready():
@@ -35,7 +37,11 @@ func show_cards():
 	var half_height = (sprite_size.y / 2) - padding
 
 	for i in range(NUM_CARDS):
-		if available_fronts.is_empty(): break
+		card_count += 1
+		if card_count > NUM_CARDS: break
+		if available_fronts.is_empty():
+			print("OUT OF CARDS")
+			break
 		
 		var random_pos = Vector2(
 			randf_range(sprite_pos.x - half_width, sprite_pos.x + half_width),

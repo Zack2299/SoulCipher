@@ -1,6 +1,41 @@
-[gd_scene load_steps=2 format=3 uid="uid://vod8bkhgu1tg"]
+[gd_scene load_steps=5 format=3 uid="uid://vod8bkhgu1tg"]
 
 [ext_resource type="Script" uid="uid://31uqlqntqxm0" path="res://entities/ghost_card/ghost_card.gd" id="1_541pa"]
+[ext_resource type="Texture2D" uid="uid://c0c7brf3376vl" path="res://assets/cards/ghost_card_frame.png" id="2_gmeba"]
+[ext_resource type="Texture2D" uid="uid://dupwwm15bk6lp" path="res://assets/cards/ghost_card_frame_mask.png" id="2_mf53t"]
+[ext_resource type="AudioStream" uid="uid://dasex35nkujyh" path="res://assets/sounds/card_flip.wav" id="2_xmul3"]
 
 [node name="GhostCard" type="Sprite2D"]
 script = ExtResource("1_541pa")
+
+[node name="Hitbox" type="ColorRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+mouse_filter = 2
+color = Color(1, 1, 1, 0)
+
+[node name="MaskLayer" type="NinePatchRect" parent="."]
+clip_children = 1
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_mf53t")
+region_rect = Rect2(0, 0, 114, 174)
+patch_margin_left = 7
+patch_margin_top = 6
+patch_margin_right = 7
+patch_margin_bottom = 6
+
+[node name="ClueArt" type="Sprite2D" parent="MaskLayer"]
+
+[node name="CardFrame" type="NinePatchRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_gmeba")
+region_rect = Rect2(0, 0, 114, 174)
+patch_margin_left = 7
+patch_margin_top = 6
+patch_margin_right = 7
+patch_margin_bottom = 6
+
+[node name="CardFlipAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_xmul3")
