@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://vod8bkhgu1tg"]
+
+[ext_resource type="Script" uid="uid://31uqlqntqxm0" path="res://entities/ghost_card/ghost_card.gd" id="1_541pa"]
+
+[node name="GhostCard" type="Sprite2D"]
+script = ExtResource("1_541pa")

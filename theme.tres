@@ -1,7 +1,8 @@
-[gd_resource type="Theme" load_steps=5 format=3 uid="uid://cw08vbvg0d6km"]
+[gd_resource type="Theme" load_steps=8 format=3 uid="uid://cw08vbvg0d6km"]
 
 [ext_resource type="Texture2D" uid="uid://crxxkcc7bcrkv" path="res://assets/ui/lineedit.png" id="1_cjfk0"]
 [ext_resource type="FontFile" uid="uid://pnn0wes51khd" path="res://assets/font/cc.yal.7w7.block.ttf" id="1_e1x85"]
+[ext_resource type="Texture2D" uid="uid://dbsleq5hyu1ac" path="res://assets/entities/wooden_board.png" id="2_vj6dk"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cjfk0"]
 
@@ -13,8 +14,19 @@ texture_margin_right = 3.0
 texture_margin_bottom = 4.0
 region_rect = Rect2(0, 0, 76, 15)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_vj6dk"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_110ce"]
+texture = ExtResource("2_vj6dk")
+texture_margin_left = 9.0
+texture_margin_top = 8.0
+texture_margin_right = 10.0
+texture_margin_bottom = 8.0
+
 [resource]
 default_font = ExtResource("1_e1x85")
 default_font_size = 16
 LineEdit/styles/focus = SubResource("StyleBoxEmpty_cjfk0")
 LineEdit/styles/normal = SubResource("StyleBoxTexture_vj6dk")
+RichTextLabel/styles/focus = SubResource("StyleBoxEmpty_vj6dk")
+RichTextLabel/styles/normal = SubResource("StyleBoxTexture_110ce")

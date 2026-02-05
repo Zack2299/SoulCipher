@@ -110,7 +110,7 @@ func _set_ghost_ui(show: bool):
 	world_node.ghost_ui.visible = show
 
 
-func _set_player_ui(show: bool, wait: float = 1.0/3.0):
+func _set_player_ui(show: bool, wait: float = 1.0):
 	var local_id = multiplayer.get_unique_id()
 	await get_tree().create_timer(wait).timeout
 	if local_id != ghost_id:
@@ -149,14 +149,14 @@ func _ghost_turn_leave():
 
 # --- GHOST HELPERS ---
 func _set_ghost_turn_ui(show: bool):
-	SceneTransition.set_visibility_transition(world_node.card_select, show)
+	SceneTransition.set_visibility_transition(world_node.card_select, show, 1.0)
 
 
 func _set_investigator_waiting_ui(show: bool):
 	var local_id = multiplayer.get_unique_id()
 	if local_id != ghost_id:
-		SceneTransition.set_visibility_transition(world_node.player_ui, !show)
-	SceneTransition.set_visibility_transition(world_node.shop, show)
+		SceneTransition.set_visibility_transition(world_node.player_ui, !show, 1.0)
+	SceneTransition.set_visibility_transition(world_node.shop, show, 1.0)
 
 
 # --- PLAYER TURN STATE ---
