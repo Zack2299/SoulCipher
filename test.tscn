@@ -1,9 +1,12 @@
-[gd_scene load_steps=8 format=3 uid="uid://o02wt4c1r6d7"]
+[gd_scene load_steps=11 format=3 uid="uid://o02wt4c1r6d7"]
 
 [ext_resource type="Texture2D" uid="uid://bji036jqt72p5" path="res://assets/environment/ghost_room.png" id="1_37kl0"]
 [ext_resource type="Script" uid="uid://c5uca0dovd8ht" path="res://scripts/card_select.gd" id="1_ppyta"]
 [ext_resource type="Shader" uid="uid://k1pfmdb6llbu" path="res://shader/ghost.gdshader" id="2_6uqi0"]
 [ext_resource type="Script" uid="uid://bsnl8s6kc8wga" path="res://entities/tint/tint.gd" id="3_ppyta"]
+[ext_resource type="Texture2D" uid="uid://c28a7yg1auif0" path="res://assets/ui/confirm_button_normal.png" id="5_vbegm"]
+[ext_resource type="Texture2D" uid="uid://cdcfnrq5uongp" path="res://assets/ui/confirm_button_pressed.png" id="6_ehkex"]
+[ext_resource type="Texture2D" uid="uid://cahn1gx385nwb" path="res://assets/ui/confirm_button_hover.png" id="7_xersf"]
 
 [sub_resource type="Gradient" id="Gradient_ykrsh"]
 colors = PackedColorArray(0, 0.83137256, 0.75686276, 0.5176471, 1, 1, 1, 1)
@@ -62,3 +65,16 @@ script = ExtResource("1_ppyta")
 texture = ExtResource("1_37kl0")
 
 [node name="Weapon" type="Sprite2D" parent="CardSelect"]
+
+[node name="TextureButton" type="TextureButton" parent="CardSelect"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -41.0
+offset_top = 16.0
+offset_right = 41.0
+offset_bottom = 56.0
+grow_horizontal = 2
+texture_normal = ExtResource("5_vbegm")
+texture_pressed = ExtResource("6_ehkex")
+texture_hover = ExtResource("7_xersf")

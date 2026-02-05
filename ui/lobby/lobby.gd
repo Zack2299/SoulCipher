@@ -13,6 +13,8 @@ extends Node2D
 @onready var book_open_audio_stream_player: AudioStreamPlayer = $Settings/BookOpenAudioStreamPlayer
 @onready var ip_line_edit: LineEdit = $Settings/VBoxContainer/IPContainer/IPLineEdit
 @onready var port_line_edit: LineEdit = $Settings/VBoxContainer/PortContainer/PortLineEdit
+@onready var host_join_audio_stream_player: AudioStreamPlayer = $HostJoinAudioStreamPlayer
+@onready var start_audio_stream_player: AudioStreamPlayer = $StartAudioStreamPlayer
 
 const NUM_AVATARS = 8
 const LOCAL_HOST = "127.0.0.1"
@@ -32,6 +34,8 @@ func _ready() -> void:
 func _on_host_button_pressed():
 	NetworkManager.host_game(int(port))
 	
+	host_join_audio_stream_player.play()
+	
 	host_button.visible = false
 	join_button.visible = false
 	#relocator.visible = true
@@ -41,12 +45,16 @@ func _on_host_button_pressed():
 func _on_join_button_pressed():
 	NetworkManager.join_game(ip, int(port))
 	
+	host_join_audio_stream_player.play()
+	
 	host_button.visible = false
 	join_button.visible = false
 
 
 func _on_start_button_pressed():
 	NetworkManager.start_game_for_all()
+	
+	start_audio_stream_player.play()
 
 
 func _on_left_arrow_clicked() -> void:

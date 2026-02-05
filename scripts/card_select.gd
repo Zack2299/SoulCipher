@@ -26,6 +26,7 @@ func _on_visibility_changed():
 	if visible:
 		show_cards()
 
+
 func show_cards():
 	var sprite_pos = spawn_zone_sprite.global_position
 	var sprite_size = spawn_zone_sprite.texture.get_size() * spawn_zone_sprite.scale
@@ -51,8 +52,15 @@ func show_cards():
 		var card = card_scene.instantiate()
 		add_child(card)
 		
+		card.top_card_changed.connect(_on_top_card_changed)
+		
 		# pass spawn_rect to setup function
 		card.setup(fixed_back, 0, available_fronts.pop_back(), random_pos, spawn_rect)
+
+
+func _on_top_card_changed(card: Node):
+	pass
+
 
 func _load_textures_from_folder(path: String) -> Array[Texture2D]:
 	var textures: Array[Texture2D] = []

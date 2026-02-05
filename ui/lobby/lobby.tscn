@@ -1,7 +1,9 @@
-[gd_scene load_steps=22 format=3 uid="uid://dsfr0tf8o28ld"]
+[gd_scene load_steps=24 format=3 uid="uid://dsfr0tf8o28ld"]
 
 [ext_resource type="Script" uid="uid://ceykfnjt41r56" path="res://ui/lobby/lobby.gd" id="1_kamvt"]
+[ext_resource type="AudioStream" uid="uid://to4fkqb27h1h" path="res://assets/sounds/Tone2C_FifthUp.wav" id="2_1etha"]
 [ext_resource type="Texture2D" uid="uid://bs7wnkuonh60h" path="res://assets/environment/LOBBY_FINAL.png" id="2_vdu1l"]
+[ext_resource type="AudioStream" uid="uid://cvq0ovf3f76xk" path="res://assets/sounds/Tone2C_FifthOctaveUp.wav" id="3_1etha"]
 [ext_resource type="PackedScene" uid="uid://ctfeboj0wqkqx" path="res://ui/crystal_ball/crystal_ball.tscn" id="5_qp8cv"]
 [ext_resource type="Texture2D" uid="uid://dxi30y27hhynw" path="res://assets/ui/host_button_normal.png" id="6_jvewa"]
 [ext_resource type="Texture2D" uid="uid://bo7iiwgb7pcl4" path="res://assets/ui/host_button_pressed.png" id="7_2ofhp"]
@@ -25,6 +27,12 @@
 [node name="Lobby" type="Node2D"]
 script = ExtResource("1_kamvt")
 
+[node name="HostJoinAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_1etha")
+
+[node name="StartAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_1etha")
+
 [node name="NonSettings" type="Node2D" parent="."]
 
 [node name="TextureButton" type="TextureButton" parent="NonSettings"]
@@ -44,72 +52,6 @@ texture_normal = ExtResource("2_vdu1l")
 
 [node name="Camera2D" type="Camera2D" parent="NonSettings"]
 zoom = Vector2(3, 3)
-
-[node name="HBoxContainer" type="HBoxContainer" parent="NonSettings"]
-visible = false
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -86.0
-offset_top = -169.5
-offset_right = 86.0
-offset_bottom = -128.5
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/separation = 50
-alignment = 1
-
-[node name="HostButton" type="Button" parent="NonSettings/HBoxContainer"]
-layout_mode = 2
-text = "Host"
-
-[node name="JoinButton" type="Button" parent="NonSettings/HBoxContainer"]
-layout_mode = 2
-text = "Join"
-
-[node name="StartButton" type="Button" parent="NonSettings"]
-visible = false
-offset_left = 123.0
-offset_top = -167.0
-offset_right = 184.0
-offset_bottom = -126.0
-text = "Start"
-
-[node name="Label" type="Label" parent="NonSettings"]
-visible = false
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -195.0
-offset_top = -119.0
-offset_right = 32.0
-offset_bottom = -86.0
-grow_horizontal = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-text = "Start Game"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Label2" type="Label" parent="NonSettings"]
-visible = false
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -11.0
-offset_top = 11.0
-offset_right = 156.0
-offset_bottom = 80.0
-grow_horizontal = 2
-size_flags_horizontal = 4
-size_flags_vertical = 0
-theme_override_constants/line_spacing = 0
-text = "Edit Player"
-horizontal_alignment = 1
 
 [node name="CrystalBall" parent="NonSettings" instance=ExtResource("5_qp8cv")]
 visible = false
@@ -135,6 +77,7 @@ alignment = 1
 [node name="HostButton" type="TextureButton" parent="NonSettings/NetworkButtons/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+mouse_filter = 1
 texture_normal = ExtResource("6_jvewa")
 texture_pressed = ExtResource("7_2ofhp")
 texture_hover = ExtResource("7_nvow0")
@@ -341,7 +284,6 @@ alignment = 1
 expand_to_text_length = true
 caret_blink = true
 
-[connection signal="pressed" from="NonSettings/HBoxContainer/HostButton" to="." method="_on_button_pressed"]
 [connection signal="mouse_clicked" from="NonSettings/LeftArrow/ClickableArea" to="." method="_on_left_arrow_clicked"]
 [connection signal="mouse_clicked" from="NonSettings/RightArrow/ClickableArea" to="." method="_on_right_arrow_clicked"]
 [connection signal="text_changed" from="NonSettings/PlayerName/PlayerNameLineEdit" to="." method="_on_player_name_line_edit_text_changed"]

@@ -24,9 +24,9 @@ signal player_turn_over
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("one"):
-		request_phase_change.rpc("ghost")
+		request_phase_change.rpc("ghost_turn_over")
 	elif event.is_action_pressed("two"):
-		request_phase_change.rpc("player")
+		request_phase_change.rpc("player_turn_over")
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -34,9 +34,9 @@ func request_phase_change(type: String):
 	if not multiplayer.is_server():
 		return
 		
-	if type == "ghost":
+	if type == "ghost_turn_over":
 		ghost_turn_over.emit()
-	elif type == "player":
+	elif type == "player_turn_over":
 		player_turn_over.emit()
 # --- DEBUG ---
 
@@ -162,3 +162,7 @@ func _on_update_player_ui(id: int, avatar_index: int):
 	if ui_node and ui_node.is_inside_tree():
 		if ui_node.sprite_2d:
 			ui_node.sprite_2d.frame = avatar_index
+
+
+func _on_card_select_confirm_pressed() -> void:
+	request_phase_change.rpc("ghost_turn_over")

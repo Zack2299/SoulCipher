@@ -15,7 +15,13 @@ var back_frame: int
 var is_revealed: bool = false
 var anchor_point: Vector2
 var bounds_rect: Rect2
-var top_z_index: int = 0
+
+signal top_card_changed
+var top_card = null:
+	set(value):
+		top_card = value
+		if top_card != null:
+			top_card_changed.emit(self)
 
 # dragging variables
 var is_dragging: bool = false
@@ -43,6 +49,9 @@ func _ready():
 	
 	mask_layer.visible = false
 	card_frame.visible = false
+	
+	if front_texture:
+		self.name = front_texture.resource_path.get_file().get_basename()
 
 
 func setup(back_tex: Texture2D, frame_idx: int, front_tex: Texture2D, start_pos: Vector2, spawn_rect: Rect2):
@@ -186,7 +195,6 @@ func _is_top_card() -> bool:
 	var mouse_pos = get_global_mouse_position()
 	var cards = get_tree().get_nodes_in_group("ghost_cards")
 	
-	var top_card = self
 	var max_z = z_index
 	
 	for card in cards:
@@ -199,4 +207,5 @@ func _is_top_card() -> bool:
 				# this handles cards with the same Z-index (standard tree order)
 				return false
 				
+	top_card = self
 	return true

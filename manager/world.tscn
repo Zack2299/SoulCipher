@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=15 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -7,7 +7,10 @@
 [ext_resource type="Texture2D" uid="uid://3klghqtw3dj" path="res://assets/environment/shop.png" id="4_wn2f2"]
 [ext_resource type="Shader" uid="uid://k1pfmdb6llbu" path="res://shader/ghost.gdshader" id="4_ym8sf"]
 [ext_resource type="Texture2D" uid="uid://bji036jqt72p5" path="res://assets/environment/ghost_room.png" id="5_hggar"]
+[ext_resource type="Texture2D" uid="uid://c28a7yg1auif0" path="res://assets/ui/confirm_button_normal.png" id="6_1jdyk"]
+[ext_resource type="Texture2D" uid="uid://cdcfnrq5uongp" path="res://assets/ui/confirm_button_pressed.png" id="7_dcuo7"]
 [ext_resource type="Script" uid="uid://bsnl8s6kc8wga" path="res://entities/tint/tint.gd" id="7_hggar"]
+[ext_resource type="Texture2D" uid="uid://cahn1gx385nwb" path="res://assets/ui/confirm_button_hover.png" id="8_4yxvl"]
 
 [sub_resource type="Gradient" id="Gradient_ym8sf"]
 colors = PackedColorArray(0, 0.83137256, 0.75686276, 0.5176471, 1, 1, 1, 1)
@@ -56,6 +59,19 @@ script = ExtResource("4_j0j34")
 [node name="Sprite2D" type="Sprite2D" parent="CardSelect"]
 texture = ExtResource("5_hggar")
 
+[node name="TextureButton" type="TextureButton" parent="CardSelect"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -41.0
+offset_top = 16.0
+offset_right = 41.0
+offset_bottom = 56.0
+grow_horizontal = 2
+texture_normal = ExtResource("6_1jdyk")
+texture_pressed = ExtResource("7_dcuo7")
+texture_hover = ExtResource("8_4yxvl")
+
 [node name="Shop" type="Node2D" parent="."]
 visible = false
 
@@ -101,3 +117,5 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0.6117647, 0.8901961, 0.12156863)
 script = ExtResource("7_hggar")
+
+[connection signal="pressed" from="CardSelect/TextureButton" to="." method="_on_card_select_confirm_pressed"]
