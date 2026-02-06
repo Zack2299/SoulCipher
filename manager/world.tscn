@@ -59,7 +59,7 @@ script = ExtResource("4_j0j34")
 [node name="Sprite2D" type="Sprite2D" parent="CardSelect"]
 texture = ExtResource("5_hggar")
 
-[node name="TextureButton" type="TextureButton" parent="CardSelect"]
+[node name="ConfirmButton" type="TextureButton" parent="CardSelect"]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -118,4 +118,4 @@ mouse_filter = 2
 color = Color(0, 0.6117647, 0.8901961, 0.12156863)
 script = ExtResource("7_hggar")
 
-[connection signal="pressed" from="CardSelect/TextureButton" to="." method="_on_card_select_confirm_pressed"]
+[connection signal="pressed" from="CardSelect/ConfirmButton" to="." method="_on_card_select_confirm_pressed"]

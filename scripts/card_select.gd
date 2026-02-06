@@ -1,23 +1,34 @@
 extends Node2D
 
-@export var card_scene: PackedScene = preload("uid://vod8bkhgu1tg")
 @onready var spawn_zone_sprite: Sprite2D = $Sprite2D
-@export var fixed_back: Texture2D = preload("uid://c0ewypdlrhiqr")
-@export_dir var fronts_path: String = "res://assets/cards/clues/"
+@onready var confirm_button: TextureButton = $ConfirmButton
 
 # control how far away from the sprite edges cards spawn
 @export var padding: float = 100.0 
+
+@export var card_scene: PackedScene = preload("uid://vod8bkhgu1tg")
+@export var fixed_back: Texture2D = preload("uid://c0ewypdlrhiqr")
+
+@export_dir var clues_path: String = "res://assets/cards/clues/"
+@export_dir var weapons_path: String = "res://assets/cards/weapons/"
 
 const NUM_CARDS: int = 6
 
 var card_count = 0
 
-var available_fronts: Array[Texture2D] = []
+var top_card: Card = null
+
+var available_clues: Array[Texture2D] = []
+var available_weapons: Array[Texture2D] = []
 
 func _ready():
-	# load the clue art once
-	available_fronts = _load_textures_from_folder(fronts_path)
-	available_fronts.shuffle()
+	confirm_button.visible = false
+	
+	# load the art once
+	available_clues = _load_textures_from_folder(clues_path)
+	available_clues.shuffle()
+	available_weapons = _load_textures_from_folder(weapons_path)
+	available_weapons.shuffle()
 	
 	visibility_changed.connect(_on_visibility_changed)
 
@@ -28,6 +39,19 @@ func _on_visibility_changed():
 
 
 func show_cards():
+	for i in range(NUM_CARDS):
+		card_count += 1
+		if card_count > NUM_CARDS: break
+		if available_clues.is_empty():
+			available_clues = _load_textures_from_folder(clues_path)
+			available_clues.shuffle()
+		
+		add_card(0)
+	
+	add_card(1)
+
+
+func add_card(card_type: int):
 	var sprite_pos = spawn_zone_sprite.global_position
 	var sprite_size = spawn_zone_sprite.texture.get_size() * spawn_zone_sprite.scale
 	
@@ -36,30 +60,39 @@ func show_cards():
 	
 	var half_width = (sprite_size.x / 2) - padding
 	var half_height = (sprite_size.y / 2) - padding
+	
+	var random_pos = Vector2(
+		randf_range(sprite_pos.x - half_width, sprite_pos.x + half_width),
+		randf_range(sprite_pos.y - half_height, sprite_pos.y + half_height)
+	)
+	
+	var card = card_scene.instantiate()
+	add_child(card)
+	
+	card.top_card_changed.connect(_on_top_card_changed)
+	
+	var available_fronts
+	if card_type == 0:
+		available_fronts = available_clues
+	elif card_type == 1:
+		available_fronts = available_weapons
+	
+	# pass spawn_rect to setup function
+	card.setup(fixed_back, card_type, available_fronts.pop_back(), random_pos, spawn_rect)
 
-	for i in range(NUM_CARDS):
-		card_count += 1
-		if card_count > NUM_CARDS: break
-		if available_fronts.is_empty():
-			print("OUT OF CARDS")
-			break
-		
-		var random_pos = Vector2(
-			randf_range(sprite_pos.x - half_width, sprite_pos.x + half_width),
-			randf_range(sprite_pos.y - half_height, sprite_pos.y + half_height)
-		)
-		
-		var card = card_scene.instantiate()
-		add_child(card)
-		
-		card.top_card_changed.connect(_on_top_card_changed)
-		
-		# pass spawn_rect to setup function
-		card.setup(fixed_back, 0, available_fronts.pop_back(), random_pos, spawn_rect)
 
+func _on_top_card_changed(card: Card):
+	if card.card_type > 0:
+		confirm_button.visible = false
+		
+		#if top_card:
+			#top_card.modulate.a = 1
+			#top_card = null
+		return
 
-func _on_top_card_changed(card: Node):
-	pass
+	#card.modulate.a = 0.5
+	top_card = card
+	confirm_button.visible = true
 
 
 func _load_textures_from_folder(path: String) -> Array[Texture2D]:

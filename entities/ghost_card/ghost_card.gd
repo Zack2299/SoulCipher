@@ -1,3 +1,4 @@
+class_name Card
 extends Sprite2D
 
 signal card_selected
@@ -15,6 +16,7 @@ var back_frame: int
 var is_revealed: bool = false
 var anchor_point: Vector2
 var bounds_rect: Rect2
+var card_type: int
 
 signal top_card_changed
 var top_card = null:
@@ -58,6 +60,15 @@ func setup(back_tex: Texture2D, frame_idx: int, front_tex: Texture2D, start_pos:
 	texture = back_tex
 	hframes = 4  
 	frame = frame_idx
+	card_type = frame_idx
+	if card_type == 0:
+		card_frame.texture = preload("uid://c0c7brf3376vl")
+	elif card_type == 1:
+		card_frame.texture = preload("uid://240yaag32lqm")
+	elif card_type == 2:
+		card_frame.texture = preload("uid://cnfs0t5f87raw")
+	elif card_type == 3:
+		card_frame.texture = preload("uid://wyg3wb5uxx4b")
 	
 	back_spritesheet = back_tex
 	back_frame = frame_idx
@@ -189,6 +200,7 @@ func _input(event):
 	elif event.button_index == MOUSE_BUTTON_LEFT:
 		if is_dragging:
 			is_dragging = false
+
 
 # helper function to find if this card is visually on top
 func _is_top_card() -> bool:
