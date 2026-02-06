@@ -155,6 +155,7 @@ func spawn_player(id: int):
 	# 4. Initialize UI
 	p_ui.setup(p_data)
 
+
 func _on_update_player_ui(id: int, avatar_index: int):
 	var ui_node_name = "UI_" + str(id)
 	var ui_node = player_ui_hbox.get_node_or_null(ui_node_name)
@@ -164,5 +165,5 @@ func _on_update_player_ui(id: int, avatar_index: int):
 			ui_node.sprite_2d.frame = avatar_index
 
 
-func _on_card_select_confirm_pressed() -> void:
-	request_phase_change.rpc("ghost_turn_over")
+#func _on_card_select_confirm_pressed() -> void:
+	#request_phase_change.rpc("ghost_turn_over")
