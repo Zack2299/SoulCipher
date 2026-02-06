@@ -11,6 +11,8 @@ extends Node2D
 
 @export_dir var clues_path: String = "res://assets/cards/clues/"
 @export_dir var weapons_path: String = "res://assets/cards/weapons/"
+@export_dir var suspects_path: String = "res://assets/cards/suspects/"
+@export_dir var locations_path: String = "res://assets/cards/locations/"
 
 const NUM_CARDS: int = 6
 
@@ -20,6 +22,8 @@ var top_card: Card = null
 
 var available_clues: Array[Texture2D] = []
 var available_weapons: Array[Texture2D] = []
+var available_suspects: Array[Texture2D] = []
+var available_locations: Array[Texture2D] = []
 
 func _ready():
 	confirm_button.visible = false
@@ -29,6 +33,10 @@ func _ready():
 	available_clues.shuffle()
 	available_weapons = _load_textures_from_folder(weapons_path)
 	available_weapons.shuffle()
+	available_suspects = _load_textures_from_folder(suspects_path)
+	available_suspects.shuffle()
+	available_locations = _load_textures_from_folder(locations_path)
+	available_locations.shuffle()
 	
 	visibility_changed.connect(_on_visibility_changed)
 
@@ -48,7 +56,7 @@ func show_cards():
 		
 		add_card(0)
 	
-	add_card(1)
+	add_card(3)
 
 
 func add_card(card_type: int):
@@ -76,6 +84,10 @@ func add_card(card_type: int):
 		available_fronts = available_clues
 	elif card_type == 1:
 		available_fronts = available_weapons
+	elif card_type == 2:
+		available_fronts = available_suspects
+	elif card_type == 3:
+		available_fronts = available_locations
 	
 	# pass spawn_rect to setup function
 	card.setup(fixed_back, card_type, available_fronts.pop_back(), random_pos, spawn_rect)
