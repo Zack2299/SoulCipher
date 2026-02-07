@@ -170,6 +170,9 @@ func toggle_reveal(should_reveal: bool):
 
 
 func _input(event):
+	if not is_visible_in_tree():
+		return
+	
 	if not event is InputEventMouseButton:
 		return
 

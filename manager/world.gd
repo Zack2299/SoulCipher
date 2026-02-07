@@ -88,17 +88,14 @@ func _server_initialize_match():
 	GameManager.start_match(ghost_id)
 
 
-func spawn_clue_in_random_room(texture_path: String, type_index: int):
-	var valid_rooms = rooms_array.filter(func(room): return room.name != "staircase" and room.name != "crystal_ball_room")
-	if valid_rooms.is_empty(): return
-
-	# add card to random room
-	var target_room = valid_rooms.pick_random()
+func spawn_clue_in_specific_room(texture_path: String, type_index: int, room_idx: int):
+	# add card to room
+	var target_room = rooms_array[room_idx]
 	var new_clue = WORLD_CLUE_SCENE.instantiate()
 	target_room.add_child(new_clue)
-	print
 	
 	new_clue.remove_from_group("ghost_cards")
+	#new_clue.add_to_group("world_clues")
 	
 	var front_tex = load(texture_path)
 	new_clue.setup(new_clue.back_spritesheet, type_index, front_tex, Vector2.ZERO, Rect2())

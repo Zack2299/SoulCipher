@@ -100,12 +100,12 @@ func _process(delta):
 	)
 	
 	# card to card repulsion
-	var separation_vector = Vector2.ZERO
-	for other_card in get_tree().get_nodes_in_group("ghost_cards"):
-		if other_card == self: continue
-		var dist = global_position.distance_to(other_card.global_position)
-		if dist < repulsion_radius:
-			separation_vector += (global_position - other_card.global_position).normalized() * (repulsion_radius - dist)
+	#var separation_vector = Vector2.ZERO
+	#for other_card in get_tree().get_nodes_in_group("ghost_cards"):
+		#if other_card == self: continue
+		#var dist = global_position.distance_to(other_card.global_position)
+		#if dist < repulsion_radius:
+			#separation_vector += (global_position - other_card.global_position).normalized() * (repulsion_radius - dist)
 
 	# border repulsion
 	var border_vector = Vector2.ZERO
@@ -120,7 +120,7 @@ func _process(delta):
 			border_vector.y -= (global_position.y - (bounds_rect.end.y - border_margin))
 
 	# combined movement
-	var target_pos = anchor_point + noise_offset + (separation_vector * 0.1) + (border_vector * border_push_strength)
+	var target_pos = anchor_point + noise_offset + (border_vector * border_push_strength)
 	
 	# apply movement
 	var current_lerp = 25.0 if is_dragging else repulsion_strength

@@ -105,8 +105,15 @@ func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: No
 	)
 	
 	if multiplayer.is_server():
-		var room_idx = randi() % GameManager.world_node.rooms_array.size()
-		rpc("spawn_clue_for_all", g_tex_path, room_idx, current_phase)
+		var valid_rooms = GameManager.world_node.rooms_array.filter(func(room): 
+			return room.name != "staircase" and room.name != "crystal_ball_room"
+		)
+		
+		if not valid_rooms.is_empty():
+			var target_room = valid_rooms.pick_random()
+			var room_idx = GameManager.world_node.rooms_array.find(target_room)
+			
+			spawn_clue_for_all.rpc(g_tex_path, room_idx, current_phase)
 
 	var g_card = get_node_or_null(g_node_path)
 	var t_card = get_node_or_null(t_node_path)
@@ -136,7 +143,7 @@ func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: No
 
 @rpc("authority", "call_local", "reliable")
 func spawn_clue_for_all(tex_path: String, room_idx: int, type_index: int):
-	GameManager.world_node.spawn_clue_in_random_room(tex_path, type_index)
+	GameManager.world_node.spawn_clue_in_specific_room(tex_path, type_index, room_idx)
 
 
 func _animate_removal(card: Card):
