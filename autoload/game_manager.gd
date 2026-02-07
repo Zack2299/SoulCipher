@@ -18,6 +18,44 @@ var game_just_started = true
 var random_ghost = true
 var total_rounds: int = 14
 
+# phase_data[phase_index][category] = { target_path : [clue_paths] }
+var phase_history: Dictionary = {
+	1: { "weapon": {}, "suspect": {}, "location": {} },
+	2: { "weapon": {}, "suspect": {}, "location": {} },
+	3: { "weapon": {}, "suspect": {}, "location": {} }
+}
+
+var current_targets: Dictionary = {
+	1: { "weapon": "", "suspect": "", "location": "" },
+	2: { "weapon": "", "suspect": "", "location": "" },
+	3: { "weapon": "", "suspect": "", "location": "" }
+}
+
+
+@rpc("authority", "call_local", "reliable")
+func record_selection(phase_num: int, card_type: int, target_path: String, clue_path: String):
+	var category = _get_category_string(card_type)
+	
+	# update current answer for this phase/type
+	current_targets[phase_num][category] = target_path
+	
+	# add clue to history
+	var history_dict = phase_history[phase_num][category]
+	if not history_dict.has(target_path):
+		history_dict[target_path] = []
+	
+	history_dict[target_path].append(clue_path)
+	
+	print("LOGGED: Phase %d | %s | Target: %s | Clue: %s" % [phase_num, category, target_path, clue_path])
+
+
+func _get_category_string(type: int) -> String:
+	match type:
+		1: return "weapon"
+		2: return "suspect"
+		3: return "location"
+	return "unknown"
+
 
 func _connect_world_signals():
 	world_node.ghost_turn_over.connect(_on_ghost_turn_over)

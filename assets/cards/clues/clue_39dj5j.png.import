@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gtyfdw8qvinf"
-path="res://.godot/imported/clue_bhnivg.png-0d3040f5499bfe7e60ecdbbe34006c36.ctex"
+uid="uid://bkrghu4g1vax7"
+path="res://.godot/imported/clue_39dj5j.png-f72c7d79ea96925ad96ca1632506aa8c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/clues/clue_bhnivg.png"
-dest_files=["res://.godot/imported/clue_bhnivg.png-0d3040f5499bfe7e60ecdbbe34006c36.ctex"]
+source_file="res://assets/cards/clues/clue_39dj5j.png"
+dest_files=["res://.godot/imported/clue_39dj5j.png-f72c7d79ea96925ad96ca1632506aa8c.ctex"]
 
 [params]
 

@@ -1,12 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://vod8bkhgu1tg"]
+[gd_scene load_steps=5 format=3 uid="uid://de7glp0syyho7"]
 
-[ext_resource type="Script" uid="uid://31uqlqntqxm0" path="res://entities/ghost_card/ghost_card.gd" id="1_541pa"]
-[ext_resource type="Texture2D" uid="uid://c0c7brf3376vl" path="res://assets/cards/ghost_card_frame.png" id="2_gmeba"]
-[ext_resource type="Texture2D" uid="uid://dupwwm15bk6lp" path="res://assets/cards/ghost_card_frame_mask.png" id="2_mf53t"]
-[ext_resource type="AudioStream" uid="uid://dasex35nkujyh" path="res://assets/sounds/card_flip.wav" id="2_xmul3"]
+[ext_resource type="Texture2D" uid="uid://dupwwm15bk6lp" path="res://assets/cards/ghost_card_frame_mask.png" id="1_riw88"]
+[ext_resource type="Script" uid="uid://dt0e7whot07wf" path="res://entities/world_clue/world_clue.gd" id="1_rphpp"]
+[ext_resource type="Texture2D" uid="uid://c0c7brf3376vl" path="res://assets/cards/ghost_card_frame.png" id="2_rphpp"]
+[ext_resource type="AudioStream" uid="uid://dasex35nkujyh" path="res://assets/sounds/card_flip.wav" id="4_avrxm"]
 
-[node name="GhostCard" type="Sprite2D"]
-script = ExtResource("1_541pa")
+[node name="WorldClue" type="Sprite2D"]
+script = ExtResource("1_rphpp")
 
 [node name="Hitbox" type="ColorRect" parent="."]
 offset_right = 40.0
@@ -19,7 +19,7 @@ metadata/_edit_use_anchors_ = true
 clip_children = 1
 offset_right = 40.0
 offset_bottom = 40.0
-texture = ExtResource("2_mf53t")
+texture = ExtResource("1_riw88")
 region_rect = Rect2(0, 0, 114, 174)
 patch_margin_left = 7
 patch_margin_top = 6
@@ -32,7 +32,7 @@ metadata/_edit_use_anchors_ = true
 [node name="CardFrame" type="NinePatchRect" parent="."]
 offset_right = 40.0
 offset_bottom = 40.0
-texture = ExtResource("2_gmeba")
+texture = ExtResource("2_rphpp")
 region_rect = Rect2(0, 0, 114, 174)
 patch_margin_left = 7
 patch_margin_top = 6
@@ -41,4 +41,4 @@ patch_margin_bottom = 6
 metadata/_edit_use_anchors_ = true
 
 [node name="CardFlipAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("2_xmul3")
+stream = ExtResource("4_avrxm")

@@ -46,14 +46,14 @@ func _ready():
 
 
 func _on_visibility_changed():
-	if visible:		
+	if visible:
 		current_phase = CardType.WEAPON
 		
 		current_type_card = add_card(CardType.WEAPON, available_weapons.pop_back())
 
 
-func add_card(type: int, tex: Texture2D) -> Card:
-	if tex == null: return null # Safety check for empty decks
+func add_card(type: int, texture: Texture2D) -> Card:
+	if texture == null: return null # Safety check for empty decks
 	
 	var sprite_pos = spawn_zone_sprite.global_position
 	var sprite_size = spawn_zone_sprite.texture.get_size() * spawn_zone_sprite.scale
@@ -70,7 +70,7 @@ func add_card(type: int, tex: Texture2D) -> Card:
 	var card = card_scene.instantiate()
 	add_child(card)
 	card.top_card_changed.connect(_on_top_card_changed)
-	card.setup(fixed_back, type, tex, random_pos, spawn_rect)
+	card.setup(fixed_back, type, texture, random_pos, spawn_rect)
 	return card
 
 
@@ -84,37 +84,59 @@ func _on_top_card_changed(card: Card):
 
 func _on_confirm_pressed():
 	if not top_card or not current_type_card: return
-	sync_card_selection.rpc(top_card.get_path(), current_type_card.get_path())
-
+	
+	# 1. Get the texture paths to send to other players
+	var ghost_tex_path = top_card.front_texture.resource_path
+	var type_tex_path = current_type_card.front_texture.resource_path
+	
+	# 2. We still need the NodePaths ONLY for the Ghost to animate their removal
+	var ghost_node = top_card.get_path()
+	var type_node = current_type_card.get_path()
+	
+	sync_card_selection.rpc(ghost_tex_path, type_tex_path, ghost_node, type_node)
 
 @rpc("any_peer", "call_local", "reliable")
-func sync_card_selection(ghost_node_path: NodePath, type_node_path: NodePath):
-	var g_card = get_node_or_null(ghost_node_path)
-	var t_card = get_node_or_null(type_node_path)
+func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: NodePath, t_node_path: NodePath):
+	GameManager.record_selection.rpc(
+		GameManager.current_track, 
+		current_phase, 
+		t_tex_path,
+		g_tex_path
+	)
 	
-	confirm_button.visible = false
+	if multiplayer.is_server():
+		var room_idx = randi() % GameManager.world_node.rooms_array.size()
+		rpc("spawn_clue_for_all", g_tex_path, room_idx, current_phase)
+
+	var g_card = get_node_or_null(g_node_path)
+	var t_card = get_node_or_null(t_node_path)
 	
-	# animate removal of selected ghost card and current phase card
-	await _animate_removal(g_card)
-	await _animate_removal(t_card)
+	if g_card and t_card:
+		confirm_button.visible = false
+		await _animate_removal(g_card)
+		await _animate_removal(t_card)
 	
 	current_phase += 1
 	
 	if current_phase > CardType.LOCATION:
-		# end of ghost's turn for this round
 		if multiplayer.is_server():
 			GameManager.world_node.request_phase_change.rpc("ghost_turn_over")
 	else:
-		# immediately replace the ghost card so there are always 6
-		add_card(CardType.GHOST, available_clues.pop_back())
-		
-		# add the next target card for the next phase
-		var next_tex: Texture2D
-		match current_phase:
-			CardType.SUSPECT: next_tex = available_suspects.pop_back()
-			CardType.LOCATION: next_tex = available_locations.pop_back()
+		# Ghost refills their private board
+		if multiplayer.get_unique_id() == GameManager.ghost_id:
+			add_card(CardType.GHOST, available_clues.pop_back())
 			
-		current_type_card = add_card(current_phase, next_tex)
+			var next_tex: Texture2D
+			match current_phase:
+				CardType.SUSPECT: next_tex = available_suspects.pop_back()
+				CardType.LOCATION: next_tex = available_locations.pop_back()
+			
+			current_type_card = add_card(current_phase, next_tex)
+
+
+@rpc("authority", "call_local", "reliable")
+func spawn_clue_for_all(tex_path: String, room_idx: int, type_index: int):
+	GameManager.world_node.spawn_clue_in_random_room(tex_path, type_index)
 
 
 func _animate_removal(card: Card):
@@ -134,8 +156,8 @@ func _load_textures(path: String) -> Array[Texture2D]:
 		var file_name = dir.get_next()
 		while file_name != "":
 			if !dir.current_is_dir() and file_name.ends_with(".png"):
-				var tex = load(path.path_join(file_name))
-				if tex is Texture2D: textures.append(tex)
+				var texture = load(path.path_join(file_name))
+				if texture is Texture2D: textures.append(texture)
 			file_name = dir.get_next()
 	return textures
 

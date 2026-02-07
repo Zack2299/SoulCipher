@@ -13,6 +13,8 @@ extends Node2D
 
 @export_dir var rooms_file_path: String = "res://rooms/"
 
+const WORLD_CLUE_SCENE = preload("res://entities/world_clue/world_clue.tscn")
+
 var loaded_scenes: Array[PackedScene] = []
 var rooms_array: Array[Node] = []
 var havent_explored_rooms = true
@@ -84,6 +86,27 @@ func _server_initialize_match():
 	
 	# start global game manager state machine
 	GameManager.start_match(ghost_id)
+
+
+func spawn_clue_in_random_room(texture_path: String, type_index: int):
+	var valid_rooms = rooms_array.filter(func(room): return room.name != "staircase" and room.name != "crystal_ball_room")
+	if valid_rooms.is_empty(): return
+
+	# add card to random room
+	var target_room = valid_rooms.pick_random()
+	var new_clue = WORLD_CLUE_SCENE.instantiate()
+	target_room.add_child(new_clue)
+	print
+	
+	new_clue.remove_from_group("ghost_cards")
+	
+	var front_tex = load(texture_path)
+	new_clue.setup(new_clue.back_spritesheet, type_index, front_tex, Vector2.ZERO, Rect2())
+	
+	# random position
+	new_clue.position = Vector2(randf_range(-200, 200), randf_range(-200, 200))
+	
+	print("CARD ADDED: Type %d ('%s') spawned in room: %s" % [type_index, texture_path.get_file(), target_room.name])
 
 
 func refresh_all_ui_visibility():
