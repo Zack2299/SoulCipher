@@ -19,6 +19,7 @@ const WORLD_CLUE_SCENE = preload("res://entities/world_clue/world_clue.tscn")
 var loaded_scenes: Array[PackedScene] = []
 var rooms_array: Array[Node] = []
 var card_spawn_rooms: Array[Node] = []
+var orphaned_room_names: Array[String] = []
 var havent_explored_rooms = true
 var player_card_screen_is_shown
 var has_started_searching = false

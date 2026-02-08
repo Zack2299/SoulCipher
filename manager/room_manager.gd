@@ -125,9 +125,11 @@ func _print_mansion_report(data: Dictionary, all_rooms: Array, reachable: Array)
 	print("=".repeat(50))
 	
 	var all_room_names = all_rooms.map(func(r): return r.name)
-	var orphaned = []
+	var orphaned: Array[String] = []
 	for name in all_room_names:
 		if not name in reachable: orphaned.append(name)
+		
+	get_parent().orphaned_room_names = orphaned.duplicate()
 	
 	if orphaned.is_empty():
 		print("All rooms are connected to the staircase")
