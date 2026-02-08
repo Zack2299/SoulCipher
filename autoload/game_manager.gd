@@ -208,6 +208,9 @@ func _ghost_turn_enter():
 	world_node.card_spawn_rooms = world_node.rooms_array.filter(func(room): 
 		return room.name != "staircase" and room.name != "crystal_ball_room"
 	)
+	
+	# clear all clues in rooms (new round)
+	world_node.clear_world_clues()
 
 func _ghost_turn():
 	pass

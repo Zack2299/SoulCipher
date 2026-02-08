@@ -140,6 +140,12 @@ func spawn_clue_to_card_screen(texture_path: String, type_index: int):
 	new_clue.position = Vector2(randf_range(-200, 200), randf_range(-200, 200))
 
 
+func clear_world_clues():
+	var clues = get_tree().get_nodes_in_group("world_clues")
+	for clue in clues:
+		clue.queue_free()
+
+
 func _on_world_clue_found(clue: WorldClue):
 	# ghost cannot find clues
 	if multiplayer.get_unique_id() == GameManager.ghost_id:

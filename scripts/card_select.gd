@@ -4,6 +4,7 @@ enum CardType { GHOST, WEAPON, SUSPECT, LOCATION }
 
 @onready var spawn_zone_sprite: Sprite2D = $Sprite2D
 @onready var confirm_button: TextureButton = $ConfirmButton
+@onready var confirm_audio_stream_player: AudioStreamPlayer = $ConfirmAudioStreamPlayer
 
 @export var padding: float = 100.0 
 @export var card_scene: PackedScene = preload("res://entities/ghost_card/ghost_card.tscn")
@@ -85,6 +86,8 @@ func _on_top_card_changed(card: Card):
 
 func _on_confirm_pressed():
 	if not top_card or not current_type_card: return
+	
+	confirm_audio_stream_player.play()
 	
 	# 1. Get the texture paths to send to other players
 	var ghost_tex_path = top_card.front_texture.resource_path

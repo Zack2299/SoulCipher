@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=21 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://c5uca0dovd8ht" path="res://scripts/card_select.gd" id="4_j0j34"]
 [ext_resource type="Texture2D" uid="uid://3klghqtw3dj" path="res://assets/environment/shop.png" id="4_wn2f2"]
 [ext_resource type="Shader" uid="uid://k1pfmdb6llbu" path="res://shader/ghost.gdshader" id="4_ym8sf"]
+[ext_resource type="AudioStream" uid="uid://oihj0dkh5mma" path="res://assets/sounds/Tone2B_FifthUp.wav" id="5_f6erf"]
 [ext_resource type="Texture2D" uid="uid://bji036jqt72p5" path="res://assets/environment/ghost_room.png" id="5_hggar"]
 [ext_resource type="Texture2D" uid="uid://c28a7yg1auif0" path="res://assets/ui/confirm_button_normal.png" id="6_1jdyk"]
 [ext_resource type="Texture2D" uid="uid://cdcfnrq5uongp" path="res://assets/ui/confirm_button_pressed.png" id="7_dcuo7"]
@@ -60,6 +61,9 @@ is_going_back = true
 [node name="CardSelect" type="Node2D" parent="."]
 visible = false
 script = ExtResource("4_j0j34")
+
+[node name="ConfirmAudioStreamPlayer" type="AudioStreamPlayer" parent="CardSelect"]
+stream = ExtResource("5_f6erf")
 
 [node name="Sprite2D" type="Sprite2D" parent="CardSelect"]
 texture = ExtResource("5_hggar")
