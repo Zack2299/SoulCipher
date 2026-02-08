@@ -10,6 +10,7 @@ extends Node2D
 @onready var player_ui: CanvasLayer = $PlayerUI
 @onready var shop: Node2D = $Shop
 @onready var card_select: Node2D = $CardSelect
+@onready var player_card_screen: Node2D = $PlayerCardScreen
 
 @export_dir var rooms_file_path: String = "res://rooms/"
 
@@ -18,7 +19,7 @@ const WORLD_CLUE_SCENE = preload("res://entities/world_clue/world_clue.tscn")
 var loaded_scenes: Array[PackedScene] = []
 var rooms_array: Array[Node] = []
 var havent_explored_rooms = true
-
+var player_card_screen_is_shown
 
 # --- DEBUG ---
 signal ghost_turn_over
@@ -29,6 +30,11 @@ func _input(event: InputEvent) -> void:
 		request_phase_change.rpc("ghost_turn_over")
 	elif event.is_action_pressed("two"):
 		request_phase_change.rpc("player_turn_over")
+		
+	if event.is_action_pressed("open_player_card_screen"):
+		if multiplayer.get_unique_id() != GameManager.ghost_id:
+			player_card_screen_is_shown = !player_card_screen_is_shown
+			SceneTransition.set_visibility_transition(player_card_screen, player_card_screen_is_shown)
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -46,6 +52,8 @@ func request_phase_change(type: String):
 func _ready() -> void:
 	NetworkManager.world_node = self
 	GameManager.world_node = self
+	
+	player_card_screen_is_shown = player_card_screen.visible
 	
 	load_scenes_from_folder()
 	spawn_rooms_to_world(loaded_scenes)

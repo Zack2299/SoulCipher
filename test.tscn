@@ -30,7 +30,7 @@ flip_h = true
 [node name="RightArrow" parent="PlayerCardScreen" instance=ExtResource("4_ykrsh")]
 position = Vector2(74, -98)
 
-[node name="HBoxContainer" type="HBoxContainer" parent="PlayerCardScreen"]
+[node name="CardsContainer" type="HBoxContainer" parent="PlayerCardScreen"]
 offset_right = 40.0
 offset_bottom = 40.0
 
