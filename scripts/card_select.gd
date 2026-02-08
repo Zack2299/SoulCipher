@@ -6,7 +6,7 @@ enum CardType { GHOST, WEAPON, SUSPECT, LOCATION }
 @onready var confirm_button: TextureButton = $ConfirmButton
 
 @export var padding: float = 100.0 
-@export var card_scene: PackedScene = preload("uid://vod8bkhgu1tg")
+@export var card_scene: PackedScene = preload("res://entities/ghost_card/ghost_card.tscn")
 @export var fixed_back: Texture2D = preload("uid://c0ewypdlrhiqr")
 
 @export_dir var clues_path: String = "res://assets/cards/clues/"
@@ -145,6 +145,11 @@ func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: No
 @rpc("authority", "call_local", "reliable")
 func spawn_clue_for_all(tex_path: String, room_idx: int, type_index: int):
 	GameManager.world_node.spawn_clue_in_specific_room(tex_path, type_index, room_idx)
+
+
+@rpc("authority", "call_local", "reliable")
+func spawn_clue_for_all_card_screens(tex_path: String, type_index: int):
+	GameManager.world_node.spawn_clue_to_card_screen(tex_path, type_index)
 
 
 func _animate_removal(card: Card):

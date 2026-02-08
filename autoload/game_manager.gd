@@ -55,6 +55,17 @@ func record_selection(phase_num: int, card_type: int, target_path: String, clue_
 	print("LOGGED: Phase %d | %s | Target: %s | Clue: %s" % [phase_num, category, target_path, clue_path])
 
 
+@rpc("any_peer", "call_local", "reliable")
+func sync_card_found(phase_num: int, card_type: int, clue_path: String):
+	var category = _get_category_string(card_type)
+	
+	found_cards[phase_num][category][clue_path] = true
+	
+	print("SYNC: Card found and recorded globally: ", clue_path)
+	
+	world_node.spawn_clue_to_card_screen(clue_path, card_type)
+
+
 func _get_category_string(type: int) -> String:
 	match type:
 		1: return "weapon"

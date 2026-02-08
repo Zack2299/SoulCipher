@@ -20,6 +20,7 @@ var loaded_scenes: Array[PackedScene] = []
 var rooms_array: Array[Node] = []
 var havent_explored_rooms = true
 var player_card_screen_is_shown
+var has_started_searching = false
 
 # --- DEBUG ---
 signal ghost_turn_over
@@ -34,7 +35,13 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("open_player_card_screen"):
 		if multiplayer.get_unique_id() != GameManager.ghost_id:
 			player_card_screen_is_shown = !player_card_screen_is_shown
-			SceneTransition.set_visibility_transition(player_card_screen, player_card_screen_is_shown)
+			if player_card_screen_is_shown:
+				SceneTransition.reveal_hide_transition([player_card_screen], [player_ui, previous_room_relocator])
+			else:
+				if !has_started_searching:
+					SceneTransition.reveal_hide_transition([player_ui], [player_card_screen])
+				else:
+					SceneTransition.reveal_hide_transition([player_ui, previous_room_relocator], [player_card_screen])
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -102,8 +109,10 @@ func spawn_clue_in_specific_room(texture_path: String, type_index: int, room_idx
 	var new_clue = WORLD_CLUE_SCENE.instantiate()
 	target_room.add_child(new_clue)
 	
-	new_clue.remove_from_group("ghost_cards")
-	#new_clue.add_to_group("world_clues")
+	#new_clue.remove_from_group("ghost_cards")
+	new_clue.add_to_group("world_clues")
+	
+	new_clue.card_found.connect(_on_world_clue_found)
 	
 	var front_tex = load(texture_path)
 	new_clue.setup(new_clue.back_spritesheet, type_index, front_tex, Vector2.ZERO, Rect2())
@@ -112,6 +121,27 @@ func spawn_clue_in_specific_room(texture_path: String, type_index: int, room_idx
 	new_clue.position = Vector2(randf_range(-200, 200), randf_range(-200, 200))
 	
 	print("CARD ADDED: Type %d ('%s') spawned in room: %s" % [type_index, texture_path.get_file(), target_room.name])
+
+
+func spawn_clue_to_card_screen(texture_path: String, type_index: int):
+	# add card to card screen
+	var target = player_card_screen
+	var new_clue = WORLD_CLUE_SCENE.instantiate()
+	target.add_child(new_clue)
+	
+	#new_clue.remove_from_group("ghost_cards")
+	new_clue.add_to_group("card_screen_clues")
+	
+	var front_tex = load(texture_path)
+	new_clue.setup(new_clue.back_spritesheet, type_index, front_tex, Vector2.ZERO, Rect2(), false)
+	
+	# random position
+	new_clue.position = Vector2(randf_range(-200, 200), randf_range(-200, 200))
+
+
+func _on_world_clue_found(clue: WorldClue):
+	var texture_path = clue.front_texture.resource_path
+	GameManager.sync_card_found.rpc(GameManager.current_track, clue.card_type, texture_path)
 
 
 func refresh_all_ui_visibility():
@@ -154,7 +184,9 @@ func spawn_rooms_to_world(scenes_array: Array[PackedScene]) -> void:
 func _process(_delta: float) -> void:
 	if SceneTransition.previous_room != "":
 		previous_room_relocator.room_name_to_switch_to = SceneTransition.previous_room
-
+	
+	if !has_started_searching and SceneTransition.current_room != "staircase":
+		has_started_searching = true
 
 func spawn_player(id: int):
 	if players_data.has_node(str(id)): 

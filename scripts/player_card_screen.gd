@@ -3,7 +3,8 @@ extends Node2D
 @onready var left_clickable_area: Node = $LeftArrow/ClickableArea
 @onready var right_clickable_area: Node = $RightArrow/ClickableArea
 @onready var tokens: Sprite2D = $Tokens
-@onready var h_box_container: HBoxContainer = $HBoxContainer
+@onready var cards_container: HBoxContainer = $CardsContainer
+@onready var token_audio_stream_player: AudioStreamPlayer = $TokenAudioStreamPlayer
 
 const NUM_TOKENS = 3
 
@@ -26,6 +27,9 @@ func _on_right_arrow_clicked():
 
 
 func _bounce_token():
+	token_audio_stream_player.pitch_scale = randf_range(1.9, 2.0)
+	token_audio_stream_player.play()
+	
 	var tween = create_tween()
 
 	tween.tween_property(tokens, "scale", Vector2(1.2, 1.2), 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)

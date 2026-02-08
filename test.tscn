@@ -31,8 +31,14 @@ flip_h = true
 position = Vector2(74, -98)
 
 [node name="CardsContainer" type="HBoxContainer" parent="PlayerCardScreen"]
-offset_right = 40.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
 offset_bottom = 40.0
+grow_horizontal = 2
+size_flags_horizontal = 4
 
 [editable path="PlayerCardScreen/LeftArrow"]
 [editable path="PlayerCardScreen/RightArrow"]

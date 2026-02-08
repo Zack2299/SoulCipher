@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://cvvt34jgnjyfb"
+path="res://.godot/imported/JDSherbert - Tabletop Games SFX Pack - Piece Impact - 1.mp3-49427790153b7ef16693a9453bbeb018.mp3str"
+
+[deps]
+
+source_file="res://assets/sounds/JDSherbert - Tabletop Games SFX Pack - Piece Impact - 1.mp3"
+dest_files=["res://.godot/imported/JDSherbert - Tabletop Games SFX Pack - Piece Impact - 1.mp3-49427790153b7ef16693a9453bbeb018.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

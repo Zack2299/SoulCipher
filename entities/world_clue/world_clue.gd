@@ -3,6 +3,8 @@ extends Sprite2D
 
 signal card_selected
 
+signal card_found
+
 @onready var hitbox: ColorRect = $Hitbox
 @onready var mask_layer: NinePatchRect = $MaskLayer
 @onready var clue_art: Sprite2D = $MaskLayer/ClueArt
@@ -17,6 +19,8 @@ var is_revealed: bool = false
 var anchor_point: Vector2
 var bounds_rect: Rect2
 var card_type: int
+var is_floating: bool
+var _has_been_found: bool = false
 
 signal top_card_changed
 var top_card = null:
@@ -56,11 +60,12 @@ func _ready():
 		self.name = front_texture.resource_path.get_file().get_basename()
 
 
-func setup(back_tex: Texture2D, frame_idx: int, front_tex: Texture2D, start_pos: Vector2, spawn_rect: Rect2):
+func setup(back_tex: Texture2D, frame_idx: int, front_tex: Texture2D, start_pos: Vector2, spawn_rect: Rect2, floating: bool = true):
 	texture = back_tex
 	hframes = 4  
 	frame = frame_idx
 	card_type = frame_idx
+	is_floating = floating
 	if card_type == 0:
 		card_frame.texture = preload("uid://c0c7brf3376vl")
 	elif card_type == 1:
@@ -85,6 +90,18 @@ func setup(back_tex: Texture2D, frame_idx: int, front_tex: Texture2D, start_pos:
 	anchor_point = start_pos
 	global_position = start_pos
 	bounds_rect = spawn_rect
+
+
+func _notification(what):
+	if what == NOTIFICATION_VISIBILITY_CHANGED:
+		_check_if_found()
+
+
+func _check_if_found():
+	if not _has_been_found and is_visible_in_tree():
+		_has_been_found = true
+		card_found.emit(self)
+		print("Card officially discovered: ", name)
 
 
 func _process(delta):
@@ -120,10 +137,14 @@ func _process(delta):
 			border_vector.y -= (global_position.y - (bounds_rect.end.y - border_margin))
 
 	# combined movement
-	var target_pos = anchor_point + noise_offset + (border_vector * border_push_strength)
-	
+	var target_pos
+	if is_floating:
+		target_pos = anchor_point + noise_offset + (border_vector * border_push_strength)
+	else:
+		target_pos = anchor_point
+		
 	# apply movement
-	var current_lerp = 25.0 if is_dragging else repulsion_strength
+	var current_lerp = 25.0 if (is_dragging or !is_floating) else repulsion_strength
 	global_position = global_position.lerp(target_pos, delta * current_lerp)
 
 

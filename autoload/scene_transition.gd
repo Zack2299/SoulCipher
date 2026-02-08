@@ -39,16 +39,18 @@ func change_scene_packed(target_scene: PackedScene, speed_scale = 3.0) -> void:
 	animation_player.speed_scale = default_speed
 
 
-func reveal_hide_transition(target_reveal: Node = null, target_hide: Node = null):
+func reveal_hide_transition(reveal_elements: Array[Node] = [], hide_elements: Array[Node] = []):
 	animation_player.play("fade")
 	
 	await animation_player.animation_finished
 	
-	if target_reveal:
-		target_reveal.visible = true
+	for node in reveal_elements:
+		if is_instance_valid(node):
+			node.visible = true
 		
-	if target_hide:
-		target_hide.visible = false
+	for node in hide_elements:
+		if is_instance_valid(node):
+			node.visible = false
 		
 	animation_player.play_backwards("fade")
 

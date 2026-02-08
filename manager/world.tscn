@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=20 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -13,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://cahn1gx385nwb" path="res://assets/ui/confirm_button_hover.png" id="8_4yxvl"]
 [ext_resource type="Script" uid="uid://bpi7g37c4olqy" path="res://scripts/player_card_screen.gd" id="9_kki0f"]
 [ext_resource type="Texture2D" uid="uid://b4edisjx2gm5n" path="res://assets/environment/tarot_table.png" id="10_dcuo7"]
+[ext_resource type="AudioStream" uid="uid://cvvt34jgnjyfb" path="res://assets/sounds/JDSherbert - Tabletop Games SFX Pack - Piece Impact - 1.mp3" id="10_qeh1x"]
 [ext_resource type="Texture2D" uid="uid://dl8ru400ggb86" path="res://assets/entities/tokens.png" id="11_qeh1x"]
 [ext_resource type="PackedScene" uid="uid://xi0qesshmf8m" path="res://ui/arrow/arrow.tscn" id="12_f6erf"]
 
@@ -80,6 +81,10 @@ texture_hover = ExtResource("8_4yxvl")
 visible = false
 script = ExtResource("9_kki0f")
 
+[node name="TokenAudioStreamPlayer" type="AudioStreamPlayer" parent="PlayerCardScreen"]
+stream = ExtResource("10_qeh1x")
+volume_db = -9.244
+
 [node name="BackgroundTable" type="Sprite2D" parent="PlayerCardScreen"]
 texture = ExtResource("10_dcuo7")
 
@@ -96,10 +101,6 @@ flip_h = true
 
 [node name="RightArrow" parent="PlayerCardScreen" instance=ExtResource("12_f6erf")]
 position = Vector2(74, -98)
-
-[node name="CardsContainer" type="HBoxContainer" parent="PlayerCardScreen"]
-offset_right = 40.0
-offset_bottom = 40.0
 
 [node name="Shop" type="Node2D" parent="."]
 visible = false

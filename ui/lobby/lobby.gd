@@ -72,13 +72,11 @@ func _on_right_arrow_clicked() -> void:
 
 
 func _on_settings_clicked() -> void:
-	SceneTransition.reveal_hide_transition(settings, non_settings)
-	settings_area_2d.visible = false
+	SceneTransition.reveal_hide_transition([settings], [non_settings, settings_area_2d])
 
 	
 func _on_open_book_clicked() -> void:
-	SceneTransition.reveal_hide_transition(non_settings, settings)
-	settings_area_2d.visible = true
+	SceneTransition.reveal_hide_transition([non_settings, settings_area_2d], [settings])
 
 
 func _on_player_name_line_edit_text_changed(new_text: String) -> void:
