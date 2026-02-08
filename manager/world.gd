@@ -140,6 +140,10 @@ func spawn_clue_to_card_screen(texture_path: String, type_index: int):
 
 
 func _on_world_clue_found(clue: WorldClue):
+	# ghost cannot find clues
+	if multiplayer.get_unique_id() == GameManager.ghost_id:
+		return
+	
 	var texture_path = clue.front_texture.resource_path
 	GameManager.sync_card_found.rpc(GameManager.current_track, clue.card_type, texture_path)
 
