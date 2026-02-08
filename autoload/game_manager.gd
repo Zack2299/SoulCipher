@@ -204,6 +204,10 @@ func _ghost_turn_enter():
 		else:
 			_set_investigator_waiting_ui(true)
 
+	# refresh spawn rooms
+	world_node.card_spawn_rooms = world_node.rooms_array.filter(func(room): 
+		return room.name != "staircase" and room.name != "crystal_ball_room"
+	)
 
 func _ghost_turn():
 	pass
