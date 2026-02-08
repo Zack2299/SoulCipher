@@ -17,7 +17,7 @@ func _on_left_arrow_clicked():
 		tokens.frame = NUM_TOKENS - 1
 	else:
 		tokens.frame -= 1
-	_bounce_token
+	_bounce_token()
 
 
 func _on_right_arrow_clicked():
