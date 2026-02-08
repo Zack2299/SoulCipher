@@ -38,8 +38,8 @@ func _ready():
 	
 	_shuffle_all()
 	
-	# spawn the very first 6 ghost cards
-	for i in range(NUM_GHOST_CARDS):
+	# spawn the very first 5 clues
+	for i in range(NUM_GHOST_CARDS - 1):
 		add_card(CardType.GHOST, available_clues.pop_back())
 	
 	visibility_changed.connect(_on_visibility_changed)
@@ -49,6 +49,7 @@ func _on_visibility_changed():
 	if visible:
 		current_phase = CardType.WEAPON
 		
+		add_card(CardType.GHOST, available_clues.pop_back()) # total of 6 clues
 		current_type_card = add_card(CardType.WEAPON, available_weapons.pop_back())
 
 

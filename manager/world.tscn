@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=16 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://cdcfnrq5uongp" path="res://assets/ui/confirm_button_pressed.png" id="7_dcuo7"]
 [ext_resource type="Script" uid="uid://bsnl8s6kc8wga" path="res://entities/tint/tint.gd" id="7_hggar"]
 [ext_resource type="Texture2D" uid="uid://cahn1gx385nwb" path="res://assets/ui/confirm_button_hover.png" id="8_4yxvl"]
+[ext_resource type="Texture2D" uid="uid://b4edisjx2gm5n" path="res://assets/environment/tarot_table.png" id="10_dcuo7"]
 
 [sub_resource type="Gradient" id="Gradient_ym8sf"]
 colors = PackedColorArray(0, 0.83137256, 0.75686276, 0.5176471, 1, 1, 1, 1)
@@ -77,6 +78,11 @@ visible = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Shop"]
 texture = ExtResource("4_wn2f2")
+
+[node name="PlayerCardScreen" type="Node2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="PlayerCardScreen"]
+texture = ExtResource("10_dcuo7")
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 layer = 0

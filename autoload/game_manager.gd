@@ -25,6 +25,12 @@ var phase_history: Dictionary = {
 	3: { "weapon": {}, "suspect": {}, "location": {} }
 }
 
+var found_cards: Dictionary = {
+	1: { "weapon": {}, "suspect": {}, "location": {} },
+	2: { "weapon": {}, "suspect": {}, "location": {} },
+	3: { "weapon": {}, "suspect": {}, "location": {} }
+}
+
 var current_targets: Dictionary = {
 	1: { "weapon": "", "suspect": "", "location": "" },
 	2: { "weapon": "", "suspect": "", "location": "" },

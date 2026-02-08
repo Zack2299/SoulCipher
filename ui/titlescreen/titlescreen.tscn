@@ -36,4 +36,3 @@ shape = SubResource("RectangleShape2D_bsphc")
 [node name="Relocator" parent="." instance=ExtResource("3_wcn2r")]
 position = Vector2(108, 79)
 scene_to_switch_to = ExtResource("5_veixt")
-change_scene_to_packed = true
