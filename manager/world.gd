@@ -242,10 +242,8 @@ func _on_update_player_ui(id: int, avatar_index: int):
 
 
 func show_crystal_ball_room_ui():
-	#await get_tree().create_timer(1.0/3.0).timeout
 	crystal_ball_room_ui.visible = true
 
 
 func hide_crystal_ball_room_ui():
-	#await get_tree().create_timer(1.0/3.0).timeout
 	crystal_ball_room_ui.visible = false

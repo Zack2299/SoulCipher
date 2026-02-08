@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=27 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://c5uca0dovd8ht" path="res://scripts/card_select.gd" id="4_j0j34"]
 [ext_resource type="Texture2D" uid="uid://3klghqtw3dj" path="res://assets/environment/shop.png" id="4_wn2f2"]
 [ext_resource type="Shader" uid="uid://k1pfmdb6llbu" path="res://shader/ghost.gdshader" id="4_ym8sf"]
-[ext_resource type="AudioStream" uid="uid://oihj0dkh5mma" path="res://assets/sounds/Tone2B_FifthUp.wav" id="5_f6erf"]
+[ext_resource type="AudioStream" uid="uid://ccwxpmj1d17fl" path="res://assets/sounds/JDSherbert - Ultimate UI SFX Pack - Select - 1.mp3" id="5_bi8ao"]
 [ext_resource type="Texture2D" uid="uid://bji036jqt72p5" path="res://assets/environment/ghost_room.png" id="5_hggar"]
 [ext_resource type="Texture2D" uid="uid://c28a7yg1auif0" path="res://assets/ui/confirm_button_normal.png" id="6_1jdyk"]
 [ext_resource type="Texture2D" uid="uid://cdcfnrq5uongp" path="res://assets/ui/confirm_button_pressed.png" id="7_dcuo7"]
@@ -17,7 +17,12 @@
 [ext_resource type="AudioStream" uid="uid://cvvt34jgnjyfb" path="res://assets/sounds/JDSherbert - Tabletop Games SFX Pack - Piece Impact - 1.mp3" id="10_qeh1x"]
 [ext_resource type="Texture2D" uid="uid://dl8ru400ggb86" path="res://assets/entities/tokens.png" id="11_qeh1x"]
 [ext_resource type="PackedScene" uid="uid://xi0qesshmf8m" path="res://ui/arrow/arrow.tscn" id="12_f6erf"]
-[ext_resource type="Texture2D" uid="uid://bc8yvdccf6ol8" path="res://assets/entities/weapon_button_hovered.png" id="16_bi8ao"]
+[ext_resource type="Texture2D" uid="uid://bgjy1v6ungd28" path="res://assets/entities/crystal_ball_in_mansion.png" id="16_bi8ao"]
+[ext_resource type="PackedScene" uid="uid://cq4v88u75nlbj" path="res://component/clickable_area.tscn" id="16_grn3s"]
+[ext_resource type="Script" uid="uid://bgvmpccj14on0" path="res://scripts/crystal_ball_room_ui.gd" id="16_odkic"]
+[ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="17_odkic"]
+[ext_resource type="Texture2D" uid="uid://wdnif4a027ka" path="res://assets/environment/crystal_ball_room_zoomed.png" id="20_qsi2s"]
+[ext_resource type="Texture2D" uid="uid://bqkt8k42kp1i4" path="res://assets/ui/crystal_ball_zoom.png" id="21_lbbrw"]
 
 [sub_resource type="Gradient" id="Gradient_ym8sf"]
 colors = PackedColorArray(0, 0.83137256, 0.75686276, 0.5176471, 1, 1, 1, 1)
@@ -64,7 +69,8 @@ visible = false
 script = ExtResource("4_j0j34")
 
 [node name="ConfirmAudioStreamPlayer" type="AudioStreamPlayer" parent="CardSelect"]
-stream = ExtResource("5_f6erf")
+stream = ExtResource("5_bi8ao")
+volume_db = -8.089
 
 [node name="Sprite2D" type="Sprite2D" parent="CardSelect"]
 texture = ExtResource("5_hggar")
@@ -114,10 +120,39 @@ visible = false
 texture = ExtResource("4_wn2f2")
 
 [node name="CrystalBallRoomUI" type="Node2D" parent="."]
-visible = false
+script = ExtResource("16_odkic")
+
+[node name="CrystalBall" type="Node2D" parent="CrystalBallRoomUI"]
+
+[node name="ClickableArea" parent="CrystalBallRoomUI/CrystalBall" node_paths=PackedStringArray("area_2d") instance=ExtResource("16_grn3s")]
+area_2d = NodePath("../Area2D")
+
+[node name="HoverableArea" parent="CrystalBallRoomUI/CrystalBall" node_paths=PackedStringArray("area_2d") instance=ExtResource("17_odkic")]
+area_2d = NodePath("../Area2D")
+hover_scale = Vector2(1.05, 1.05)
+exit_trans = 7
+
+[node name="Sprite2D" type="Sprite2D" parent="CrystalBallRoomUI/CrystalBall"]
+texture = ExtResource("16_bi8ao")
+
+[node name="Area2D" type="Area2D" parent="CrystalBallRoomUI/CrystalBall"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CrystalBallRoomUI/CrystalBall/Area2D"]
+polygon = PackedVector2Array(0, -31, -21, -28, -42, -15, -55, 11, -54, 36, -42, 60, -27, 71, -35, 85, -33, 89, -12, 94, 19, 93, 34, 87, 25, 71, 42, 58, 52, 35, 53, 12, 42, -11, 23, -27)
+
+[node name="CrystalBallAbove" type="Sprite2D" parent="CrystalBallRoomUI"]
+modulate = Color(1, 1, 1, 0)
+texture = ExtResource("20_qsi2s")
+
+[node name="InsideCrystalBall" type="Sprite2D" parent="CrystalBallRoomUI"]
+modulate = Color(1, 1, 1, 0)
+texture = ExtResource("21_lbbrw")
 
 [node name="Sprite2D" type="Sprite2D" parent="CrystalBallRoomUI"]
-texture = ExtResource("16_bi8ao")
+position = Vector2(0, -104)
+texture = ExtResource("11_qeh1x")
+hframes = 3
+frame = 1
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 layer = 0
