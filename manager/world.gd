@@ -36,12 +36,12 @@ func _input(event: InputEvent) -> void:
 		if multiplayer.get_unique_id() != GameManager.ghost_id:
 			player_card_screen_is_shown = !player_card_screen_is_shown
 			if player_card_screen_is_shown:
-				SceneTransition.reveal_hide_transition([player_card_screen], [player_ui, previous_room_relocator])
+				SceneTransition.reveal_hide_transition([player_card_screen], [player_ui, previous_room_relocator, room_manager])
 			else:
 				if !has_started_searching:
 					SceneTransition.reveal_hide_transition([player_ui], [player_card_screen])
 				else:
-					SceneTransition.reveal_hide_transition([player_ui, previous_room_relocator], [player_card_screen])
+					SceneTransition.reveal_hide_transition([player_ui, previous_room_relocator, room_manager], [player_card_screen])
 
 
 @rpc("any_peer", "call_local", "reliable")

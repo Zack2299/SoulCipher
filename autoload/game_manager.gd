@@ -57,11 +57,25 @@ func record_selection(phase_num: int, card_type: int, target_path: String, clue_
 
 @rpc("any_peer", "call_local", "reliable")
 func sync_card_found(phase_num: int, card_type: int, clue_path: String):
+	if not multiplayer.is_server(): return 
+	
 	var category = _get_category_string(card_type)
 	
+	# has this clue already been recorded?
+	if found_cards[phase_num][category].has(clue_path):
+		print("SERVER: Clue already processed, ignoring duplicate find.")
+		return
+	
+	# record
 	found_cards[phase_num][category][clue_path] = true
 	
-	print("SYNC: Card found and recorded globally: ", clue_path)
+	spawn_clue_for_all_card_screens.rpc(phase_num, card_type, clue_path)
+
+
+@rpc("authority", "call_local", "reliable")
+func spawn_clue_for_all_card_screens(phase_num: int, card_type: int, clue_path: String):
+	var category = _get_category_string(card_type)
+	found_cards[phase_num][category][clue_path] = true # keep local client dicts in sync
 	
 	world_node.spawn_clue_to_card_screen(clue_path, card_type)
 

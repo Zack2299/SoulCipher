@@ -3,7 +3,6 @@ extends Node2D
 @onready var left_clickable_area: Node = $LeftArrow/ClickableArea
 @onready var right_clickable_area: Node = $RightArrow/ClickableArea
 @onready var tokens: Sprite2D = $Tokens
-@onready var cards_container: HBoxContainer = $CardsContainer
 @onready var token_audio_stream_player: AudioStreamPlayer = $TokenAudioStreamPlayer
 
 const NUM_TOKENS = 3

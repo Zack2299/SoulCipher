@@ -147,11 +147,6 @@ func spawn_clue_for_all(tex_path: String, room_idx: int, type_index: int):
 	GameManager.world_node.spawn_clue_in_specific_room(tex_path, type_index, room_idx)
 
 
-@rpc("authority", "call_local", "reliable")
-func spawn_clue_for_all_card_screens(tex_path: String, type_index: int):
-	GameManager.world_node.spawn_clue_to_card_screen(tex_path, type_index)
-
-
 func _animate_removal(card: Card):
 	if not card: return
 	var tween = create_tween().set_parallel(true)
