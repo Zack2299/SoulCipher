@@ -39,7 +39,7 @@ func _input(event: InputEvent) -> void:
 				SceneTransition.reveal_hide_transition([player_card_screen], [player_ui, previous_room_relocator, room_manager])
 			else:
 				if !has_started_searching:
-					SceneTransition.reveal_hide_transition([player_ui], [player_card_screen])
+					SceneTransition.reveal_hide_transition([player_ui, room_manager], [player_card_screen])
 				else:
 					SceneTransition.reveal_hide_transition([player_ui, previous_room_relocator, room_manager], [player_card_screen])
 
