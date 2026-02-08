@@ -11,6 +11,8 @@ extends Node2D
 @onready var shop: Node2D = $Shop
 @onready var card_select: Node2D = $CardSelect
 @onready var player_card_screen: Node2D = $PlayerCardScreen
+@onready var crystal_ball_room_ui: Node2D = $CrystalBallRoomUI
+
 
 @export_dir var rooms_file_path: String = "res://rooms/"
 
@@ -61,6 +63,7 @@ func request_phase_change(type: String):
 func _ready() -> void:
 	NetworkManager.world_node = self
 	GameManager.world_node = self
+	SceneTransition.world_node = self
 	
 	player_card_screen_is_shown = player_card_screen.visible
 	
@@ -200,6 +203,7 @@ func _process(_delta: float) -> void:
 	if !has_started_searching and SceneTransition.current_room != "staircase":
 		has_started_searching = true
 
+
 func spawn_player(id: int):
 	if players_data.has_node(str(id)): 
 		return
@@ -237,5 +241,11 @@ func _on_update_player_ui(id: int, avatar_index: int):
 			ui_node.sprite_2d.frame = avatar_index
 
 
-#func _on_card_select_confirm_pressed() -> void:
-	#request_phase_change.rpc("ghost_turn_over")
+func show_crystal_ball_room_ui():
+	#await get_tree().create_timer(1.0/3.0).timeout
+	crystal_ball_room_ui.visible = true
+
+
+func hide_crystal_ball_room_ui():
+	#await get_tree().create_timer(1.0/3.0).timeout
+	crystal_ball_room_ui.visible = false

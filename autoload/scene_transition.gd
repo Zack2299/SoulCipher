@@ -6,11 +6,22 @@ extends CanvasLayer
 @onready var door_audio_stream_player: AudioStreamPlayer = $DoorAudioStreamPlayer
 
 var previous_room: String = "staircase"
-var current_room: String = "staircase"
+var current_room: String = "staircase":
+	set(value):
+		current_room = value
+		# Check if the new room is the crystal ball room
+		if current_room == "crystal_ball_room":
+			if world_node:
+				world_node.show_crystal_ball_room_ui()
+		else:
+			if world_node:
+				world_node.hide_crystal_ball_room_ui()
 
 var default_speed: float = 3.0
 
 var room_history_queue: Array = []
+
+var world_node: World = null
 
 
 func _ready() -> void:
@@ -39,7 +50,7 @@ func change_scene_packed(target_scene: PackedScene, speed_scale = 3.0) -> void:
 	animation_player.speed_scale = default_speed
 
 
-func reveal_hide_transition(reveal_elements: Array[Node] = [], hide_elements: Array[Node] = []):
+func reveal_hide_transition(reveal_elements: Array = [], hide_elements: Array = []):
 	animation_player.play("fade")
 	
 	await animation_player.animation_finished

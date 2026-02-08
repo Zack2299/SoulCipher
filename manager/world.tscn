@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=22 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://cvvt34jgnjyfb" path="res://assets/sounds/JDSherbert - Tabletop Games SFX Pack - Piece Impact - 1.mp3" id="10_qeh1x"]
 [ext_resource type="Texture2D" uid="uid://dl8ru400ggb86" path="res://assets/entities/tokens.png" id="11_qeh1x"]
 [ext_resource type="PackedScene" uid="uid://xi0qesshmf8m" path="res://ui/arrow/arrow.tscn" id="12_f6erf"]
+[ext_resource type="Texture2D" uid="uid://bc8yvdccf6ol8" path="res://assets/entities/weapon_button_hovered.png" id="16_bi8ao"]
 
 [sub_resource type="Gradient" id="Gradient_ym8sf"]
 colors = PackedColorArray(0, 0.83137256, 0.75686276, 0.5176471, 1, 1, 1, 1)
@@ -111,6 +112,12 @@ visible = false
 
 [node name="Sprite2D" type="Sprite2D" parent="Shop"]
 texture = ExtResource("4_wn2f2")
+
+[node name="CrystalBallRoomUI" type="Node2D" parent="."]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="CrystalBallRoomUI"]
+texture = ExtResource("16_bi8ao")
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 layer = 0
