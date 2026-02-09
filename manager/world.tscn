@@ -88,39 +88,13 @@ texture_normal = ExtResource("6_1jdyk")
 texture_pressed = ExtResource("7_dcuo7")
 texture_hover = ExtResource("8_4yxvl")
 
-[node name="PlayerCardScreen" type="Node2D" parent="."]
+[node name="CrystalBallRoomUI" type="Node2D" parent="."]
 visible = false
-script = ExtResource("9_kki0f")
+script = ExtResource("16_odkic")
 
-[node name="TokenAudioStreamPlayer" type="AudioStreamPlayer" parent="PlayerCardScreen"]
+[node name="TokenAudioStreamPlayer" type="AudioStreamPlayer" parent="CrystalBallRoomUI"]
 stream = ExtResource("10_qeh1x")
 volume_db = -9.244
-
-[node name="BackgroundTable" type="Sprite2D" parent="PlayerCardScreen"]
-texture = ExtResource("10_dcuo7")
-
-[node name="Tokens" type="Sprite2D" parent="PlayerCardScreen"]
-position = Vector2(0, -96)
-texture = ExtResource("11_qeh1x")
-hframes = 3
-
-[node name="LeftArrow" parent="PlayerCardScreen" instance=ExtResource("12_f6erf")]
-position = Vector2(-74, -98)
-
-[node name="Sprite2D" parent="PlayerCardScreen/LeftArrow" index="3"]
-flip_h = true
-
-[node name="RightArrow" parent="PlayerCardScreen" instance=ExtResource("12_f6erf")]
-position = Vector2(74, -98)
-
-[node name="Shop" type="Node2D" parent="."]
-visible = false
-
-[node name="Sprite2D" type="Sprite2D" parent="Shop"]
-texture = ExtResource("4_wn2f2")
-
-[node name="CrystalBallRoomUI" type="Node2D" parent="."]
-script = ExtResource("16_odkic")
 
 [node name="CrystalBall" type="Node2D" parent="CrystalBallRoomUI"]
 
@@ -148,11 +122,53 @@ texture = ExtResource("20_qsi2s")
 modulate = Color(1, 1, 1, 0)
 texture = ExtResource("21_lbbrw")
 
-[node name="Sprite2D" type="Sprite2D" parent="CrystalBallRoomUI"]
-position = Vector2(0, -104)
+[node name="Tokens" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
+position = Vector2(0, -96)
 texture = ExtResource("11_qeh1x")
 hframes = 3
-frame = 1
+
+[node name="LeftArrow" parent="CrystalBallRoomUI/InsideCrystalBall" instance=ExtResource("12_f6erf")]
+position = Vector2(-74, -98)
+
+[node name="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall/LeftArrow" index="3"]
+flip_h = true
+
+[node name="RightArrow" parent="CrystalBallRoomUI/InsideCrystalBall" instance=ExtResource("12_f6erf")]
+position = Vector2(74, -98)
+
+[node name="PlayerCardScreen" type="Node2D" parent="."]
+visible = false
+script = ExtResource("9_kki0f")
+
+[node name="TokenAudioStreamPlayer" type="AudioStreamPlayer" parent="PlayerCardScreen"]
+stream = ExtResource("10_qeh1x")
+volume_db = -9.244
+
+[node name="BackgroundTable" type="Sprite2D" parent="PlayerCardScreen"]
+texture = ExtResource("10_dcuo7")
+
+[node name="Tokens" type="Sprite2D" parent="PlayerCardScreen"]
+visible = false
+position = Vector2(0, -96)
+texture = ExtResource("11_qeh1x")
+hframes = 3
+
+[node name="LeftArrow" parent="PlayerCardScreen" instance=ExtResource("12_f6erf")]
+visible = false
+position = Vector2(-74, -98)
+
+[node name="Sprite2D" parent="PlayerCardScreen/LeftArrow" index="3"]
+flip_h = true
+
+[node name="RightArrow" parent="PlayerCardScreen" instance=ExtResource("12_f6erf")]
+visible = false
+position = Vector2(74, -98)
+
+[node name="Shop" type="Node2D" parent="."]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Shop"]
+texture = ExtResource("4_wn2f2")
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 layer = 0
@@ -196,5 +212,7 @@ script = ExtResource("7_hggar")
 
 [connection signal="pressed" from="CardSelect/ConfirmButton" to="." method="_on_card_select_confirm_pressed"]
 
+[editable path="CrystalBallRoomUI/InsideCrystalBall/LeftArrow"]
+[editable path="CrystalBallRoomUI/InsideCrystalBall/RightArrow"]
 [editable path="PlayerCardScreen/LeftArrow"]
 [editable path="PlayerCardScreen/RightArrow"]

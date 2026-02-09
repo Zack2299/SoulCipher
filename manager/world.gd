@@ -25,6 +25,7 @@ var orphaned_room_names: Array[String] = []
 var havent_explored_rooms = true
 var player_card_screen_is_shown
 var has_started_searching = false
+var is_showing_crystal_ball_ui = true # CHANGE
 
 # --- DEBUG ---
 signal ghost_turn_over
@@ -40,7 +41,9 @@ func _input(event: InputEvent) -> void:
 		if multiplayer.get_unique_id() != GameManager.ghost_id:
 			player_card_screen_is_shown = !player_card_screen_is_shown
 			if player_card_screen_is_shown:
-				SceneTransition.reveal_hide_transition([player_card_screen], [player_ui, previous_room_relocator, room_manager])
+				SceneTransition.reveal_hide_transition([player_card_screen], [player_ui, previous_room_relocator, room_manager, crystal_ball_room_ui])
+			elif is_showing_crystal_ball_ui:
+				SceneTransition.reveal_hide_transition([player_ui, previous_room_relocator, room_manager, crystal_ball_room_ui], [player_card_screen])
 			else:
 				if !has_started_searching:
 					SceneTransition.reveal_hide_transition([player_ui, room_manager], [player_card_screen])
@@ -243,7 +246,11 @@ func _on_update_player_ui(id: int, avatar_index: int):
 
 func show_crystal_ball_room_ui():
 	crystal_ball_room_ui.visible = true
+	is_showing_crystal_ball_ui = true
 
 
 func hide_crystal_ball_room_ui():
 	crystal_ball_room_ui.visible = false
+	is_showing_crystal_ball_ui = false
+	crystal_ball_room_ui.reset()
+	
