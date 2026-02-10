@@ -10,10 +10,10 @@
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1rmny"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ttqs8"]
-content_margin_left = 5.0
-content_margin_top = 2.0
-content_margin_right = 5.0
-content_margin_bottom = 2.0
+content_margin_left = 12.0
+content_margin_top = 5.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
 texture = ExtResource("1_1rmny")
 texture_margin_left = 3.0
 texture_margin_top = 3.0
@@ -25,10 +25,10 @@ expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_05tig"]
-content_margin_left = 5.0
-content_margin_top = 2.0
-content_margin_right = 5.0
-content_margin_bottom = 2.0
+content_margin_left = 12.0
+content_margin_top = 5.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
 texture = ExtResource("2_mihib")
 texture_margin_left = 3.0
 texture_margin_top = 3.0
@@ -40,10 +40,10 @@ expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1rmny"]
-content_margin_left = 5.0
-content_margin_top = 2.0
-content_margin_right = 5.0
-content_margin_bottom = 2.0
+content_margin_left = 12.0
+content_margin_top = 5.0
+content_margin_right = 12.0
+content_margin_bottom = 5.0
 texture = ExtResource("3_yin2u")
 texture_margin_left = 4.0
 texture_margin_top = 4.0
@@ -76,6 +76,7 @@ texture_margin_bottom = 8.0
 [resource]
 default_font = ExtResource("1_e1x85")
 default_font_size = 16
+Button/font_sizes/font_size = 16
 Button/styles/focus = SubResource("StyleBoxEmpty_1rmny")
 Button/styles/hover = SubResource("StyleBoxTexture_ttqs8")
 Button/styles/normal = SubResource("StyleBoxTexture_05tig")

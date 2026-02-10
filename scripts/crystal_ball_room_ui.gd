@@ -12,12 +12,15 @@ extends Node2D
 @onready var chime_audio_stream_player: AudioStreamPlayer = $ChimeAudioStreamPlayer
 @onready var button_audio_stream_player: AudioStreamPlayer = $ButtonAudioStreamPlayer
 @onready var area_2d: Area2D = $CrystalBall/Area2D
-@onready var container: HBoxContainer = $InsideCrystalBall/CardDisplay/HBoxContainer
+#@onready var container: HBoxContainer = $InsideCrystalBall/CardDisplay/HBoxContainer
 #@onready var preview_sprite: Sprite2D = $InsideCrystalBall/PreviewSprite
 @onready var preview_sprite: Sprite2D = $InsideCrystalBall/Preview/MaskLayer/PreviewSprite
 @onready var mask_layer: NinePatchRect = $InsideCrystalBall/Preview/MaskLayer
 @onready var card_frame: NinePatchRect = $InsideCrystalBall/Preview/CardFrame
 @onready var preview: Sprite2D = $InsideCrystalBall/Preview
+@onready var top_container: HBoxContainer = $InsideCrystalBall/CardDisplay/TopContainer
+@onready var bottom_container: HBoxContainer = $InsideCrystalBall/CardDisplay/BottomContainer
+
 
 
 var suspect_paths: Array[String] = []
@@ -124,11 +127,19 @@ func _refresh_selection_ui():
 
 func populate_selection_menu(texture_paths: Array):
 	# clear existing buttons
-	for child in container.get_children():
+	for child in top_container.get_children():
 		child.queue_free()
+	for child in bottom_container.get_children():
+		child.queue_free()
+		
+	var top_container_size = int(texture_paths.size() / 2)
+	
+	var count = 0
 	
 	# loop through the paths sent from the server/ghost
 	for path in texture_paths:
+		count += 1
+		
 		if path == "": continue
 		
 		var button = Button.new()
@@ -140,7 +151,10 @@ func populate_selection_menu(texture_paths: Array):
 		button.pressed.connect(_on_item_button_pressed.bind(path))
 		button.pressed.connect(func(): button_audio_stream_player.play())
 		
-		container.add_child(button)
+		if count <= top_container_size:
+			top_container.add_child(button)
+		else:
+			bottom_container.add_child(button)
 
 
 func _get_clean_name(path: String) -> String:
