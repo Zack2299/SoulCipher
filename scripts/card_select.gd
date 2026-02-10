@@ -37,8 +37,9 @@ func _ready():
 	available_suspects = _load_textures(suspects_path)
 	available_locations = _load_textures(locations_path)
 	
-	_shuffle_all()
-	_broadcast_crystal_ball_data()
+	if multiplayer.is_server():
+		_shuffle_all()
+		_broadcast_crystal_ball_data()
 	
 	# spawn the very first 5 clues
 	for i in range(NUM_GHOST_CARDS - 1):

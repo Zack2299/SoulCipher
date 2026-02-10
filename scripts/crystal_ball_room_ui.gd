@@ -28,7 +28,6 @@ func _ready() -> void:
 	clickable_area.mouse_clicked.connect(_on_crystal_ball_clicked)
 	
 	tokens.frame = 0
-	_refresh_selection_ui()
 
 
 func _on_left_arrow_clicked():
@@ -59,6 +58,8 @@ func _bounce_token():
 
 func _on_crystal_ball_clicked():
 	woosh_audio_stream_player.play()
+	
+	_refresh_selection_ui()
 	
 	if crystal_ball_tween and crystal_ball_tween.is_running():
 		crystal_ball_tween.kill()
