@@ -9,6 +9,7 @@ extends Node2D
 @onready var right_clickable_area: Node = $InsideCrystalBall/RightArrow/ClickableArea
 @onready var tokens: Sprite2D = $InsideCrystalBall/Tokens
 @onready var token_audio_stream_player: AudioStreamPlayer = $TokenAudioStreamPlayer
+@onready var woosh_audio_stream_player: AudioStreamPlayer = $WooshAudioStreamPlayer
 @onready var area_2d: Area2D = $CrystalBall/Area2D
 
 var crystal_ball_tween: Tween
@@ -46,11 +47,13 @@ func _bounce_token():
 
 
 func _on_crystal_ball_clicked():
+	woosh_audio_stream_player.play()
+	
 	if crystal_ball_tween and crystal_ball_tween.is_running():
 		crystal_ball_tween.kill()
 		
 	crystal_ball_tween = create_tween()
-	if get_parent().has_node("player_ui"):
+	if get_parent().has_node("PlayerUI"):
 		get_parent().player_ui.visible = false
 	
 	area_2d.visible = false

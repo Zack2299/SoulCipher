@@ -162,14 +162,30 @@ func _animate_removal(card: Card):
 func _load_textures(path: String) -> Array[Texture2D]:
 	var textures: Array[Texture2D] = []
 	var dir = DirAccess.open(path)
+	
 	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
+		
 		while file_name != "":
-			if !dir.current_is_dir() and file_name.ends_with(".png"):
-				var texture = load(path.path_join(file_name))
-				if texture is Texture2D: textures.append(texture)
+			if not dir.current_is_dir() and not file_name.begins_with("."):
+				# handle exported builds
+				if file_name.ends_with(".import"):
+					file_name = file_name.replace(".import", "")
+				
+				# filter for images
+				if file_name.ends_with(".png"):
+					var full_path = path.path_join(file_name)
+					
+					# avoid duplicates in editor
+					var tex = load(full_path)
+					if tex is Texture2D and not textures.has(tex):
+						textures.append(tex)
+			
 			file_name = dir.get_next()
+	else:
+		push_error("Failed to open directory: " + path)
+		
 	return textures
 
 

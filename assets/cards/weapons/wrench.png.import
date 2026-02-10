@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ccfre02t6ud1o"
-path="res://.godot/imported/ghost_card_frame_mask.png-b70b2c51e8976554fbfafc68c237abb0.ctex"
+uid="uid://42sdt5yeqbdq"
+path="res://.godot/imported/wrench.png-c994c6d44ff71e4cb586b0bddbf347e2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/weapons/ghost_card_frame_mask.png"
-dest_files=["res://.godot/imported/ghost_card_frame_mask.png-b70b2c51e8976554fbfafc68c237abb0.ctex"]
+source_file="res://assets/cards/weapons/wrench.png"
+dest_files=["res://.godot/imported/wrench.png-c994c6d44ff71e4cb586b0bddbf347e2.ctex"]
 
 [params]
 

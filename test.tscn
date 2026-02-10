@@ -1,10 +1,11 @@
-[gd_scene load_steps=11 format=3 uid="uid://o02wt4c1r6d7"]
+[gd_scene load_steps=12 format=3 uid="uid://o02wt4c1r6d7"]
 
 [ext_resource type="Texture2D" uid="uid://5eo6dw0je20s" path="res://assets/environment/crystal_ball_room.png" id="1_37kl0"]
 [ext_resource type="Script" uid="uid://bgvmpccj14on0" path="res://scripts/crystal_ball_room_ui.gd" id="2_00tp4"]
 [ext_resource type="Texture2D" uid="uid://dl8ru400ggb86" path="res://assets/entities/tokens.png" id="2_8uh7m"]
 [ext_resource type="AudioStream" uid="uid://cvvt34jgnjyfb" path="res://assets/sounds/JDSherbert - Tabletop Games SFX Pack - Piece Impact - 1.mp3" id="3_77dp3"]
 [ext_resource type="PackedScene" uid="uid://cq4v88u75nlbj" path="res://component/clickable_area.tscn" id="4_5tkv4"]
+[ext_resource type="AudioStream" uid="uid://52wudyeyp8pq" path="res://assets/sounds/u_1cwn0vj1yq-mystical-chime-196405.mp3" id="4_77dp3"]
 [ext_resource type="PackedScene" uid="uid://xi0qesshmf8m" path="res://ui/arrow/arrow.tscn" id="4_ykrsh"]
 [ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="5_0m0f1"]
 [ext_resource type="Texture2D" uid="uid://bgjy1v6ungd28" path="res://assets/entities/crystal_ball_in_mansion.png" id="6_b0q6j"]
@@ -25,6 +26,9 @@ script = ExtResource("2_00tp4")
 [node name="TokenAudioStreamPlayer" type="AudioStreamPlayer" parent="CrystalBallRoomUI"]
 stream = ExtResource("3_77dp3")
 volume_db = -9.244
+
+[node name="WooshAudioStreamPlayer" type="AudioStreamPlayer" parent="CrystalBallRoomUI"]
+stream = ExtResource("4_77dp3")
 
 [node name="CrystalBall" type="Node2D" parent="CrystalBallRoomUI"]
 
@@ -65,6 +69,28 @@ flip_h = true
 
 [node name="RightArrow" parent="CrystalBallRoomUI/InsideCrystalBall" instance=ExtResource("4_ykrsh")]
 position = Vector2(74, -98)
+
+[node name="CardDisplay" type="Control" parent="CrystalBallRoomUI/InsideCrystalBall"]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 96.0
+offset_bottom = 96.0
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CrystalBallRoomUI/InsideCrystalBall/CardDisplay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
 
 [editable path="CrystalBallRoomUI/InsideCrystalBall/LeftArrow"]
 [editable path="CrystalBallRoomUI/InsideCrystalBall/RightArrow"]
