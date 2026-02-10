@@ -1,44 +1,70 @@
-[gd_scene load_steps=5 format=3 uid="uid://o02wt4c1r6d7"]
+[gd_scene load_steps=11 format=3 uid="uid://o02wt4c1r6d7"]
 
-[ext_resource type="Script" uid="uid://bpi7g37c4olqy" path="res://scripts/player_card_screen.gd" id="1_ppyta"]
+[ext_resource type="Texture2D" uid="uid://5eo6dw0je20s" path="res://assets/environment/crystal_ball_room.png" id="1_37kl0"]
+[ext_resource type="Script" uid="uid://bgvmpccj14on0" path="res://scripts/crystal_ball_room_ui.gd" id="2_00tp4"]
 [ext_resource type="Texture2D" uid="uid://dl8ru400ggb86" path="res://assets/entities/tokens.png" id="2_8uh7m"]
+[ext_resource type="AudioStream" uid="uid://cvvt34jgnjyfb" path="res://assets/sounds/JDSherbert - Tabletop Games SFX Pack - Piece Impact - 1.mp3" id="3_77dp3"]
+[ext_resource type="PackedScene" uid="uid://cq4v88u75nlbj" path="res://component/clickable_area.tscn" id="4_5tkv4"]
 [ext_resource type="PackedScene" uid="uid://xi0qesshmf8m" path="res://ui/arrow/arrow.tscn" id="4_ykrsh"]
-[ext_resource type="Texture2D" uid="uid://b4edisjx2gm5n" path="res://assets/environment/tarot_table.png" id="8_ehkex"]
+[ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="5_0m0f1"]
+[ext_resource type="Texture2D" uid="uid://bgjy1v6ungd28" path="res://assets/entities/crystal_ball_in_mansion.png" id="6_b0q6j"]
+[ext_resource type="Texture2D" uid="uid://wdnif4a027ka" path="res://assets/environment/crystal_ball_room_zoomed.png" id="7_mhym6"]
+[ext_resource type="Texture2D" uid="uid://bqkt8k42kp1i4" path="res://assets/ui/crystal_ball_zoom.png" id="8_a3se8"]
 
 [node name="Test" type="Node2D"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(3, 3)
 
-[node name="PlayerCardScreen" type="Node2D" parent="."]
-script = ExtResource("1_ppyta")
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_37kl0")
 
-[node name="BackgroundTable" type="Sprite2D" parent="PlayerCardScreen"]
-texture = ExtResource("8_ehkex")
+[node name="CrystalBallRoomUI" type="Node2D" parent="."]
+script = ExtResource("2_00tp4")
 
-[node name="Tokens" type="Sprite2D" parent="PlayerCardScreen"]
+[node name="TokenAudioStreamPlayer" type="AudioStreamPlayer" parent="CrystalBallRoomUI"]
+stream = ExtResource("3_77dp3")
+volume_db = -9.244
+
+[node name="CrystalBall" type="Node2D" parent="CrystalBallRoomUI"]
+
+[node name="ClickableArea" parent="CrystalBallRoomUI/CrystalBall" node_paths=PackedStringArray("area_2d") instance=ExtResource("4_5tkv4")]
+area_2d = NodePath("../Area2D")
+
+[node name="HoverableArea" parent="CrystalBallRoomUI/CrystalBall" node_paths=PackedStringArray("area_2d") instance=ExtResource("5_0m0f1")]
+area_2d = NodePath("../Area2D")
+hover_scale = Vector2(1.05, 1.05)
+exit_trans = 7
+
+[node name="Sprite2D" type="Sprite2D" parent="CrystalBallRoomUI/CrystalBall"]
+texture = ExtResource("6_b0q6j")
+
+[node name="Area2D" type="Area2D" parent="CrystalBallRoomUI/CrystalBall"]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="CrystalBallRoomUI/CrystalBall/Area2D"]
+polygon = PackedVector2Array(0, -31, -21, -28, -42, -15, -55, 11, -54, 36, -42, 60, -27, 71, -35, 85, -33, 89, -12, 94, 19, 93, 34, 87, 25, 71, 42, 58, 52, 35, 53, 12, 42, -11, 23, -27)
+
+[node name="CrystalBallAbove" type="Sprite2D" parent="CrystalBallRoomUI"]
+modulate = Color(1, 1, 1, 0)
+texture = ExtResource("7_mhym6")
+
+[node name="InsideCrystalBall" type="Sprite2D" parent="CrystalBallRoomUI"]
+modulate = Color(1, 1, 1, 0)
+texture = ExtResource("8_a3se8")
+
+[node name="Tokens" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
 position = Vector2(0, -96)
 texture = ExtResource("2_8uh7m")
 hframes = 3
 
-[node name="LeftArrow" parent="PlayerCardScreen" instance=ExtResource("4_ykrsh")]
+[node name="LeftArrow" parent="CrystalBallRoomUI/InsideCrystalBall" instance=ExtResource("4_ykrsh")]
 position = Vector2(-74, -98)
 
-[node name="Sprite2D" parent="PlayerCardScreen/LeftArrow" index="3"]
+[node name="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall/LeftArrow" index="3"]
 flip_h = true
 
-[node name="RightArrow" parent="PlayerCardScreen" instance=ExtResource("4_ykrsh")]
+[node name="RightArrow" parent="CrystalBallRoomUI/InsideCrystalBall" instance=ExtResource("4_ykrsh")]
 position = Vector2(74, -98)
 
-[node name="CardsContainer" type="HBoxContainer" parent="PlayerCardScreen"]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 40.0
-grow_horizontal = 2
-size_flags_horizontal = 4
-
-[editable path="PlayerCardScreen/LeftArrow"]
-[editable path="PlayerCardScreen/RightArrow"]
+[editable path="CrystalBallRoomUI/InsideCrystalBall/LeftArrow"]
+[editable path="CrystalBallRoomUI/InsideCrystalBall/RightArrow"]

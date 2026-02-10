@@ -50,6 +50,8 @@ func _on_crystal_ball_clicked():
 		crystal_ball_tween.kill()
 		
 	crystal_ball_tween = create_tween()
+	if get_parent().has_node("player_ui"):
+		get_parent().player_ui.visible = false
 	
 	area_2d.visible = false
 
@@ -69,6 +71,7 @@ func _on_crystal_ball_clicked():
 func reset():
 	if crystal_ball_tween and crystal_ball_tween.is_running():
 		crystal_ball_tween.kill()
+		
 	crystal_ball_above.modulate.a = 0
 	inside_crystal_ball.modulate.a = 0
 	area_2d.visible = true

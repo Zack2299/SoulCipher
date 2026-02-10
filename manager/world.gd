@@ -211,14 +211,14 @@ func spawn_player(id: int):
 	if players_data.has_node(str(id)): 
 		return
 	
-	# 1. Spawn UI
+	# spawn ui
 	var p_ui = preload("res://entities/player_container/player_container.tscn").instantiate()
 	p_ui.name = "UI_" + str(id) 
 	player_ui_hbox.add_child(p_ui)
 	
-	# 2. Setup Data Node
+	# setup data node
 	var p_data = preload("res://manager/player_data.tscn").instantiate()
-	p_data.name = str(id) # Name matches peer ID exactly
+	p_data.name = str(id) # name matches peer id
 	p_data.player_id = id
 	
 	if multiplayer.is_server():
@@ -228,10 +228,9 @@ func spawn_player(id: int):
 	
 	p_data.update_player_ui.connect(_on_update_player_ui)
 	
-	# 3. Add to tree (without the 'true' flag to keep path predictable)
 	players_data.add_child(p_data)
 	
-	# 4. Initialize UI
+	# init ui
 	p_ui.setup(p_data)
 
 
