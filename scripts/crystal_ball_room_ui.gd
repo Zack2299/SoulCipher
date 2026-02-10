@@ -9,7 +9,8 @@ extends Node2D
 @onready var right_clickable_area: Node = $InsideCrystalBall/RightArrow/ClickableArea
 @onready var tokens: Sprite2D = $InsideCrystalBall/Tokens
 @onready var token_audio_stream_player: AudioStreamPlayer = $TokenAudioStreamPlayer
-@onready var woosh_audio_stream_player: AudioStreamPlayer = $WooshAudioStreamPlayer
+@onready var chime_audio_stream_player: AudioStreamPlayer = $ChimeAudioStreamPlayer
+@onready var button_audio_stream_player: AudioStreamPlayer = $ButtonAudioStreamPlayer
 @onready var area_2d: Area2D = $CrystalBall/Area2D
 @onready var container: HBoxContainer = $InsideCrystalBall/CardDisplay/HBoxContainer
 @onready var preview_sprite: Sprite2D = $InsideCrystalBall/PreviewSprite
@@ -57,7 +58,7 @@ func _bounce_token():
 
 
 func _on_crystal_ball_clicked():
-	woosh_audio_stream_player.play()
+	chime_audio_stream_player.play()
 	
 	_refresh_selection_ui()
 	
@@ -102,6 +103,8 @@ func setup_crystal_ball(s_paths: Array, w_paths: Array, l_paths: Array):
 func _refresh_selection_ui():
 	var paths_to_load: Array[String] = []
 	
+	preview_sprite.texture = null
+	
 	match tokens.frame:
 		0:
 			paths_to_load = weapon_paths
@@ -121,15 +124,16 @@ func populate_selection_menu(texture_paths: Array):
 	for path in texture_paths:
 		if path == "": continue
 		
-		var btn = Button.new()
+		var button = Button.new()
 		
 		# convert path "res://assets/.../the_chef.png" -> "The Chef"
-		btn.text = _get_clean_name(path)
+		button.text = _get_clean_name(path)
 		
 		# connect the button to the preview logic
-		btn.pressed.connect(_on_item_button_pressed.bind(path))
+		button.pressed.connect(_on_item_button_pressed.bind(path))
+		button.pressed.connect(func(): button_audio_stream_player.play())
 		
-		container.add_child(btn)
+		container.add_child(button)
 
 
 func _get_clean_name(path: String) -> String:

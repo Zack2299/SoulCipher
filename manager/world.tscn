@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=29 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -18,6 +18,7 @@
 [ext_resource type="Texture2D" uid="uid://dl8ru400ggb86" path="res://assets/entities/tokens.png" id="11_qeh1x"]
 [ext_resource type="PackedScene" uid="uid://xi0qesshmf8m" path="res://ui/arrow/arrow.tscn" id="12_f6erf"]
 [ext_resource type="AudioStream" uid="uid://52wudyeyp8pq" path="res://assets/sounds/u_1cwn0vj1yq-mystical-chime-196405.mp3" id="12_vbg0p"]
+[ext_resource type="AudioStream" uid="uid://b2dbvqfg1ngnx" path="res://assets/sounds/Click_Combo_Pitched_Up.wav" id="14_2lj22"]
 [ext_resource type="Texture2D" uid="uid://bgjy1v6ungd28" path="res://assets/entities/crystal_ball_in_mansion.png" id="16_bi8ao"]
 [ext_resource type="PackedScene" uid="uid://cq4v88u75nlbj" path="res://component/clickable_area.tscn" id="16_grn3s"]
 [ext_resource type="Script" uid="uid://bgvmpccj14on0" path="res://scripts/crystal_ball_room_ui.gd" id="16_odkic"]
@@ -102,8 +103,11 @@ script = ExtResource("16_odkic")
 stream = ExtResource("10_qeh1x")
 volume_db = -9.244
 
-[node name="WooshAudioStreamPlayer" type="AudioStreamPlayer" parent="CrystalBallRoomUI"]
+[node name="ChimeAudioStreamPlayer" type="AudioStreamPlayer" parent="CrystalBallRoomUI"]
 stream = ExtResource("12_vbg0p")
+
+[node name="ButtonAudioStreamPlayer" type="AudioStreamPlayer" parent="CrystalBallRoomUI"]
+stream = ExtResource("14_2lj22")
 
 [node name="CrystalBall" type="Node2D" parent="CrystalBallRoomUI"]
 
@@ -132,18 +136,18 @@ modulate = Color(1, 1, 1, 0)
 texture = ExtResource("21_lbbrw")
 
 [node name="Tokens" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
-position = Vector2(0, -96)
+position = Vector2(0, -112)
 texture = ExtResource("11_qeh1x")
 hframes = 3
 
 [node name="LeftArrow" parent="CrystalBallRoomUI/InsideCrystalBall" instance=ExtResource("12_f6erf")]
-position = Vector2(-74, -98)
+position = Vector2(-74, -114)
 
 [node name="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall/LeftArrow" index="3"]
 flip_h = true
 
 [node name="RightArrow" parent="CrystalBallRoomUI/InsideCrystalBall" instance=ExtResource("12_f6erf")]
-position = Vector2(74, -98)
+position = Vector2(74, -114)
 
 [node name="PreviewSprite" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
 position = Vector2(0, 32)
