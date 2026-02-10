@@ -70,11 +70,14 @@ flip_h = true
 [node name="RightArrow" parent="CrystalBallRoomUI/InsideCrystalBall" instance=ExtResource("4_ykrsh")]
 position = Vector2(74, -98)
 
+[node name="PreviewSprite" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
+position = Vector2(0, 32)
+
 [node name="CardDisplay" type="Control" parent="CrystalBallRoomUI/InsideCrystalBall"]
 layout_mode = 3
 anchors_preset = 0
-offset_top = 96.0
-offset_bottom = 96.0
+offset_top = 144.0
+offset_bottom = 144.0
 mouse_filter = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CrystalBallRoomUI/InsideCrystalBall/CardDisplay"]

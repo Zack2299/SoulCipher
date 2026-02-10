@@ -17,6 +17,7 @@ var game_just_started = true
 # config
 var random_ghost = true
 var total_rounds: int = 14
+var num_cards = 7
 
 # phase_data[phase_index][category] = { target_path : [clue_paths] }
 var phase_history: Dictionary = {

@@ -38,24 +38,55 @@ func _ready():
 	available_locations = _load_textures(locations_path)
 	
 	_shuffle_all()
+	_broadcast_crystal_ball_data()
 	
 	# spawn the very first 5 clues
 	for i in range(NUM_GHOST_CARDS - 1):
-		add_card(CardType.GHOST, available_clues.pop_back())
+		add_card(CardType.GHOST, available_clues.pop_front())
 	
 	visibility_changed.connect(_on_visibility_changed)
+
+
+func _broadcast_crystal_ball_data():
+	# extract the texture paths for the first N cards of each type
+	var s_paths = _get_paths_slice(available_suspects, GameManager.num_cards)
+	var w_paths = _get_paths_slice(available_weapons, GameManager.num_cards)
+	var l_paths = _get_paths_slice(available_locations, GameManager.num_cards)
+	
+	# broadcast to everyone
+	sync_crystal_ball_options.rpc(s_paths, w_paths, l_paths)
+
+
+# helper to get resource paths from array of textures
+func _get_paths_slice(tex_array: Array[Texture2D], count: int) -> Array[String]:
+	var paths: Array[String] = []
+	var limit = min(count, tex_array.size())
+	for i in range(limit):
+		paths.append(tex_array[i].resource_path)
+	paths.shuffle() # randomize so you don't just guess the first 3 every time
+	return paths
+
+
+@rpc("authority", "call_local", "reliable")
+func sync_crystal_ball_options(s_paths: Array, w_paths: Array, l_paths: Array):
+	var crystal_ball = get_tree().root.find_child("CrystalBallRoomUI", true, false)
+	
+	if crystal_ball and crystal_ball.has_method("setup_crystal_ball"):
+		crystal_ball.setup_crystal_ball(s_paths, w_paths, l_paths)
+	else:
+		push_warning("CrystalBall node not found to sync options!")
 
 
 func _on_visibility_changed():
 	if visible:
 		current_phase = CardType.WEAPON
 		
-		add_card(CardType.GHOST, available_clues.pop_back()) # total of 6 clues
-		current_type_card = add_card(CardType.WEAPON, available_weapons.pop_back())
+		add_card(CardType.GHOST, available_clues.pop_front()) # total of 6 clues
+		current_type_card = add_card(CardType.WEAPON, available_weapons.pop_front())
 
 
 func add_card(type: int, texture: Texture2D) -> Card:
-	if texture == null: return null # Safety check for empty decks
+	if texture == null: return null # safety check for empty decks
 	
 	var sprite_pos = spawn_zone_sprite.global_position
 	var sprite_size = spawn_zone_sprite.texture.get_size() * spawn_zone_sprite.scale
@@ -89,15 +120,16 @@ func _on_confirm_pressed():
 	
 	confirm_audio_stream_player.play()
 	
-	# 1. Get the texture paths to send to other players
+	# get the texture paths to send to other players
 	var ghost_tex_path = top_card.front_texture.resource_path
 	var type_tex_path = current_type_card.front_texture.resource_path
 	
-	# 2. We still need the NodePaths ONLY for the Ghost to animate their removal
+	# we still need the NodePaths ONLY for the Ghost to animate their removal
 	var ghost_node = top_card.get_path()
 	var type_node = current_type_card.get_path()
 	
 	sync_card_selection.rpc(ghost_tex_path, type_tex_path, ghost_node, type_node)
+
 
 @rpc("any_peer", "call_local", "reliable")
 func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: NodePath, t_node_path: NodePath):
@@ -135,12 +167,12 @@ func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: No
 	else:
 		# Ghost refills their private board
 		if multiplayer.get_unique_id() == GameManager.ghost_id:
-			add_card(CardType.GHOST, available_clues.pop_back())
+			add_card(CardType.GHOST, available_clues.pop_front())
 			
 			var next_tex: Texture2D
 			match current_phase:
-				CardType.SUSPECT: next_tex = available_suspects.pop_back()
-				CardType.LOCATION: next_tex = available_locations.pop_back()
+				CardType.SUSPECT: next_tex = available_suspects.pop_front()
+				CardType.LOCATION: next_tex = available_locations.pop_front()
 			
 			current_type_card = add_card(current_phase, next_tex)
 

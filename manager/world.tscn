@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=28 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -17,6 +17,7 @@
 [ext_resource type="AudioStream" uid="uid://cvvt34jgnjyfb" path="res://assets/sounds/JDSherbert - Tabletop Games SFX Pack - Piece Impact - 1.mp3" id="10_qeh1x"]
 [ext_resource type="Texture2D" uid="uid://dl8ru400ggb86" path="res://assets/entities/tokens.png" id="11_qeh1x"]
 [ext_resource type="PackedScene" uid="uid://xi0qesshmf8m" path="res://ui/arrow/arrow.tscn" id="12_f6erf"]
+[ext_resource type="AudioStream" uid="uid://52wudyeyp8pq" path="res://assets/sounds/u_1cwn0vj1yq-mystical-chime-196405.mp3" id="12_vbg0p"]
 [ext_resource type="Texture2D" uid="uid://bgjy1v6ungd28" path="res://assets/entities/crystal_ball_in_mansion.png" id="16_bi8ao"]
 [ext_resource type="PackedScene" uid="uid://cq4v88u75nlbj" path="res://component/clickable_area.tscn" id="16_grn3s"]
 [ext_resource type="Script" uid="uid://bgvmpccj14on0" path="res://scripts/crystal_ball_room_ui.gd" id="16_odkic"]
@@ -64,6 +65,12 @@ is_going_back = true
 
 [node name="PlayersData" type="Node2D" parent="."]
 
+[node name="Shop" type="Node2D" parent="."]
+visible = false
+
+[node name="Sprite2D" type="Sprite2D" parent="Shop"]
+texture = ExtResource("4_wn2f2")
+
 [node name="CardSelect" type="Node2D" parent="."]
 visible = false
 script = ExtResource("4_j0j34")
@@ -89,12 +96,14 @@ texture_pressed = ExtResource("7_dcuo7")
 texture_hover = ExtResource("8_4yxvl")
 
 [node name="CrystalBallRoomUI" type="Node2D" parent="."]
-visible = false
 script = ExtResource("16_odkic")
 
 [node name="TokenAudioStreamPlayer" type="AudioStreamPlayer" parent="CrystalBallRoomUI"]
 stream = ExtResource("10_qeh1x")
 volume_db = -9.244
+
+[node name="WooshAudioStreamPlayer" type="AudioStreamPlayer" parent="CrystalBallRoomUI"]
+stream = ExtResource("12_vbg0p")
 
 [node name="CrystalBall" type="Node2D" parent="CrystalBallRoomUI"]
 
@@ -136,6 +145,32 @@ flip_h = true
 [node name="RightArrow" parent="CrystalBallRoomUI/InsideCrystalBall" instance=ExtResource("12_f6erf")]
 position = Vector2(74, -98)
 
+[node name="PreviewSprite" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
+position = Vector2(0, 32)
+rotation = 1.5707964
+
+[node name="CardDisplay" type="Control" parent="CrystalBallRoomUI/InsideCrystalBall"]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 144.0
+offset_bottom = 144.0
+mouse_filter = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CrystalBallRoomUI/InsideCrystalBall/CardDisplay"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
 [node name="PlayerCardScreen" type="Node2D" parent="."]
 visible = false
 script = ExtResource("9_kki0f")
@@ -163,12 +198,6 @@ flip_h = true
 [node name="RightArrow" parent="PlayerCardScreen" instance=ExtResource("12_f6erf")]
 visible = false
 position = Vector2(74, -98)
-
-[node name="Shop" type="Node2D" parent="."]
-visible = false
-
-[node name="Sprite2D" type="Sprite2D" parent="Shop"]
-texture = ExtResource("4_wn2f2")
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 layer = 0

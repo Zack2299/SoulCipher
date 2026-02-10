@@ -11,6 +11,12 @@ extends Node2D
 @onready var token_audio_stream_player: AudioStreamPlayer = $TokenAudioStreamPlayer
 @onready var woosh_audio_stream_player: AudioStreamPlayer = $WooshAudioStreamPlayer
 @onready var area_2d: Area2D = $CrystalBall/Area2D
+@onready var container: HBoxContainer = $InsideCrystalBall/CardDisplay/HBoxContainer
+@onready var preview_sprite: Sprite2D = $InsideCrystalBall/PreviewSprite
+
+var suspect_paths: Array[String] = []
+var weapon_paths: Array[String] = []
+var location_paths: Array[String] = []
 
 var crystal_ball_tween: Tween
 
@@ -20,6 +26,9 @@ func _ready() -> void:
 	left_clickable_area.mouse_clicked.connect(_on_left_arrow_clicked)
 	right_clickable_area.mouse_clicked.connect(_on_right_arrow_clicked)
 	clickable_area.mouse_clicked.connect(_on_crystal_ball_clicked)
+	
+	tokens.frame = 0
+	_refresh_selection_ui()
 
 
 func _on_left_arrow_clicked():
@@ -28,11 +37,13 @@ func _on_left_arrow_clicked():
 	else:
 		tokens.frame -= 1
 	_bounce_token()
+	_refresh_selection_ui()
 
 
 func _on_right_arrow_clicked():
 	tokens.frame = (tokens.frame + 1) % NUM_TOKENS
 	_bounce_token()
+	_refresh_selection_ui()
 
 
 func _bounce_token():
@@ -78,3 +89,62 @@ func reset():
 	crystal_ball_above.modulate.a = 0
 	inside_crystal_ball.modulate.a = 0
 	area_2d.visible = true
+
+
+func setup_crystal_ball(s_paths: Array, w_paths: Array, l_paths: Array):
+	# convert incoming generic arrays to typed string arrays
+	suspect_paths = Array(s_paths, TYPE_STRING, &"", null)
+	weapon_paths = Array(w_paths, TYPE_STRING, &"", null)
+	location_paths = Array(l_paths, TYPE_STRING, &"", null)
+
+
+func _refresh_selection_ui():
+	var paths_to_load: Array[String] = []
+	
+	match tokens.frame:
+		0:
+			paths_to_load = weapon_paths
+		1:
+			paths_to_load = suspect_paths
+		2:
+			paths_to_load = location_paths
+	populate_selection_menu(paths_to_load)
+
+
+func populate_selection_menu(texture_paths: Array):
+	# clear existing buttons
+	for child in container.get_children():
+		child.queue_free()
+	
+	# loop through the paths sent from the server/ghost
+	for path in texture_paths:
+		if path == "": continue
+		
+		var btn = Button.new()
+		
+		# convert path "res://assets/.../the_chef.png" -> "The Chef"
+		btn.text = _get_clean_name(path)
+		
+		# connect the button to the preview logic
+		btn.pressed.connect(_on_item_button_pressed.bind(path))
+		
+		container.add_child(btn)
+
+
+func _get_clean_name(path: String) -> String:
+	# "the_chef.png" -> "the_chef"
+	var base_name = path.get_file().get_basename()
+	# "the_chef" -> "The Chef"
+	return base_name.replace("_", " ").capitalize()
+
+
+func _on_item_button_pressed(path: String):
+	# Load the texture from the path sent in the RPC
+	var texture = load(path)
+	if texture is Texture2D:
+		preview_sprite.texture = texture
+		
+		# Optional: Small juice effect when the image swaps
+		var tween = create_tween()
+		tween.tween_property(preview_sprite, "scale", Vector2(1.1, 1.1), 0.05)
+		tween.tween_property(preview_sprite, "scale", Vector2(1.0, 1.0), 0.1)
