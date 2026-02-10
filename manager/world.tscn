@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=31 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -25,6 +25,8 @@
 [ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="17_odkic"]
 [ext_resource type="Texture2D" uid="uid://wdnif4a027ka" path="res://assets/environment/crystal_ball_room_zoomed.png" id="20_qsi2s"]
 [ext_resource type="Texture2D" uid="uid://bqkt8k42kp1i4" path="res://assets/ui/crystal_ball_zoom.png" id="21_lbbrw"]
+[ext_resource type="Texture2D" uid="uid://dupwwm15bk6lp" path="res://assets/cards/ghost_card_frame_mask.png" id="22_a8vg4"]
+[ext_resource type="Texture2D" uid="uid://c0c7brf3376vl" path="res://assets/cards/ghost_card_frame.png" id="23_2kk55"]
 
 [sub_resource type="Gradient" id="Gradient_ym8sf"]
 colors = PackedColorArray(0, 0.83137256, 0.75686276, 0.5176471, 1, 1, 1, 1)
@@ -149,9 +151,51 @@ flip_h = true
 [node name="RightArrow" parent="CrystalBallRoomUI/InsideCrystalBall" instance=ExtResource("12_f6erf")]
 position = Vector2(74, -114)
 
-[node name="PreviewSprite" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
+[node name="Preview" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
 position = Vector2(0, 32)
 rotation = 1.5707964
+
+[node name="MaskLayer" type="NinePatchRect" parent="CrystalBallRoomUI/InsideCrystalBall/Preview"]
+clip_children = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -0.5
+offset_top = -0.5
+offset_right = 39.5
+offset_bottom = 39.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+texture = ExtResource("22_a8vg4")
+region_rect = Rect2(0, 0, 114, 174)
+patch_margin_left = 7
+patch_margin_top = 6
+patch_margin_right = 7
+patch_margin_bottom = 6
+
+[node name="PreviewSprite" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall/Preview/MaskLayer"]
+
+[node name="CardFrame" type="NinePatchRect" parent="CrystalBallRoomUI/InsideCrystalBall/Preview"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("23_2kk55")
+region_rect = Rect2(0, 0, 114, 174)
+patch_margin_left = 7
+patch_margin_top = 6
+patch_margin_right = 7
+patch_margin_bottom = 6
 
 [node name="CardDisplay" type="Control" parent="CrystalBallRoomUI/InsideCrystalBall"]
 layout_mode = 3

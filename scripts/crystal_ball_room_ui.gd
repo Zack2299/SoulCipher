@@ -13,7 +13,12 @@ extends Node2D
 @onready var button_audio_stream_player: AudioStreamPlayer = $ButtonAudioStreamPlayer
 @onready var area_2d: Area2D = $CrystalBall/Area2D
 @onready var container: HBoxContainer = $InsideCrystalBall/CardDisplay/HBoxContainer
-@onready var preview_sprite: Sprite2D = $InsideCrystalBall/PreviewSprite
+#@onready var preview_sprite: Sprite2D = $InsideCrystalBall/PreviewSprite
+@onready var preview_sprite: Sprite2D = $InsideCrystalBall/Preview/MaskLayer/PreviewSprite
+@onready var mask_layer: NinePatchRect = $InsideCrystalBall/Preview/MaskLayer
+@onready var card_frame: NinePatchRect = $InsideCrystalBall/Preview/CardFrame
+@onready var preview: Sprite2D = $InsideCrystalBall/Preview
+
 
 var suspect_paths: Array[String] = []
 var weapon_paths: Array[String] = []
@@ -103,6 +108,8 @@ func setup_crystal_ball(s_paths: Array, w_paths: Array, l_paths: Array):
 func _refresh_selection_ui():
 	var paths_to_load: Array[String] = []
 	
+	preview.visible = false
+	
 	preview_sprite.texture = null
 	
 	match tokens.frame:
@@ -144,12 +151,22 @@ func _get_clean_name(path: String) -> String:
 
 
 func _on_item_button_pressed(path: String):
-	# Load the texture from the path sent in the RPC
+	preview.visible = true
 	var texture = load(path)
 	if texture is Texture2D:
 		preview_sprite.texture = texture
+		match tokens.frame:
+			0: card_frame.texture = preload("uid://240yaag32lqm")
+			1: card_frame.texture = preload("uid://cnfs0t5f87raw")
+			2: card_frame.texture = preload("uid://wyg3wb5uxx4b")
+		var art_size = preview_sprite.texture.get_size()
+		mask_layer.size = art_size
+		mask_layer.position = -art_size / 2
+		card_frame.size = art_size
+		card_frame.position = -art_size / 2
+		preview_sprite.offset = art_size /2
 		
 		# Optional: Small juice effect when the image swaps
 		var tween = create_tween()
-		tween.tween_property(preview_sprite, "scale", Vector2(1.1, 1.1), 0.05)
-		tween.tween_property(preview_sprite, "scale", Vector2(1.0, 1.0), 0.1)
+		tween.tween_property(preview, "scale", Vector2(1.1, 1.1), 0.05)
+		tween.tween_property(preview, "scale", Vector2(1.0, 1.0), 0.1)
