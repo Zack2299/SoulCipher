@@ -4,7 +4,9 @@ enum TokenType { WEAPON, SUSPECT, LOCATION }
 
 @onready var clickable_area: Node = $CrystalBall/ClickableArea
 @onready var crystal_ball_above: Sprite2D = $CrystalBallAbove
-@onready var inside_crystal_ball: Sprite2D = $InsideCrystalBall
+#@onready var inside_crystal_ball: Sprite2D = $InsideCrystalBall
+@onready var inside_crystal_ball: Node2D = $InsideCrystalBall
+@onready var inside_crystal_ball_bg: Sprite2D = $InsideCrystalBall/InsideCrystalBallBg
 
 
 @onready var left_clickable_area: Node = $InsideCrystalBall/LeftArrow/ClickableArea
@@ -113,7 +115,8 @@ func setup_crystal_ball(s_paths: Array, w_paths: Array, l_paths: Array):
 
 func _refresh_selection_ui():
 	if tokens.frame < TokenType.LOCATION:
-		inside_crystal_ball.texture = preload("uid://bqkt8k42kp1i4")
+		inside_crystal_ball_bg.rotation_degrees = 0
+		inside_crystal_ball_bg.texture = preload("uid://bqkt8k42kp1i4")
 
 	var paths_to_load: Array[String] = []
 	
@@ -201,7 +204,13 @@ func _on_item_button_pressed(path: String):
 func _on_location_button_pressed(path: String):
 	var texture = load(path)
 	if texture is Texture2D:
-		inside_crystal_ball.texture = texture
+		inside_crystal_ball_bg.rotation_degrees = 90
+		inside_crystal_ball_bg.texture = texture
 		
 		preview_sprite.texture = null
 		preview.visible = false
+		
+		# animation
+		var tween = create_tween()
+		tween.tween_property(inside_crystal_ball_bg, "scale", Vector2(1.025, 1.025), 0.05)
+		tween.tween_property(inside_crystal_ball_bg, "scale", Vector2(1.0, 1.0), 0.1)

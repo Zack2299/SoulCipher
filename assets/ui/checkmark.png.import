@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bqdmu3qcdoh6n"
-path="res://.godot/imported/coy_pond.png-8bc0ddb012e80b7df71e14f595d2c833.ctex"
+uid="uid://c0f6s2nw75tso"
+path="res://.godot/imported/checkmark.png-63a0e441d88c8e56190bfc00350804a7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/locations/coy_pond.png"
-dest_files=["res://.godot/imported/coy_pond.png-8bc0ddb012e80b7df71e14f595d2c833.ctex"]
+source_file="res://assets/ui/checkmark.png"
+dest_files=["res://.godot/imported/checkmark.png-63a0e441d88c8e56190bfc00350804a7.ctex"]
 
 [params]
 

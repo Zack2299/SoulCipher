@@ -134,8 +134,10 @@ polygon = PackedVector2Array(0, -31, -21, -28, -42, -15, -55, 11, -54, 36, -42, 
 modulate = Color(1, 1, 1, 0)
 texture = ExtResource("20_qsi2s")
 
-[node name="InsideCrystalBall" type="Sprite2D" parent="CrystalBallRoomUI"]
+[node name="InsideCrystalBall" type="Node2D" parent="CrystalBallRoomUI"]
 modulate = Color(1, 1, 1, 0)
+
+[node name="InsideCrystalBallBg" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
 texture = ExtResource("21_lbbrw")
 
 [node name="Tokens" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
