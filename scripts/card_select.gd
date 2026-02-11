@@ -155,7 +155,7 @@ func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: No
 			var target_room = valid_rooms.pick_random()
 			var room_idx = GameManager.world_node.rooms_array.find(target_room)
 			
-			GameManager.world_node.card_spawn_rooms.remove_at(room_idx)
+			GameManager.world_node.card_spawn_rooms.erase(target_room)
 			
 			spawn_clue_for_all.rpc(g_tex_path, room_idx, current_phase)
 

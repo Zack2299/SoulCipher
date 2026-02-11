@@ -208,10 +208,9 @@ func _ghost_turn_enter():
 	# refresh spawn rooms
 	world_node.card_spawn_rooms = world_node.rooms_array.filter(func(room): 
 		var is_special = room.name == "staircase" or room.name == "crystal_ball_room"
-		var is_orphan = room.name in world_node.orphaned_room_names
 		
-		return !is_special and !is_orphan
-	)	
+		return !is_special
+	)
 	
 	# clear all clues in rooms (new round)
 	world_node.clear_world_clues()
