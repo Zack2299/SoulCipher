@@ -87,6 +87,27 @@ func _ready() -> void:
 	shop.visibility_changed.connect(_on_shop_visibility_changed)
 
 
+func delete_orphaned_rooms(orphaned_names: Array[String]) -> void:
+	if orphaned_names.is_empty():
+		return
+		
+	print("Cleanup: Removing %d orphaned rooms..." % orphaned_names.size())
+	
+	# find the node, remove it from the array, and queue_free
+	for room_name in orphaned_names:
+		var node_to_remove: Node = null
+		
+		# find node based on name
+		for room in rooms_array:
+			if room.name == room_name:
+				node_to_remove = room
+				break
+		
+		if node_to_remove:
+			rooms_array.erase(node_to_remove)
+			node_to_remove.queue_free()
+
+
 func _on_card_select_visibility_changed():
 	room_manager.visible = !card_select.visible
 

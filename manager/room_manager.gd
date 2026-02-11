@@ -45,12 +45,22 @@ func generate_mansion(rooms: Array[Node]):
 	# create Safe Internal Loops (Using remaining empty doors)
 	_create_safe_wing_loops(reached_left, layout_data)
 	_create_safe_wing_loops(reached_right, layout_data)
-
-	mansion_layout = layout_data
 	
 	# REACHABILITY REPORT
 	var all_reachable = ["staircase"] + reached_left + reached_right
+	
+	# report before removing orphans
 	_print_mansion_report(layout_data, rooms, all_reachable)
+	
+	# remove orphaned rooms
+	var keys_to_remove = []
+	for room_name in layout_data:
+		if not room_name in all_reachable:
+			keys_to_remove.append(room_name)
+	for k in keys_to_remove:
+		layout_data.erase(k)
+		
+	mansion_layout = layout_data
 	
 	sync_mansion_layout.rpc(layout_data)
 
@@ -118,6 +128,7 @@ func _get_room_by_name(r_name: String, rooms: Array) -> Node:
 		if r.name == r_name: return r
 	return null
 
+
 # orphan detection
 func _print_mansion_report(data: Dictionary, all_rooms: Array, reachable: Array):
 	print("\n" + "=".repeat(50))
@@ -137,15 +148,31 @@ func _print_mansion_report(data: Dictionary, all_rooms: Array, reachable: Array)
 		print("THE FOLLOWING ROOMS ARE UNREACHABLE")
 		print("   (These rooms will never spawn in the game layout)")
 		for name in orphaned: print("   - " + name)
+		
+		get_parent().delete_orphaned_rooms(orphaned) # remove orphans on server
 
 	print("-".repeat(50))
 	for room in data:
 		print("[ %-12s ] Exits: %s" % [room.to_upper(), str(data[room])])
 	print("=".repeat(50) + "\n")
 
+
 @rpc("authority", "call_local", "reliable")
 func sync_mansion_layout(layout_data: Dictionary):
 	mansion_layout = layout_data
+	
+	# find and remove/queue_free orphans locally
+	var world = get_parent()
+	var client_orphans: Array[String] = []
+	var current_rooms = get_parent().rooms_array
+	for room in current_rooms:
+		if room.name != "staircase" and not layout_data.has(room.name):
+			client_orphans.append(room.name)
+	if not client_orphans.is_empty():
+		get_parent().delete_orphaned_rooms(client_orphans)
+		
+	
+	# sync mansion
 	for room_name in layout_data:
 		var room_node = get_node_or_null(NodePath(room_name))
 		if room_node and "relocators" in room_node:
