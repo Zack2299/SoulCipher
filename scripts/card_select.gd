@@ -138,7 +138,9 @@ func _on_confirm_pressed():
 
 @rpc("any_peer", "call_local", "reliable")
 func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: NodePath, t_node_path: NodePath):
-	current_phase %= 4
+	if current_phase > 3:
+		current_phase = 1
+		
 	GameManager.record_selection.rpc(
 		GameManager.current_track, 
 		current_phase, 
