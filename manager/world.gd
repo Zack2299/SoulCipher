@@ -43,7 +43,7 @@ func _input(event: InputEvent) -> void:
 			if player_card_screen_is_shown:
 				SceneTransition.reveal_hide_transition([player_card_screen], [player_ui, previous_room_relocator, room_manager, crystal_ball_room_ui])
 			elif is_showing_crystal_ball_ui:
-				SceneTransition.reveal_hide_transition([player_ui, previous_room_relocator, room_manager, crystal_ball_room_ui], [player_card_screen])
+				SceneTransition.reveal_hide_transition([previous_room_relocator, room_manager, crystal_ball_room_ui], [player_ui, player_card_screen])
 			else:
 				if !has_started_searching:
 					SceneTransition.reveal_hide_transition([player_ui, room_manager], [player_card_screen])
@@ -272,5 +272,6 @@ func show_crystal_ball_room_ui():
 func hide_crystal_ball_room_ui():
 	crystal_ball_room_ui.visible = false
 	is_showing_crystal_ball_ui = false
+	player_ui.visible = true
 	crystal_ball_room_ui.reset()
 	
