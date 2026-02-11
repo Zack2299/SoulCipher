@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cetjwngxi17y6"
-path="res://.godot/imported/ghost_card_frame_mask - Copy.png-5fbbc3e2675e3b3792580068aae5542c.ctex"
+uid="uid://blxtqsi5mxd8r"
+path="res://.godot/imported/architect's_room.png-e2f7de1fcfc4af9d8aebd3219c09fc9c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/locations/ghost_card_frame_mask - Copy.png"
-dest_files=["res://.godot/imported/ghost_card_frame_mask - Copy.png-5fbbc3e2675e3b3792580068aae5542c.ctex"]
+source_file="res://assets/cards/locations/architect's_room.png"
+dest_files=["res://.godot/imported/architect's_room.png-e2f7de1fcfc4af9d8aebd3219c09fc9c.ctex"]
 
 [params]
 

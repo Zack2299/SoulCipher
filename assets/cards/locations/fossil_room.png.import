@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bs5jncjllr1hp"
-path="res://.godot/imported/ghost_card_frame_mask - Copy (4).png-e9c146dd00ca6fac1cdd4874bc5f973e.ctex"
+uid="uid://dnvt8ds1ry8b7"
+path="res://.godot/imported/fossil_room.png-09a9b2d133c34eeb5bd653d7c1a7ac0f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/locations/ghost_card_frame_mask - Copy (4).png"
-dest_files=["res://.godot/imported/ghost_card_frame_mask - Copy (4).png-e9c146dd00ca6fac1cdd4874bc5f973e.ctex"]
+source_file="res://assets/cards/locations/fossil_room.png"
+dest_files=["res://.godot/imported/fossil_room.png-09a9b2d133c34eeb5bd653d7c1a7ac0f.ctex"]
 
 [params]
 

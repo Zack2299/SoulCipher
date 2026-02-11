@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://e08io35hjfds"
-path="res://.godot/imported/ghost_card_frame_mask.png-5c56cba6c685391f0298d0868d82a6b7.ctex"
+uid="uid://bs7clfgrxxe03"
+path="res://.godot/imported/hallway.png-d77a769f181202584bc97a2a00528a25.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/locations/ghost_card_frame_mask.png"
-dest_files=["res://.godot/imported/ghost_card_frame_mask.png-5c56cba6c685391f0298d0868d82a6b7.ctex"]
+source_file="res://assets/cards/locations/hallway.png"
+dest_files=["res://.godot/imported/hallway.png-d77a769f181202584bc97a2a00528a25.ctex"]
 
 [params]
 

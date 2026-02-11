@@ -17,7 +17,7 @@ var game_just_started = true
 # config
 var random_ghost = true
 var total_rounds: int = 14
-var num_cards = 7
+var num_cards = 8
 
 # phase_data[phase_index][category] = { target_path : [clue_paths] }
 var phase_history: Dictionary = {
@@ -168,9 +168,9 @@ func _on_waiting_leave():
 	var local_id = multiplayer.get_unique_id()
 	print("GAME MANAGER: ID [%d] left WAITING state." % local_id)
 	
-		# logic to differentiate UI
 	if local_id == ghost_id:
 		_set_ghost_ui(true)
+		world_node.card_select.start()
 	else:
 		_set_player_ui(false)
 

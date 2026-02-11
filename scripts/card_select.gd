@@ -15,7 +15,7 @@ enum CardType { GHOST, WEAPON, SUSPECT, LOCATION }
 @export_dir var suspects_path: String = "res://assets/cards/suspects/"
 @export_dir var locations_path: String = "res://assets/cards/locations/"
 
-const NUM_GHOST_CARDS: int = 6
+const NUM_GHOST_CARDS: int = 7
 
 var current_phase: int = CardType.WEAPON
 var top_card: Card = null
@@ -37,11 +37,15 @@ func _ready():
 	available_suspects = _load_textures(suspects_path)
 	available_locations = _load_textures(locations_path)
 	
-	if multiplayer.is_server():
-		_shuffle_all()
-		_broadcast_crystal_ball_data()
+
+func start():
+	if multiplayer.get_unique_id() != GameManager.ghost_id:
+		return
 	
-	# spawn the very first 5 clues
+	_shuffle_all()
+	_broadcast_crystal_ball_data()
+	
+	# spawn the very first n-1 clues (visibility change spawns the nth clue)
 	for i in range(NUM_GHOST_CARDS - 1):
 		add_card(CardType.GHOST, available_clues.pop_front())
 	
@@ -68,7 +72,7 @@ func _get_paths_slice(tex_array: Array[Texture2D], count: int) -> Array[String]:
 	return paths
 
 
-@rpc("authority", "call_local", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func sync_crystal_ball_options(s_paths: Array, w_paths: Array, l_paths: Array):
 	var crystal_ball = get_tree().root.find_child("CrystalBallRoomUI", true, false)
 	
@@ -82,7 +86,7 @@ func _on_visibility_changed():
 	if visible:
 		current_phase = CardType.WEAPON
 		
-		add_card(CardType.GHOST, available_clues.pop_front()) # total of 6 clues
+		add_card(CardType.GHOST, available_clues.pop_front()) # nth clue
 		current_type_card = add_card(CardType.WEAPON, available_weapons.pop_front())
 
 

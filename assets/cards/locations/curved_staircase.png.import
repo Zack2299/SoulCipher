@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://va7ryxwk6m1y"
-path="res://.godot/imported/ghost_card_frame_mask - Copy (6).png-fd00f9e197adda083c6910724a05546d.ctex"
+uid="uid://c56mp4lfpohpm"
+path="res://.godot/imported/curved_staircase.png-4170cc0167949c04737f76abb3c60017.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/locations/ghost_card_frame_mask - Copy (6).png"
-dest_files=["res://.godot/imported/ghost_card_frame_mask - Copy (6).png-fd00f9e197adda083c6910724a05546d.ctex"]
+source_file="res://assets/cards/locations/curved_staircase.png"
+dest_files=["res://.godot/imported/curved_staircase.png-4170cc0167949c04737f76abb3c60017.ctex"]
 
 [params]
 

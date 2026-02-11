@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://5s1qih8u8jub"
-path="res://.godot/imported/ghost_card_frame_mask - Copy (5).png-84c124a21ead3b45c8622a2525d76535.ctex"
+uid="uid://c20uqn7ryrvik"
+path="res://.godot/imported/orrery_room.png-02b521caa689ec191fd8c65f7c52ec08.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/locations/ghost_card_frame_mask - Copy (5).png"
-dest_files=["res://.godot/imported/ghost_card_frame_mask - Copy (5).png-84c124a21ead3b45c8622a2525d76535.ctex"]
+source_file="res://assets/cards/locations/orrery_room.png"
+dest_files=["res://.godot/imported/orrery_room.png-02b521caa689ec191fd8c65f7c52ec08.ctex"]
 
 [params]
 

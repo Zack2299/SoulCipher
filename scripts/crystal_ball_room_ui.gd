@@ -1,5 +1,7 @@
 extends Node2D
 
+enum TokenType { WEAPON, SUSPECT, LOCATION }
+
 @onready var clickable_area: Node = $CrystalBall/ClickableArea
 @onready var crystal_ball_above: Sprite2D = $CrystalBallAbove
 @onready var inside_crystal_ball: Sprite2D = $InsideCrystalBall
@@ -22,7 +24,6 @@ extends Node2D
 @onready var bottom_container: HBoxContainer = $InsideCrystalBall/CardDisplay/BottomContainer
 
 
-
 var suspect_paths: Array[String] = []
 var weapon_paths: Array[String] = []
 var location_paths: Array[String] = []
@@ -36,7 +37,7 @@ func _ready() -> void:
 	right_clickable_area.mouse_clicked.connect(_on_right_arrow_clicked)
 	clickable_area.mouse_clicked.connect(_on_crystal_ball_clicked)
 	
-	tokens.frame = 0
+	tokens.frame = TokenType.WEAPON
 
 
 func _on_left_arrow_clicked():
@@ -106,9 +107,14 @@ func setup_crystal_ball(s_paths: Array, w_paths: Array, l_paths: Array):
 	suspect_paths = Array(s_paths, TYPE_STRING, &"", null)
 	weapon_paths = Array(w_paths, TYPE_STRING, &"", null)
 	location_paths = Array(l_paths, TYPE_STRING, &"", null)
+	
+	print("CRYSTAL BALL WAS SETUP")
 
 
 func _refresh_selection_ui():
+	if tokens.frame < TokenType.LOCATION:
+		inside_crystal_ball.texture = preload("uid://bqkt8k42kp1i4")
+
 	var paths_to_load: Array[String] = []
 	
 	preview.visible = false
@@ -116,11 +122,11 @@ func _refresh_selection_ui():
 	preview_sprite.texture = null
 	
 	match tokens.frame:
-		0:
+		TokenType.WEAPON:
 			paths_to_load = weapon_paths
-		1:
+		TokenType.SUSPECT:
 			paths_to_load = suspect_paths
-		2:
+		TokenType.LOCATION:
 			paths_to_load = location_paths
 	populate_selection_menu(paths_to_load)
 
@@ -148,7 +154,11 @@ func populate_selection_menu(texture_paths: Array):
 		button.text = _get_clean_name(path)
 		
 		# connect the button to the preview logic
-		button.pressed.connect(_on_item_button_pressed.bind(path))
+		if tokens.frame != TokenType.LOCATION:
+			button.pressed.connect(_on_item_button_pressed.bind(path))
+		else:
+			button.pressed.connect(_on_location_button_pressed.bind(path))
+		
 		button.pressed.connect(func(): button_audio_stream_player.play())
 		
 		if count <= top_container_size:
@@ -165,22 +175,33 @@ func _get_clean_name(path: String) -> String:
 
 
 func _on_item_button_pressed(path: String):
-	preview.visible = true
 	var texture = load(path)
 	if texture is Texture2D:
 		preview_sprite.texture = texture
 		match tokens.frame:
-			0: card_frame.texture = preload("uid://240yaag32lqm")
-			1: card_frame.texture = preload("uid://cnfs0t5f87raw")
-			2: card_frame.texture = preload("uid://wyg3wb5uxx4b")
+			TokenType.WEAPON: card_frame.texture = preload("uid://240yaag32lqm")
+			TokenType.SUSPECT: card_frame.texture = preload("uid://cnfs0t5f87raw")
+			TokenType.LOCATION: card_frame.texture = preload("uid://wyg3wb5uxx4b")
 		var art_size = preview_sprite.texture.get_size()
 		mask_layer.size = art_size
 		mask_layer.position = -art_size / 2
 		card_frame.size = art_size
 		card_frame.position = -art_size / 2
-		preview_sprite.offset = art_size /2
+		preview_sprite.offset = art_size / 2
 		
-		# Optional: Small juice effect when the image swaps
+		preview.rotation_degrees = 90
+		preview.visible = true
+		
+		# animation
 		var tween = create_tween()
 		tween.tween_property(preview, "scale", Vector2(1.1, 1.1), 0.05)
 		tween.tween_property(preview, "scale", Vector2(1.0, 1.0), 0.1)
+
+
+func _on_location_button_pressed(path: String):
+	var texture = load(path)
+	if texture is Texture2D:
+		inside_crystal_ball.texture = texture
+		
+		preview_sprite.texture = null
+		preview.visible = false

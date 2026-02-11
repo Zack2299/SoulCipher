@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://yyql8ax1qxpu"
-path="res://.godot/imported/ghost_card_frame_mask - Copy (3).png-15e98584c20c0dfe69f3da000ea4f869.ctex"
+uid="uid://bxyxcbdma2ibr"
+path="res://.godot/imported/wooden_bathroom.png-aadf542fe431c1c30236b42329e4a27d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cards/locations/ghost_card_frame_mask - Copy (3).png"
-dest_files=["res://.godot/imported/ghost_card_frame_mask - Copy (3).png-15e98584c20c0dfe69f3da000ea4f869.ctex"]
+source_file="res://assets/cards/locations/wooden_bathroom.png"
+dest_files=["res://.godot/imported/wooden_bathroom.png-aadf542fe431c1c30236b42329e4a27d.ctex"]
 
 [params]
 
