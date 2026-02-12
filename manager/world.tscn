@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=34 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -25,8 +25,27 @@
 [ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="17_odkic"]
 [ext_resource type="Texture2D" uid="uid://bb68irlyms4m4" path="res://assets/ui/inside_crystal_ball.png" id="19_a8vg4"]
 [ext_resource type="Texture2D" uid="uid://wdnif4a027ka" path="res://assets/environment/crystal_ball_room_zoomed.png" id="20_qsi2s"]
+[ext_resource type="Texture2D" uid="uid://c0f6s2nw75tso" path="res://assets/ui/checkmark.png" id="22_2kk55"]
 [ext_resource type="Texture2D" uid="uid://dupwwm15bk6lp" path="res://assets/cards/ghost_card_frame_mask.png" id="22_a8vg4"]
 [ext_resource type="Texture2D" uid="uid://c0c7brf3376vl" path="res://assets/cards/ghost_card_frame.png" id="23_2kk55"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_a8vg4"]
+shader = ExtResource("4_ym8sf")
+shader_parameter/pixelation = Vector2(640, 360)
+shader_parameter/gradient_steps = 64.0
+shader_parameter/gradient = ExtResource("19_a8vg4")
+shader_parameter/spread = 0.40000000596046
+shader_parameter/size = 0.2190000579025
+shader_parameter/speed = 1.0
+shader_parameter/ray1_density = 4.4110002095225
+shader_parameter/ray2_density = 7.9670003784325
+shader_parameter/ray2_intensity = -0.2669999176825
+shader_parameter/core_intensity = -1.0
+shader_parameter/hdr = false
+shader_parameter/seed = 1.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_e7dbp"]
+radius = 11.78
 
 [sub_resource type="Gradient" id="Gradient_ym8sf"]
 colors = PackedColorArray(0, 0.83137256, 0.75686276, 0.5176471, 1, 1, 1, 1)
@@ -34,7 +53,7 @@ colors = PackedColorArray(0, 0.83137256, 0.75686276, 0.5176471, 1, 1, 1, 1)
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_2dpf7"]
 gradient = SubResource("Gradient_ym8sf")
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_wn2f2"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_2kk55"]
 shader = ExtResource("4_ym8sf")
 shader_parameter/pixelation = Vector2(640, 360)
 shader_parameter/gradient_steps = 64.0
@@ -57,7 +76,6 @@ rooms_file_path = "res://rooms"
 zoom = Vector2(3, 3)
 
 [node name="PreviousRoomRelocator" parent="." instance=ExtResource("1_kmqa5")]
-visible = false
 z_index = 100
 z_as_relative = false
 position = Vector2(-295, -155)
@@ -99,7 +117,6 @@ texture_pressed = ExtResource("7_dcuo7")
 texture_hover = ExtResource("8_4yxvl")
 
 [node name="CrystalBallRoomUI" type="Node2D" parent="."]
-visible = false
 script = ExtResource("16_odkic")
 
 [node name="TokenAudioStreamPlayer" type="AudioStreamPlayer" parent="CrystalBallRoomUI"]
@@ -140,10 +157,41 @@ modulate = Color(1, 1, 1, 0)
 [node name="InsideCrystalBallBg" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
 texture = ExtResource("19_a8vg4")
 
+[node name="Rays" type="ColorRect" parent="CrystalBallRoomUI/InsideCrystalBall"]
+z_as_relative = false
+material = SubResource("ShaderMaterial_a8vg4")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
 [node name="Tokens" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
 position = Vector2(0, -112)
 texture = ExtResource("11_qeh1x")
 hframes = 3
+
+[node name="Checkmark" type="Node2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
+position = Vector2(289, -153)
+
+[node name="ClickableArea" parent="CrystalBallRoomUI/InsideCrystalBall/Checkmark" node_paths=PackedStringArray("area_2d") instance=ExtResource("16_grn3s")]
+area_2d = NodePath("../Area2D")
+
+[node name="HoverableArea" parent="CrystalBallRoomUI/InsideCrystalBall/Checkmark" node_paths=PackedStringArray("area_2d") instance=ExtResource("17_odkic")]
+area_2d = NodePath("../Area2D")
+
+[node name="Sprite2D" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall/Checkmark"]
+texture = ExtResource("22_2kk55")
+
+[node name="Area2D" type="Area2D" parent="CrystalBallRoomUI/InsideCrystalBall/Checkmark"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CrystalBallRoomUI/InsideCrystalBall/Checkmark/Area2D"]
+shape = SubResource("CircleShape2D_e7dbp")
 
 [node name="LeftArrow" parent="CrystalBallRoomUI/InsideCrystalBall" instance=ExtResource("12_f6erf")]
 position = Vector2(-74, -114)
@@ -280,7 +328,7 @@ visible = false
 
 [node name="Rays" type="ColorRect" parent="GhostUI"]
 z_as_relative = false
-material = SubResource("ShaderMaterial_wn2f2")
+material = SubResource("ShaderMaterial_2kk55")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -300,6 +348,7 @@ color = Color(0, 0.6117647, 0.8901961, 0.12156863)
 script = ExtResource("7_hggar")
 
 [connection signal="pressed" from="CardSelect/ConfirmButton" to="." method="_on_card_select_confirm_pressed"]
+[connection signal="mouse_clicked" from="CrystalBallRoomUI/InsideCrystalBall/Checkmark/ClickableArea" to="CrystalBallRoomUI" method="_on_clickable_area_mouse_clicked"]
 
 [editable path="CrystalBallRoomUI/InsideCrystalBall/LeftArrow"]
 [editable path="CrystalBallRoomUI/InsideCrystalBall/RightArrow"]

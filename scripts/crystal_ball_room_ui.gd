@@ -24,35 +24,74 @@ enum TokenType { WEAPON, SUSPECT, LOCATION }
 @onready var preview: Sprite2D = $InsideCrystalBall/Preview
 @onready var top_container: HBoxContainer = $InsideCrystalBall/CardDisplay/TopContainer
 @onready var bottom_container: HBoxContainer = $InsideCrystalBall/CardDisplay/BottomContainer
+@onready var checkmark: Node2D = $InsideCrystalBall/Checkmark
+@onready var checkmark_area: Node = $InsideCrystalBall/Checkmark/ClickableArea
 
 
 var suspect_paths: Array[String] = []
 var weapon_paths: Array[String] = []
 var location_paths: Array[String] = []
 
+var current_texture_path: String
+var submissions: Dictionary = {}
+var skip_token_state: Array[int] = []
+
 var crystal_ball_tween: Tween
 
 const NUM_TOKENS = 3
+
 
 func _ready() -> void:
 	left_clickable_area.mouse_clicked.connect(_on_left_arrow_clicked)
 	right_clickable_area.mouse_clicked.connect(_on_right_arrow_clicked)
 	clickable_area.mouse_clicked.connect(_on_crystal_ball_clicked)
+	checkmark_area.mouse_clicked.connect(_on_checkmark_clicked)
 	
 	tokens.frame = TokenType.WEAPON
 
 
+func reset_submissions():
+	submissions = {}
+	skip_token_state.clear()
+
+
+func _on_checkmark_clicked():
+	checkmark.visible = false
+	rpc("send_guess_submission", tokens.frame, current_texture_path)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func send_guess_submission(token_frame: int, texture_path: String):
+	checkmark.visible = false
+	
+	submissions[token_frame + 1] = texture_path
+	
+	skip_token_state.append(token_frame)
+	
+	if skip_token_state.size() < 3:
+		_on_right_arrow_clicked()
+	elif multiplayer.is_server():
+		GameManager.change_game_phase.rpc("end_round")
+
 func _on_left_arrow_clicked():
-	if tokens.frame == 0:
-		tokens.frame = NUM_TOKENS - 1
-	else:
-		tokens.frame -= 1
+	while(true):
+		if tokens.frame == 0:
+			tokens.frame = NUM_TOKENS - 1
+		else:
+			tokens.frame -= 1
+			
+		if !(tokens.frame in skip_token_state) and skip_token_state.size() < 3:
+			break
 	_bounce_token()
 	_refresh_selection_ui()
 
 
 func _on_right_arrow_clicked():
-	tokens.frame = (tokens.frame + 1) % NUM_TOKENS
+	while(true):
+		tokens.frame = (tokens.frame + 1) % NUM_TOKENS
+		
+		if !(tokens.frame in skip_token_state) and skip_token_state.size() < 3:
+			break
 	_bounce_token()
 	_refresh_selection_ui()
 
@@ -114,6 +153,8 @@ func setup_crystal_ball(s_paths: Array, w_paths: Array, l_paths: Array):
 
 
 func _refresh_selection_ui():
+	checkmark.visible = false
+	
 	if tokens.frame < TokenType.LOCATION:
 		inside_crystal_ball_bg.rotation_degrees = 0
 		inside_crystal_ball_bg.texture = preload("uid://bb68irlyms4m4")
@@ -179,6 +220,9 @@ func _get_clean_name(path: String) -> String:
 
 func _on_item_button_pressed(path: String):
 	var texture = load(path)
+	current_texture_path = path
+	checkmark.visible = true
+	
 	if texture is Texture2D:
 		preview_sprite.texture = texture
 		match tokens.frame:
@@ -203,6 +247,9 @@ func _on_item_button_pressed(path: String):
 
 func _on_location_button_pressed(path: String):
 	var texture = load(path)
+	current_texture_path = path
+	checkmark.visible = true
+	
 	if texture is Texture2D:
 		inside_crystal_ball_bg.rotation_degrees = 90
 		inside_crystal_ball_bg.texture = texture

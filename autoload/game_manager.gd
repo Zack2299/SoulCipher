@@ -132,7 +132,7 @@ func request_end_ghost_turn():
 	if multiplayer.is_server():
 		change_game_phase.rpc("player")
 
-## This is called to tell the server the player round is over
+
 @rpc("any_peer", "call_local", "reliable")
 func request_end_player_turn():
 	if multiplayer.is_server():
