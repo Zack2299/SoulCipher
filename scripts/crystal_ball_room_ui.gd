@@ -116,7 +116,7 @@ func setup_crystal_ball(s_paths: Array, w_paths: Array, l_paths: Array):
 func _refresh_selection_ui():
 	if tokens.frame < TokenType.LOCATION:
 		inside_crystal_ball_bg.rotation_degrees = 0
-		inside_crystal_ball_bg.texture = preload("uid://bqkt8k42kp1i4")
+		inside_crystal_ball_bg.texture = preload("uid://bb68irlyms4m4")
 
 	var paths_to_load: Array[String] = []
 	

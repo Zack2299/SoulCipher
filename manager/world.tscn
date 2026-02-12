@@ -23,8 +23,8 @@
 [ext_resource type="PackedScene" uid="uid://cq4v88u75nlbj" path="res://component/clickable_area.tscn" id="16_grn3s"]
 [ext_resource type="Script" uid="uid://bgvmpccj14on0" path="res://scripts/crystal_ball_room_ui.gd" id="16_odkic"]
 [ext_resource type="PackedScene" uid="uid://dlkp0eup1qydy" path="res://component/hoverable_area/hoverable_area.tscn" id="17_odkic"]
+[ext_resource type="Texture2D" uid="uid://bb68irlyms4m4" path="res://assets/ui/inside_crystal_ball.png" id="19_a8vg4"]
 [ext_resource type="Texture2D" uid="uid://wdnif4a027ka" path="res://assets/environment/crystal_ball_room_zoomed.png" id="20_qsi2s"]
-[ext_resource type="Texture2D" uid="uid://bqkt8k42kp1i4" path="res://assets/ui/crystal_ball_zoom.png" id="21_lbbrw"]
 [ext_resource type="Texture2D" uid="uid://dupwwm15bk6lp" path="res://assets/cards/ghost_card_frame_mask.png" id="22_a8vg4"]
 [ext_resource type="Texture2D" uid="uid://c0c7brf3376vl" path="res://assets/cards/ghost_card_frame.png" id="23_2kk55"]
 
@@ -138,7 +138,7 @@ texture = ExtResource("20_qsi2s")
 modulate = Color(1, 1, 1, 0)
 
 [node name="InsideCrystalBallBg" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
-texture = ExtResource("21_lbbrw")
+texture = ExtResource("19_a8vg4")
 
 [node name="Tokens" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
 position = Vector2(0, -112)
