@@ -85,9 +85,66 @@ func sync_crystal_ball_options(s_paths: Array, w_paths: Array, l_paths: Array):
 func _on_visibility_changed():
 	if visible:
 		current_phase = CardType.WEAPON
+		if multiplayer.get_unique_id() == GameManager.ghost_id:
+			_proceed_to_next_available_phase()
+
+
+@rpc("any_peer", "call_local", "reliable")
+func sync_ghost_phase(new_phase: int):
+	current_phase = new_phase
+
+
+func _proceed_to_next_available_phase():
+	var category_name = GameManager._get_category_string(current_phase)
+	
+	# if this part of the case is already solved, skip it
+	if category_name in GameManager.solved_categories_in_current_track:
+		current_phase += 1
+		sync_ghost_phase(current_phase)
+		if current_phase > CardType.LOCATION:
+			_end_ghost_selection()
+		else:
+			_proceed_to_next_available_phase()
+		return
+
+	# if not solved, set up the board for this phase
+	_setup_ghost_selection_ui()
+
+func _setup_ghost_selection_ui():
+	var category_name = GameManager._get_category_string(current_phase)
+	var target_path = GameManager.current_targets[GameManager.current_track][category_name]
+	
+	# ghost always provided a new clue
+	add_card(CardType.GHOST, available_clues.pop_front())
+	
+	var target_texture: Texture2D
+	if target_path != "":
+		# target card remains same from the failed round
+		target_texture = load(target_path)
+	else:
+		# pop a brand new target card for this track
+		match current_phase:
+			CardType.WEAPON: target_texture = available_weapons.pop_front()
+			CardType.SUSPECT: target_texture = available_suspects.pop_front()
+			CardType.LOCATION: target_texture = available_locations.pop_front()
 		
-		add_card(CardType.GHOST, available_clues.pop_front()) # nth clue
-		current_type_card = add_card(CardType.WEAPON, available_weapons.pop_front())
+		# save it so server knows what the target is
+		GameManager.current_targets[GameManager.current_track][category_name] = target_texture.resource_path
+
+	current_type_card = add_card(current_phase, target_texture)
+
+
+func _on_selection_confirmed():
+	current_phase += 1
+	if current_phase > CardType.LOCATION:
+		_end_ghost_selection()
+	else:
+		_proceed_to_next_available_phase()
+
+
+func _end_ghost_selection():
+	if multiplayer.is_server():
+		GameManager.world_node.request_phase_change.rpc("ghost_turn_over")
 
 
 func add_card(type: int, texture: Texture2D) -> Card:
@@ -137,17 +194,14 @@ func _on_confirm_pressed():
 	var ghost_node = top_card.get_path()
 	var type_node = current_type_card.get_path()
 	
-	sync_card_selection.rpc(ghost_tex_path, type_tex_path, ghost_node, type_node)
+	sync_card_selection.rpc(ghost_tex_path, type_tex_path, ghost_node, type_node, current_phase)
 
 
 @rpc("any_peer", "call_local", "reliable")
-func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: NodePath, t_node_path: NodePath):
-	if current_phase > 3:
-		current_phase = 1
-		
+func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: NodePath, t_node_path: NodePath, phase: int):
 	GameManager.record_selection.rpc(
 		GameManager.current_track, 
-		current_phase, 
+		phase, 
 		t_tex_path,
 		g_tex_path
 	)
@@ -171,22 +225,7 @@ func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: No
 		await _animate_removal(g_card)
 		await _animate_removal(t_card)
 	
-	current_phase += 1
-	
-	if current_phase > CardType.LOCATION:
-		if multiplayer.is_server():
-			GameManager.world_node.request_phase_change.rpc("ghost_turn_over")
-	else:
-		# Ghost refills their private board
-		if multiplayer.get_unique_id() == GameManager.ghost_id:
-			add_card(CardType.GHOST, available_clues.pop_front())
-			
-			var next_tex: Texture2D
-			match current_phase:
-				CardType.SUSPECT: next_tex = available_suspects.pop_front()
-				CardType.LOCATION: next_tex = available_locations.pop_front()
-			
-			current_type_card = add_card(current_phase, next_tex)
+	_on_selection_confirmed()
 
 
 @rpc("authority", "call_local", "reliable")

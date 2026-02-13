@@ -72,6 +72,7 @@ func send_guess_submission(token_frame: int, texture_path: String):
 		if tokens.frame == token_frame:
 			_on_right_arrow_clicked()
 	elif multiplayer.is_server():
+		GameManager.evaluate_crystal_ball_submissions()
 		GameManager.change_game_phase.rpc("end_round")
 
 

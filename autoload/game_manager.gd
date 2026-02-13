@@ -13,6 +13,7 @@ var current_track: int = 1
 var current_round: int = 1
 var ghost_id: int = -1
 var game_just_started = true
+var solved_categories_in_current_track: Array[String] = []
 
 # config
 var random_ghost = true
@@ -39,7 +40,7 @@ var current_targets: Dictionary = {
 }
 
 
-@rpc("authority", "call_local", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func record_selection(phase_num: int, card_type: int, target_path: String, clue_path: String):
 	var category = _get_category_string(card_type)
 	
@@ -79,6 +80,49 @@ func spawn_clue_for_all_card_screens(phase_num: int, card_type: int, clue_path: 
 	found_cards[phase_num][category][clue_path] = true # keep local client dicts in sync
 	
 	world_node.spawn_clue_to_card_screen(clue_path, card_type)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func evaluate_crystal_ball_submissions():
+	if not multiplayer.is_server(): 
+		return
+	
+	var crystal_ball = world_node.crystal_ball_room_ui
+	var player_submissions = crystal_ball.submissions
+	var targets = current_targets[current_track]
+	
+	var correct_this_round: Array[String] = []
+	
+	# check each category
+	var categories = ["weapon", "suspect", "location"]
+	for index in range(categories.size()):
+		var category_name = categories[index]
+		var type_index = index + 1 # 1: Weapon, 2: Suspect, 3: Location
+		
+		if player_submissions.has(type_index):
+			if player_submissions[type_index] == targets[category_name]:
+				if not solved_categories_in_current_track.has(category_name):
+					correct_this_round.append(category_name)
+
+	rpc("sync_round_results", correct_this_round)
+
+
+@rpc("authority", "call_local", "reliable")
+func sync_round_results(new_solved_categories: Array):
+	# add newly found categories to persistent list
+	for category in new_solved_categories:
+		if not solved_categories_in_current_track.has(category):
+			solved_categories_in_current_track.append(category)
+	
+	# check if track is complete
+	if solved_categories_in_current_track.size() == 3:
+		current_track += 1
+		solved_categories_in_current_track.clear()
+		# init next track's targets
+		current_targets[current_track] = { "weapon": "", "suspect": "", "location": "" }
+		print("SYSTEM: Track complete! Moving to Track: ", current_track)
+	else:
+		print("SYSTEM: Track incomplete. Solved so far: ", solved_categories_in_current_track)
 
 
 func _get_category_string(type: int) -> String:
@@ -202,7 +246,6 @@ func _ghost_turn_enter():
 	# to_hide.append(end_round_info)
 
 	if game_just_started:
-		# Snap visibility instantly on first load
 		for node in to_reveal: node.visible = true
 		for node in to_hide: node.visible = false
 		game_just_started = false
@@ -236,18 +279,6 @@ func _ghost_turn_leave():
 		to_reveal.append(world_node.player_ui)
 
 	SceneTransition.reveal_hide_transition(to_reveal, to_hide, 1.0)
-
-
-# --- GHOST HELPERS ---
-func _set_ghost_turn_ui(show: bool):
-	SceneTransition.set_visibility_transition(world_node.card_select, show, 1.0)
-
-
-func _set_investigator_waiting_ui(show: bool):
-	var local_id = multiplayer.get_unique_id()
-	if local_id != ghost_id:
-		SceneTransition.set_visibility_transition(world_node.player_ui, !show, 1.0)
-	SceneTransition.set_visibility_transition(world_node.shop, show, 1.0)
 
 
 # --- PLAYER TURN STATE ---
