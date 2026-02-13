@@ -137,13 +137,17 @@ func _on_crystal_ball_clicked():
 	crystal_ball_tween.tween_property(inside_crystal_ball, "scale", Vector2(1.0, 1.0), 0.8).from(Vector2(0.9, 0.9)).set_delay(delay)
 
 
-func reset():
+func reset_visuals():
 	if crystal_ball_tween and crystal_ball_tween.is_running():
 		crystal_ball_tween.kill()
 		
 	crystal_ball_above.modulate.a = 0
 	inside_crystal_ball.modulate.a = 0
 	area_2d.visible = true
+
+
+func reset_state():
+	skip_token_state.clear()
 
 
 func setup_crystal_ball(s_paths: Array, w_paths: Array, l_paths: Array):

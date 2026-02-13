@@ -9,13 +9,15 @@ var previous_room: String = "staircase"
 var current_room: String = "staircase":
 	set(value):
 		current_room = value
-		# Check if the new room is the crystal ball room
 		if current_room == "crystal_ball_room":
 			if world_node:
 				world_node.show_crystal_ball_room_ui()
 		else:
 			if world_node:
 				world_node.hide_crystal_ball_room_ui()
+var current_room_node: Node
+
+
 
 var default_speed: float = 3.0
 
@@ -102,6 +104,7 @@ func change_scene_room_name(target_room_name: String, target_room: Node, room_to
 		woosh_audio_stream_player.play()
 		
 	current_room = target_room_name
+	current_room_node = target_room
 	
 	#if current_room == "staircase":
 		#door_audio_stream_player.play()

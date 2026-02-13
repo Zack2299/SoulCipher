@@ -316,9 +316,18 @@ func _end_round_enter():
 	print("")
 	print("----- Round ", current_round, " -----")
 	
-	# if correctly guessed weapon/person/place
-	# current_track += 1
-
+	world_node.crystal_ball_room_ui.reset_state()
+	
+	# reset which room the player is in to staircase
+	await get_tree().create_timer(1).timeout
+	
+	if SceneTransition.current_room_node:
+		SceneTransition.current_room_node.visible = false
+	var staircase_index = world_node.rooms_array.find_custom(func(room): return room.name == "staircase")
+	var staircase_node = world_node.rooms_array[staircase_index]
+	staircase_node.visible = true
+	SceneTransition.current_room_node = staircase_node
+	SceneTransition.current_room = "staircase"
 
 func _end_round():
 	if current_round > total_rounds:

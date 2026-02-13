@@ -273,5 +273,5 @@ func hide_crystal_ball_room_ui():
 	crystal_ball_room_ui.visible = false
 	is_showing_crystal_ball_ui = false
 	player_ui.visible = true
-	crystal_ball_room_ui.reset()
+	crystal_ball_room_ui.reset_visuals()
 	
