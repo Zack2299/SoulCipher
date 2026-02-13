@@ -76,6 +76,7 @@ rooms_file_path = "res://rooms"
 zoom = Vector2(3, 3)
 
 [node name="PreviousRoomRelocator" parent="." instance=ExtResource("1_kmqa5")]
+visible = false
 z_index = 100
 z_as_relative = false
 position = Vector2(-295, -155)
@@ -117,6 +118,7 @@ texture_pressed = ExtResource("7_dcuo7")
 texture_hover = ExtResource("8_4yxvl")
 
 [node name="CrystalBallRoomUI" type="Node2D" parent="."]
+visible = false
 script = ExtResource("16_odkic")
 
 [node name="TokenAudioStreamPlayer" type="AudioStreamPlayer" parent="CrystalBallRoomUI"]

@@ -151,10 +151,61 @@ func _print_mansion_report(data: Dictionary, all_rooms: Array, reachable: Array)
 		
 		get_parent().delete_orphaned_rooms(orphaned) # remove orphans on server
 
+
 	print("-".repeat(50))
 	for room in data:
 		print("[ %-12s ] Exits: %s" % [room.to_upper(), str(data[room])])
+	print("=".repeat(50))
+	
+	if data.has("crystal_ball_room") or reachable.has("crystal_ball_room"):
+		var path_str = _find_path_to_room("staircase", "crystal_ball_room", data)
+		print("PATH TO CRYSTAL BALL:")
+		print("   " + path_str)
+	else:
+		print("PATH TO CRYSTAL BALL UNREACHABLE")
+		
 	print("=".repeat(50) + "\n")
+
+
+func _find_path_to_room(start_node: String, target_node: String, layout: Dictionary) -> String:
+	if start_node == target_node:
+		return start_node
+		
+	var queue = [start_node]
+	var visited = {start_node: null} # room_name: [parent_room, exit_index]
+	
+	# BFS to find shortest path
+	while queue.size() > 0:
+		var current = queue.pop_front()
+		
+		if current == target_node:
+			break
+			
+		if not layout.has(current): continue
+			
+		var exits = layout[current]
+		for i in range(exits.size()):
+			var neighbor = exits[i]
+			if neighbor != "" and not visited.has(neighbor):
+				visited[neighbor] = [current, i]
+				queue.append(neighbor)
+				
+	# reconstruct path
+	if not visited.has(target_node):
+		return "No path found."
+		
+	var path_segments = []
+	var curr = target_node
+	
+	while curr != start_node:
+		var info = visited[curr] # [parent, index]
+		var parent = info[0]
+		var exit_idx = info[1]
+		
+		path_segments.push_front("relocator %d --> %s" % [exit_idx + 1, curr])
+		curr = parent
+		
+	return start_node + " --> " + " --> ".join(path_segments)
 
 
 @rpc("authority", "call_local", "reliable")

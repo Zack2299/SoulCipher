@@ -118,10 +118,14 @@ func _on_top_card_changed(card: Card):
 		return
 	top_card = card
 	confirm_button.visible = true
+	confirm_button.disabled = false
 
 
 func _on_confirm_pressed():
 	if not top_card or not current_type_card: return
+	
+	confirm_button.disabled = true
+	confirm_button.visible = false
 	
 	confirm_audio_stream_player.play()
 	

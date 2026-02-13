@@ -69,9 +69,11 @@ func send_guess_submission(token_frame: int, texture_path: String):
 	skip_token_state.append(token_frame)
 	
 	if skip_token_state.size() < 3:
-		_on_right_arrow_clicked()
+		if tokens.frame == token_frame:
+			_on_right_arrow_clicked()
 	elif multiplayer.is_server():
 		GameManager.change_game_phase.rpc("end_round")
+
 
 func _on_left_arrow_clicked():
 	while(true):

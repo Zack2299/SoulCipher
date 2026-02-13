@@ -190,20 +190,24 @@ func _set_player_ui(show: bool, wait: float = 1.0):
 # --- GHOST TURN STATE ---
 func _ghost_turn_enter():
 	var local_id = multiplayer.get_unique_id()
-	print("GAME MANAGER: ID [%d] entered GHOST TURN." % local_id)
-	
-	# logic to differentiate UI
+	var to_reveal = []
+	var to_hide = []
+
+	if local_id == ghost_id:
+		to_reveal.append(world_node.card_select)
+	else:
+		to_reveal.append(world_node.shop)
+		to_hide.append(world_node.player_ui)
+		
+	# to_hide.append(end_round_info)
+
 	if game_just_started:
-		if local_id == ghost_id:
-			world_node.card_select.visible = true
-		else:
-			world_node.shop.visible = true
+		# Snap visibility instantly on first load
+		for node in to_reveal: node.visible = true
+		for node in to_hide: node.visible = false
 		game_just_started = false
 	else:
-		if local_id == ghost_id:
-			_set_ghost_turn_ui(true)
-		else:
-			_set_investigator_waiting_ui(true)
+		SceneTransition.reveal_hide_transition(to_reveal, to_hide, 1.0)
 
 	# refresh spawn rooms
 	world_node.card_spawn_rooms = world_node.rooms_array.filter(func(room): 
@@ -220,10 +224,18 @@ func _ghost_turn():
 
 
 func _ghost_turn_leave():
-	#print("GAME MANAGER: ID [%d] left GHOST TURN." % multiplayer.get_unique_id())
-	_set_ghost_turn_ui(false)
-	_set_investigator_waiting_ui(false)
-	_set_player_ui(true)
+	var local_id = multiplayer.get_unique_id()
+	var to_hide = []
+	var to_reveal = []
+
+	if local_id == ghost_id:
+		to_hide.append(world_node.card_select)
+		to_reveal.append(world_node.ghost_ui)
+	else:
+		to_hide.append(world_node.shop)
+		to_reveal.append(world_node.player_ui)
+
+	SceneTransition.reveal_hide_transition(to_reveal, to_hide, 1.0)
 
 
 # --- GHOST HELPERS ---
@@ -249,8 +261,19 @@ func _player_turn():
 
 
 func _player_turn_leave():
-	pass
-	#print("GAME MANAGER: ID [%d] left PLAYER TURN." % multiplayer.get_unique_id())
+	var local_id = multiplayer.get_unique_id()
+	var to_hide = []
+	var to_reveal = []
+
+	if local_id == ghost_id:
+		to_reveal.append(world_node.card_select)
+	else:
+		to_reveal.append(world_node.shop)
+		to_hide.append(world_node.player_ui)
+		to_hide.append(world_node.crystal_ball_room_ui)
+		to_hide.append(world_node.previous_room_relocator)
+
+	SceneTransition.reveal_hide_transition(to_reveal, to_hide, 1.0)
 
 
 # --- END ROUND STATE ---
