@@ -100,7 +100,8 @@ func _proceed_to_next_available_phase():
 	# if this part of the case is already solved, skip it
 	if category_name in GameManager.solved_categories_in_current_track:
 		current_phase += 1
-		sync_ghost_phase(current_phase)
+		if multiplayer.get_unique_id() == GameManager.ghost_id:
+			rpc("sync_ghost_phase", current_phase)
 		if current_phase > CardType.LOCATION:
 			_end_ghost_selection()
 		else:

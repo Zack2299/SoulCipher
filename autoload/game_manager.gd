@@ -118,6 +118,9 @@ func sync_round_results(new_solved_categories: Array):
 	if solved_categories_in_current_track.size() == 3:
 		current_track += 1
 		solved_categories_in_current_track.clear()
+		
+		world_node.player_card_screen.clear_clues()
+		
 		# init next track's targets
 		current_targets[current_track] = { "weapon": "", "suspect": "", "location": "" }
 		print("SYSTEM: Track complete! Moving to Track: ", current_track)

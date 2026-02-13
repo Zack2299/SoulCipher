@@ -34,3 +34,9 @@ func _bounce_token():
 	tween.tween_property(tokens, "scale", Vector2(1.2, 1.2), 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	
 	tween.tween_property(tokens, "scale", Vector2(1.0, 1.0), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+func clear_clues() -> void:
+	var clues = get_tree().get_nodes_in_group("card_screen_clues")
+	for clue in clues:
+		clue.queue_free()
