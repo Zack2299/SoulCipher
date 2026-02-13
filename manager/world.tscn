@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=35 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -28,6 +28,7 @@
 [ext_resource type="Texture2D" uid="uid://c0f6s2nw75tso" path="res://assets/ui/checkmark.png" id="22_2kk55"]
 [ext_resource type="Texture2D" uid="uid://dupwwm15bk6lp" path="res://assets/cards/ghost_card_frame_mask.png" id="22_a8vg4"]
 [ext_resource type="Texture2D" uid="uid://c0c7brf3376vl" path="res://assets/cards/ghost_card_frame.png" id="23_2kk55"]
+[ext_resource type="Texture2D" uid="uid://dmdvssbrwofnk" path="res://assets/ui/investigation_board_v3.png" id="28_e7dbp"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a8vg4"]
 shader = ExtResource("4_ym8sf")
@@ -308,6 +309,44 @@ flip_h = true
 [node name="RightArrow" parent="PlayerCardScreen" instance=ExtResource("12_f6erf")]
 visible = false
 position = Vector2(74, -98)
+
+[node name="EndRoundStatusScreen" type="Node2D" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="EndRoundStatusScreen"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -960.0
+offset_top = -540.0
+offset_right = 960.0
+offset_bottom = 540.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Background" type="Sprite2D" parent="EndRoundStatusScreen"]
+texture = ExtResource("28_e7dbp")
+
+[node name="RoundText" type="Node2D" parent="EndRoundStatusScreen"]
+modulate = Color(1, 1, 1, 0.41960785)
+position = Vector2(0, 32)
+
+[node name="Label" type="Label" parent="EndRoundStatusScreen/RoundText"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -28.0
+offset_top = -3.5
+offset_right = 28.0
+offset_bottom = 3.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "ROUND 1"
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 layer = 0
