@@ -14,6 +14,7 @@ var current_round: int = 1
 var ghost_id: int = -1
 var game_just_started = true
 var solved_categories_in_current_track: Array[String] = []
+var solved_current_track = false
 
 # config
 var random_ghost = true
@@ -117,7 +118,7 @@ func sync_round_results(new_solved_categories: Array):
 	# check if track is complete
 	if solved_categories_in_current_track.size() == 3:
 		current_track += 1
-		solved_categories_in_current_track.clear()
+		solved_current_track = true
 		
 		world_node.player_card_screen.clear_clues()
 		
@@ -245,7 +246,8 @@ func _ghost_turn_enter():
 	else:
 		to_reveal.append(world_node.shop)
 		to_hide.append(world_node.player_ui)
-		
+	
+	to_hide.append(world_node.end_round_status_screen)
 	# to_hide.append(end_round_info)
 
 	if game_just_started:
@@ -264,6 +266,7 @@ func _ghost_turn_enter():
 	
 	# clear all clues in rooms (new round)
 	world_node.clear_world_clues()
+
 
 func _ghost_turn():
 	pass
@@ -321,9 +324,31 @@ func _end_round_enter():
 	
 	world_node.crystal_ball_room_ui.reset_state()
 	
+	SceneTransition.reveal_hide_transition([world_node.end_round_status_screen], [], 1.0)
+	
+	world_node.end_round_status_screen.display_results(solved_categories_in_current_track)
+	
+	await get_tree().create_timer(7).timeout
+	
+	if solved_current_track:
+		solved_categories_in_current_track.clear()
+		solved_current_track = false
+	
+	if current_round > total_rounds:
+		state_machine.change_state(_end_game)
+	else:
+		state_machine.change_state(_ghost_turn)
+	
 	# reset which room the player is in to staircase
 	await get_tree().create_timer(1).timeout
-	
+	_reset_player_to_staircase()
+
+
+func _end_round():	
+	pass
+
+
+func _reset_player_to_staircase():
 	if SceneTransition.current_room_node:
 		SceneTransition.current_room_node.visible = false
 	var staircase_index = world_node.rooms_array.find_custom(func(room): return room.name == "staircase")
@@ -331,12 +356,6 @@ func _end_round_enter():
 	staircase_node.visible = true
 	SceneTransition.current_room_node = staircase_node
 	SceneTransition.current_room = "staircase"
-
-func _end_round():
-	if current_round > total_rounds:
-		state_machine.change_state(_end_game)
-	else:
-		state_machine.change_state(_ghost_turn)
 
 
 # --- ENG GAME STATE

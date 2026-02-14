@@ -12,7 +12,7 @@ extends Node2D
 @onready var card_select: Node2D = $CardSelect
 @onready var player_card_screen: Node2D = $PlayerCardScreen
 @onready var crystal_ball_room_ui: Node2D = $CrystalBallRoomUI
-
+@onready var end_round_status_screen: Node2D = $EndRoundStatusScreen
 
 @export_dir var rooms_file_path: String = "res://rooms/"
 

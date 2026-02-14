@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=37 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -29,6 +29,8 @@
 [ext_resource type="Texture2D" uid="uid://dupwwm15bk6lp" path="res://assets/cards/ghost_card_frame_mask.png" id="22_a8vg4"]
 [ext_resource type="Texture2D" uid="uid://c0c7brf3376vl" path="res://assets/cards/ghost_card_frame.png" id="23_2kk55"]
 [ext_resource type="Texture2D" uid="uid://dmdvssbrwofnk" path="res://assets/ui/investigation_board_v3.png" id="28_e7dbp"]
+[ext_resource type="Script" uid="uid://b8xaiygn2sclb" path="res://scripts/end_round_status_screen.gd" id="28_ux4w8"]
+[ext_resource type="AudioStream" uid="uid://cdcqrnsnivqc2" path="res://assets/sounds/u_u4pf5h7zip-woosh-345977.mp3" id="29_b0ykd"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a8vg4"]
 shader = ExtResource("4_ym8sf")
@@ -312,6 +314,11 @@ position = Vector2(74, -98)
 
 [node name="EndRoundStatusScreen" type="Node2D" parent="."]
 visible = false
+script = ExtResource("28_ux4w8")
+
+[node name="WooshAudioStreamPlayer" type="AudioStreamPlayer" parent="EndRoundStatusScreen"]
+stream = ExtResource("29_b0ykd")
+volume_db = 9.389
 
 [node name="ColorRect" type="ColorRect" parent="EndRoundStatusScreen"]
 anchors_preset = 15
@@ -327,6 +334,23 @@ color = Color(0, 0, 0, 1)
 
 [node name="Background" type="Sprite2D" parent="EndRoundStatusScreen"]
 texture = ExtResource("28_e7dbp")
+
+[node name="WeaponToken" type="Sprite2D" parent="EndRoundStatusScreen"]
+position = Vector2(-105, -53)
+texture = ExtResource("11_qeh1x")
+hframes = 3
+
+[node name="SuspectToken" type="Sprite2D" parent="EndRoundStatusScreen"]
+position = Vector2(-1, -53)
+texture = ExtResource("11_qeh1x")
+hframes = 3
+frame = 1
+
+[node name="LocationToken" type="Sprite2D" parent="EndRoundStatusScreen"]
+position = Vector2(103, -53)
+texture = ExtResource("11_qeh1x")
+hframes = 3
+frame = 2
 
 [node name="RoundText" type="Node2D" parent="EndRoundStatusScreen"]
 modulate = Color(1, 1, 1, 0.41960785)
