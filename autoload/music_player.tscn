@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://ebbr80wr5n3h"]
+
+[ext_resource type="AudioStream" uid="uid://cleq86gbilb75" path="res://assets/music/Soul Cipher Theme.wav" id="1_ouhko"]
+[ext_resource type="Script" uid="uid://d4ckk0d46gnfd" path="res://autoload/music_player.gd" id="2_5pgb1"]
+
+[node name="MusicPlayer" type="AudioStreamPlayer"]
+stream = ExtResource("1_ouhko")
+volume_db = -10.0
+autoplay = true
+bus = &"Music"
+script = ExtResource("2_5pgb1")
