@@ -303,9 +303,10 @@ func _player_turn_leave():
 	var to_reveal = []
 
 	if local_id == ghost_id:
-		to_reveal.append(world_node.card_select)
+		#to_reveal.append(world_node.card_select)
+		pass
 	else:
-		to_reveal.append(world_node.shop)
+		#to_reveal.append(world_node.shop)
 		to_hide.append(world_node.player_ui)
 		to_hide.append(world_node.crystal_ball_room_ui)
 		to_hide.append(world_node.previous_room_relocator)
@@ -322,17 +323,19 @@ func _end_round_enter():
 	print("")
 	print("----- Round ", current_round, " -----")
 	
-	world_node.crystal_ball_room_ui.reset_state()
 	
 	SceneTransition.reveal_hide_transition([world_node.end_round_status_screen], [], 1.0)
 	
-	world_node.end_round_status_screen.display_results(solved_categories_in_current_track)
+	await world_node.end_round_status_screen.display_results(solved_categories_in_current_track)
 	
-	await get_tree().create_timer(7).timeout
+	#await get_tree().create_timer(7).timeout
 	
 	if solved_current_track:
+		world_node.crystal_ball_room_ui.reset_submissions_new_track()
 		solved_categories_in_current_track.clear()
 		solved_current_track = false
+	else:
+		world_node.crystal_ball_room_ui.reset_submissions_same_track(solved_categories_in_current_track)
 	
 	if current_round > total_rounds:
 		state_machine.change_state(_end_game)

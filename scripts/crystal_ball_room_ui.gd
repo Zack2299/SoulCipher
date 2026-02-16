@@ -50,9 +50,32 @@ func _ready() -> void:
 	tokens.frame = TokenType.WEAPON
 
 
-func reset_submissions():
+func reset_submissions_same_track(solved_categories: Array):
+	tokens.frame = TokenType.WEAPON
+	
 	submissions = {}
 	skip_token_state.clear()
+	if solved_categories.has("weapon"):
+		skip_token_state.append(TokenType.WEAPON)
+	if solved_categories.has("suspect"):
+		skip_token_state.append(TokenType.SUSPECT)
+	if solved_categories.has("location"):
+		skip_token_state.append(TokenType.LOCATION)
+	
+	while(true):
+		tokens.frame = (tokens.frame + 1) % NUM_TOKENS
+		
+		if !(tokens.frame in skip_token_state) or skip_token_state.size() == 3:
+			break
+	
+	_refresh_selection_ui()
+
+
+func reset_submissions_new_track():
+	tokens.frame = TokenType.WEAPON
+	submissions = {}
+	skip_token_state.clear()
+	_refresh_selection_ui()
 
 
 func _on_checkmark_clicked():
@@ -146,8 +169,8 @@ func reset_visuals():
 	area_2d.visible = true
 
 
-func reset_state():
-	skip_token_state.clear()
+#func reset_state():
+	#skip_token_state.clear()
 
 
 func setup_crystal_ball(s_paths: Array, w_paths: Array, l_paths: Array):
