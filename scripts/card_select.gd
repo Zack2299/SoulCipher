@@ -146,8 +146,8 @@ func _on_selection_confirmed():
 
 
 func _end_ghost_selection():
-	if multiplayer.is_server():
-		GameManager.world_node.request_phase_change.rpc("ghost_turn_over")
+	if multiplayer.get_unique_id() == GameManager.ghost_id:
+		GameManager.world_node.request_phase_change.rpc_id(1, "ghost_turn_over")
 
 
 func add_card(type: int, texture: Texture2D) -> Card:
