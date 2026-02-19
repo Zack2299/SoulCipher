@@ -5,8 +5,8 @@ extends Node2D
 @onready var clickable_area: Node = $ClickableArea
 @onready var audio_stream_player: AudioStreamPlayer = $AudioStreamPlayer
 
-enum Type { BRONZE_COIN, SILVER_COIN, HOURGLASS }
-@export var item_type: Type
+enum CollectibleType { BRONZE_COIN, SILVER_COIN, HOURGLASS }
+@export var item_type: CollectibleType
 
 var start_y: float
 var float_tween: Tween
@@ -17,13 +17,13 @@ func _ready():
 	clickable_area.mouse_clicked.connect(_on_collectible_clicked)
 	
 	match item_type:
-		Type.BRONZE_COIN:
+		CollectibleType.BRONZE_COIN:
 			sprite_2d.texture = preload("uid://b23ljafgxhq8l")
 			audio_stream_player.stream = preload("uid://b425sigrewc6f")
-		Type.SILVER_COIN:
+		CollectibleType.SILVER_COIN:
 			sprite_2d.texture = preload("uid://dxx1idcw8d5y4")
 			audio_stream_player.stream = preload("uid://b425sigrewc6f")
-		Type.HOURGLASS:
+		CollectibleType.HOURGLASS:
 			sprite_2d.texture = preload("uid://dife8bu1u8joa")
 			audio_stream_player.stream = preload("uid://c2u327mud2mps")
 	
@@ -50,11 +50,11 @@ func request_collection():
 	if not multiplayer.is_server(): return
 	
 	match item_type:
-		Type.BRONZE_COIN:
+		CollectibleType.BRONZE_COIN:
 			GameManager.coins += 1
-		Type.SILVER_COIN:
+		CollectibleType.SILVER_COIN:
 			GameManager.coins += 3
-		Type.HOURGLASS:
+		CollectibleType.HOURGLASS:
 			GameManager.current_time_remaining += 15.0
 			
 	GameManager.sync_turn_state.rpc(GameManager.current_time_remaining, GameManager.coins)

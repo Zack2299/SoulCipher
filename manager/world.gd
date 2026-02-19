@@ -1,6 +1,8 @@
 class_name World
 extends Node2D
 
+enum CollectibleType { BRONZE_COIN, SILVER_COIN, HOURGLASS }
+
 @onready var room_manager: Node2D = $RoomManager
 @onready var previous_room_relocator: Node2D = $PreviousRoomRelocator
 @onready var players_data: Node2D = $PlayersData
@@ -168,7 +170,7 @@ func spawn_clue_to_card_screen(texture_path: String, type_index: int):
 	var front_tex = load(texture_path)
 	
 	# random position
-	var random_pos = Vector2(randf_range(-10, 10), randf_range(-10, 10))
+	var random_pos = Vector2(randf_range(-20, 20), randf_range(-20, 20))
 	
 	new_clue.setup(new_clue.back_spritesheet, type_index, front_tex, random_pos, Rect2(), false)
 
@@ -191,11 +193,14 @@ func spawn_round_collectibles():
 	var valid_rooms = rooms_array.filter(func(r): return r.name != "staircase" and r.name != "crystal_ball_room")
 	if valid_rooms.is_empty(): return
 	
-	for i in range(3):
-		_generate_collectible_data(0, valid_rooms.pick_random()) # 0 = BRONZE_COIN
-		_generate_collectible_data(2, valid_rooms.pick_random()) # 2 = HOURGLASS
+	for i in range(randi_range(3,5)):
+		_generate_collectible_data(CollectibleType.BRONZE_COIN, valid_rooms.pick_random())
 		
-	_generate_collectible_data(1, valid_rooms.pick_random()) # 1 = SILVER_COIN
+	for i in range(randi_range(3,5)):
+		_generate_collectible_data(CollectibleType.HOURGLASS, valid_rooms.pick_random())
+		
+	for i in range(randi_range(1,2)):
+		_generate_collectible_data(CollectibleType.SILVER_COIN, valid_rooms.pick_random())
 
 
 func _generate_collectible_data(item_type: int, target_room: Node):
