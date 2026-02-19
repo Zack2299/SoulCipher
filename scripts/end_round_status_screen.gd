@@ -56,7 +56,7 @@ func change_round_animation():
 			.set_ease(Tween.EASE_IN)\
 			.set_delay(delay)
 			
-		tween.tween_property(token, "scale", Vector2(5, 5), 0.5)\
+		tween.tween_property(token, "scale", Vector2(3, 3), 0.5)\
 			.set_trans(Tween.TRANS_CUBIC)\
 			.set_ease(Tween.EASE_IN)\
 			.set_delay(delay)

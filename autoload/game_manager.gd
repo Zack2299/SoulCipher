@@ -15,7 +15,7 @@ var ghost_id: int = -1
 var game_just_started = true
 var solved_categories_in_current_track: Array[String] = []
 var solved_current_track = false
-var max_turn_time: float = 20.0 # in seconds
+var max_turn_time: float = 240.0 # in seconds
 var current_time_remaining: float = 0.0
 var coins: int = 0
 var current_delta: float = 0.0
@@ -45,7 +45,7 @@ var current_targets: Dictionary = {
 }
 
 
-@rpc("authority", "call_local", "unreliable")
+@rpc("authority", "call_local", "reliable")
 func sync_turn_state(time_left: float, current_coins: int):
 	current_time_remaining = time_left
 	coins = current_coins
@@ -275,9 +275,6 @@ func _ghost_turn_enter():
 		
 		return !is_special
 	)
-	
-	# clear all clues in rooms (new round)
-	world_node.clear_world_clues()
 
 
 func _ghost_turn():
@@ -307,6 +304,7 @@ func _player_turn_enter():
 	if multiplayer.is_server():
 		current_time_remaining = max_turn_time
 		sync_turn_state.rpc(current_time_remaining, coins)
+		world_node.spawn_round_collectibles()
 
 
 func _player_turn():
@@ -346,6 +344,12 @@ func _end_round_enter():
 	
 	
 	SceneTransition.reveal_hide_transition([world_node.end_round_status_screen], [], 1.0)
+	
+	await get_tree().create_timer(1.0).timeout
+	
+	# clear all clues and collectibles in rooms (new round)
+	world_node.clear_world_clues()
+	world_node.clear_collectibles()
 	
 	await world_node.end_round_status_screen.display_results(solved_categories_in_current_track)
 	

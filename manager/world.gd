@@ -18,6 +18,9 @@ extends Node2D
 @export_dir var rooms_file_path: String = "res://rooms/"
 
 const WORLD_CLUE_SCENE = preload("res://entities/world_clue/world_clue.tscn")
+const COLLECTIBLE_SCENE = preload("res://entities/collectible/collectible.tscn")
+
+var collectible_counter: int = 0 # unique id across network
 
 var loaded_scenes: Array[PackedScene] = []
 var rooms_array: Array[Node] = []
@@ -173,6 +176,49 @@ func clear_world_clues():
 	var clues = get_tree().get_nodes_in_group("world_clues")
 	for clue in clues:
 		clue.queue_free()
+
+
+func clear_collectibles():
+	var items = get_tree().get_nodes_in_group("collectibles")
+	for item in items:
+		item.queue_free()
+
+
+func spawn_round_collectibles():
+	if not multiplayer.is_server(): return
+	
+	var valid_rooms = rooms_array.filter(func(r): return r.name != "staircase" and r.name != "crystal_ball_room")
+	if valid_rooms.is_empty(): return
+	
+	for i in range(3):
+		_generate_collectible_data(0, valid_rooms.pick_random()) # 0 = BRONZE_COIN
+		_generate_collectible_data(2, valid_rooms.pick_random()) # 2 = HOURGLASS
+		
+	_generate_collectible_data(1, valid_rooms.pick_random()) # 1 = SILVER_COIN
+
+
+func _generate_collectible_data(item_type: int, target_room: Node):
+	var room_idx = rooms_array.find(target_room)
+	
+	var random_pos = Vector2(randf_range(-300, 300), randf_range(-160, 160))
+	
+	collectible_counter += 1
+	var unique_name = "Collectible_" + str(collectible_counter)
+	
+	# spawn item for clients and server
+	sync_spawn_collectible.rpc(item_type, room_idx, random_pos, unique_name)
+
+
+@rpc("authority", "call_local", "reliable")
+func sync_spawn_collectible(item_type: int, room_idx: int, pos: Vector2, item_name: String):
+	var item = COLLECTIBLE_SCENE.instantiate()
+	
+	item.item_type = item_type # assign the enum type BEFORE it enters the tree
+	item.name = item_name # make node paths match
+	item.position = pos
+	item.add_to_group("collectibles")
+	
+	rooms_array[room_idx].add_child(item)
 
 
 func _on_world_clue_found(clue: WorldClue):
