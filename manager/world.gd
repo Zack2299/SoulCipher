@@ -151,7 +151,7 @@ func spawn_clue_in_specific_room(texture_path: String, type_index: int, room_idx
 	new_clue.setup(new_clue.back_spritesheet, type_index, front_tex, Vector2.ZERO, Rect2())
 	
 	# random position
-	new_clue.position = Vector2(randf_range(-200, 200), randf_range(-200, 200))
+	new_clue.position = Vector2(randf_range(-100, 100), randf_range(-100, 100))
 	
 	print("CARD ADDED: Type %d ('%s') spawned in room: %s" % [type_index, texture_path.get_file(), target_room.name])
 
@@ -166,10 +166,11 @@ func spawn_clue_to_card_screen(texture_path: String, type_index: int):
 	new_clue.add_to_group("card_screen_clues")
 	
 	var front_tex = load(texture_path)
-	new_clue.setup(new_clue.back_spritesheet, type_index, front_tex, Vector2.ZERO, Rect2(), false)
 	
 	# random position
-	new_clue.position = Vector2(randf_range(-200, 200), randf_range(-200, 200))
+	var random_pos = Vector2(randf_range(-10, 10), randf_range(-10, 10))
+	
+	new_clue.setup(new_clue.back_spritesheet, type_index, front_tex, random_pos, Rect2(), false)
 
 
 func clear_world_clues():
