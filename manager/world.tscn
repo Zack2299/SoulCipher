@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=40 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -31,6 +31,9 @@
 [ext_resource type="Texture2D" uid="uid://dmdvssbrwofnk" path="res://assets/ui/investigation_board_v3.png" id="28_e7dbp"]
 [ext_resource type="Script" uid="uid://b8xaiygn2sclb" path="res://scripts/end_round_status_screen.gd" id="28_ux4w8"]
 [ext_resource type="AudioStream" uid="uid://cdcqrnsnivqc2" path="res://assets/sounds/u_u4pf5h7zip-woosh-345977.mp3" id="29_b0ykd"]
+[ext_resource type="Texture2D" uid="uid://c2mfpijx2jmo4" path="res://assets/ui/progress_bar_empty.png" id="31_ftsf3"]
+[ext_resource type="Texture2D" uid="uid://c0tvgren7mu6p" path="res://assets/ui/progress_bar_outside.png" id="32_647gl"]
+[ext_resource type="Texture2D" uid="uid://blugwbds1wxcu" path="res://assets/ui/progress_bar_inside.png" id="33_ia8pi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a8vg4"]
 shader = ExtResource("4_ym8sf")
@@ -374,7 +377,6 @@ metadata/_edit_use_anchors_ = true
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 layer = 0
-visible = false
 
 [node name="PlayerUIHbox" type="HBoxContainer" parent="PlayerUI"]
 anchors_preset = 5
@@ -386,6 +388,27 @@ offset_bottom = 40.0
 grow_horizontal = 2
 size_flags_horizontal = 4
 alignment = 1
+
+[node name="TextureProgressBar" type="TextureProgressBar" parent="PlayerUI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -414.0
+offset_top = -60.0
+offset_right = -138.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+scale = Vector2(3, 3)
+max_value = 1.0
+step = 0.001
+value = 1.0
+texture_under = ExtResource("31_ftsf3")
+texture_over = ExtResource("32_647gl")
+texture_progress = ExtResource("33_ia8pi")
+texture_progress_offset = Vector2(5, 5)
 
 [node name="GhostUI" type="CanvasLayer" parent="."]
 layer = 0
