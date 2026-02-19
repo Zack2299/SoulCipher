@@ -234,6 +234,9 @@ func _is_top_card() -> bool:
 	var max_z = z_index
 	
 	for card in cards:
+		if not card.is_visible_in_tree():
+			continue
+			
 		# check if the other card is also under the mouse
 		if card.hitbox.get_rect().has_point(card.to_local(mouse_pos)):
 			# if the other card has a higher Z, or same Z but is later in the tree
