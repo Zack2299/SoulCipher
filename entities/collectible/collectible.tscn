@@ -11,11 +11,14 @@ radius = 38.0
 [node name="Collectible" type="Node2D"]
 script = ExtResource("1_anydl")
 
-[node name="ClickableArea" parent="." node_paths=PackedStringArray("area_2d") instance=ExtResource("1_nssf5")]
+[node name="ClickableArea" parent="." node_paths=PackedStringArray("area_2d", "click_audio") instance=ExtResource("1_nssf5")]
 area_2d = NodePath("../Area2D")
+click_audio = NodePath("../AudioStreamPlayer")
 
 [node name="HoverableArea" parent="." node_paths=PackedStringArray("area_2d") instance=ExtResource("2_anydl")]
 area_2d = NodePath("../Area2D")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("3_uptvc")
