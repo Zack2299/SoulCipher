@@ -13,6 +13,7 @@ extends Node2D
 @onready var player_card_screen: Node2D = $PlayerCardScreen
 @onready var crystal_ball_room_ui: Node2D = $CrystalBallRoomUI
 @onready var end_round_status_screen: Node2D = $EndRoundStatusScreen
+@onready var timer_progress_bar: TextureProgressBar = $PlayerUI/TimerProgressBar
 
 @export_dir var rooms_file_path: String = "res://rooms/"
 

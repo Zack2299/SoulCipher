@@ -15,6 +15,10 @@ var ghost_id: int = -1
 var game_just_started = true
 var solved_categories_in_current_track: Array[String] = []
 var solved_current_track = false
+var max_turn_time: float = 20.0 # in seconds
+var current_time_remaining: float = 0.0
+var coins: int = 0
+var current_delta: float = 0.0
 
 # config
 var random_ghost = true
@@ -39,6 +43,13 @@ var current_targets: Dictionary = {
 	2: { "weapon": "", "suspect": "", "location": "" },
 	3: { "weapon": "", "suspect": "", "location": "" }
 }
+
+
+@rpc("authority", "call_local", "unreliable")
+func sync_turn_state(time_left: float, current_coins: int):
+	current_time_remaining = time_left
+	coins = current_coins
+	world_node.timer_progress_bar.value = current_time_remaining / max_turn_time
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -157,7 +168,8 @@ func _setup_states():
 	state_machine.set_initial_state(_state_waiting)
 
 
-func _process(_delta):
+func _process(delta):
+	current_delta = delta
 	state_machine.update() 
 
 
@@ -291,10 +303,19 @@ func _ghost_turn_leave():
 func _player_turn_enter():
 	var local_id = multiplayer.get_unique_id()
 	print("GAME MANAGER: ID [%d] entered PLAYER TURN." % local_id)
+	
+	if multiplayer.is_server():
+		current_time_remaining = max_turn_time
+		sync_turn_state.rpc(current_time_remaining, coins)
 
 
 func _player_turn():
-	pass
+	if current_time_remaining > 0:
+		current_time_remaining -= current_delta
+		world_node.timer_progress_bar.value = current_time_remaining / max_turn_time
+	elif multiplayer.is_server():
+		evaluate_crystal_ball_submissions()
+		change_game_phase.rpc("end_round")
 
 
 func _player_turn_leave():

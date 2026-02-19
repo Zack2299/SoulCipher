@@ -95,6 +95,8 @@ func sync_ghost_phase(new_phase: int):
 
 
 func _proceed_to_next_available_phase():
+	if multiplayer.get_unique_id() != GameManager.ghost_id:
+		return
 	var category_name = GameManager._get_category_string(current_phase)
 	
 	# if this part of the case is already solved, skip it
@@ -107,7 +109,7 @@ func _proceed_to_next_available_phase():
 		else:
 			_proceed_to_next_available_phase()
 		return
-
+	rpc("sync_ghost_phase", current_phase)
 	# if not solved, set up the board for this phase
 	_setup_ghost_selection_ui()
 
@@ -200,7 +202,7 @@ func _on_confirm_pressed():
 
 @rpc("any_peer", "call_local", "reliable")
 func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: NodePath, t_node_path: NodePath, phase: int):
-	GameManager.record_selection.rpc(
+	GameManager.record_selection(
 		GameManager.current_track, 
 		phase, 
 		t_tex_path,
@@ -216,7 +218,7 @@ func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: No
 			
 			GameManager.world_node.card_spawn_rooms.erase(target_room)
 			
-			spawn_clue_for_all.rpc(g_tex_path, room_idx, current_phase)
+			spawn_clue_for_all.rpc(g_tex_path, room_idx, phase)
 
 	var g_card = get_node_or_null(g_node_path)
 	var t_card = get_node_or_null(t_node_path)
