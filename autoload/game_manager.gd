@@ -51,6 +51,7 @@ func sync_turn_state(time_left: float, current_coins: int):
 	current_time_remaining = time_left
 	coins = current_coins
 	world_node.timer_progress_bar.value = current_time_remaining / max_turn_time
+	world_node.crystal_timer_progress_bar.value = world_node.timer_progress_bar.value
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -322,6 +323,7 @@ func _player_turn():
 	if current_time_remaining > 0:
 		current_time_remaining -= current_delta
 		world_node.timer_progress_bar.value = current_time_remaining / max_turn_time
+		world_node.crystal_timer_progress_bar.value = world_node.timer_progress_bar.value
 	elif multiplayer.is_server():
 		evaluate_crystal_ball_submissions()
 		change_game_phase.rpc("end_round")
