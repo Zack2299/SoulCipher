@@ -227,6 +227,9 @@ func populate_selection_menu(texture_paths: Array):
 		# convert path "res://assets/.../the_chef.png" -> "The Chef"
 		button.text = _get_clean_name(path)
 		
+		if GameManager.wrong_guesses_in_current_track.has(path):
+			button.disabled = true
+		
 		# connect the button to the preview logic
 		if tokens.frame != TokenType.LOCATION:
 			button.pressed.connect(_on_item_button_pressed.bind(path))

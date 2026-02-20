@@ -14,6 +14,7 @@ var current_round: int = 1
 var ghost_id: int = -1
 var game_just_started = true
 var solved_categories_in_current_track: Array[String] = []
+var wrong_guesses_in_current_track: Array[String] = []
 var solved_current_track = false
 var max_turn_time: float = 240.0 # in seconds
 var current_time_remaining: float = 0.0
@@ -104,6 +105,7 @@ func evaluate_crystal_ball_submissions():
 	var targets = current_targets[current_track]
 	
 	var correct_this_round: Array[String] = []
+	var wrong_this_round: Array[String] = []
 	
 	# check each category
 	var categories = ["weapon", "suspect", "location"]
@@ -115,16 +117,23 @@ func evaluate_crystal_ball_submissions():
 			if player_submissions[type_index] == targets[category_name]:
 				if not solved_categories_in_current_track.has(category_name):
 					correct_this_round.append(category_name)
+			else:
+				wrong_this_round.append(player_submissions[type_index])
 
-	rpc("sync_round_results", correct_this_round)
+	rpc("sync_round_results", correct_this_round, wrong_this_round)
 
 
 @rpc("authority", "call_local", "reliable")
-func sync_round_results(new_solved_categories: Array):
+func sync_round_results(new_solved_categories: Array, new_wrong_guesses: Array = []):
 	# add newly found categories to persistent list
 	for category in new_solved_categories:
 		if not solved_categories_in_current_track.has(category):
 			solved_categories_in_current_track.append(category)
+	
+	# add new wrong guesses to persistent list
+	for wrong_guess in new_wrong_guesses:
+		if not wrong_guesses_in_current_track.has(wrong_guess):
+			wrong_guesses_in_current_track.append(wrong_guess)
 	
 	# check if track is complete
 	if solved_categories_in_current_track.size() == 3:
@@ -135,6 +144,8 @@ func sync_round_results(new_solved_categories: Array):
 		
 		# init next track's targets
 		current_targets[current_track] = { "weapon": "", "suspect": "", "location": "" }
+		
+		wrong_guesses_in_current_track.clear()
 		print("SYSTEM: Track complete! Moving to Track: ", current_track)
 	else:
 		print("SYSTEM: Track incomplete. Solved so far: ", solved_categories_in_current_track)
