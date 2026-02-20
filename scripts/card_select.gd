@@ -210,6 +210,9 @@ func sync_card_selection(g_tex_path: String, t_tex_path: String, g_node_path: No
 	)
 	
 	if multiplayer.is_server():
+		# purge rooms deleted by mansion generator (orphaned rooms)
+		GameManager.world_node.card_spawn_rooms = GameManager.world_node.card_spawn_rooms.filter(func(r): return is_instance_valid(r))
+		
 		var valid_rooms = GameManager.world_node.card_spawn_rooms
 		
 		if not valid_rooms.is_empty():

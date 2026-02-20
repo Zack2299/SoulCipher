@@ -33,7 +33,7 @@ var orphaned_room_names: Array[String] = []
 var havent_explored_rooms = true
 var player_card_screen_is_shown
 var has_started_searching = false
-var is_showing_crystal_ball_ui = true # CHANGE
+var is_showing_crystal_ball_ui = false
 
 # --- DEBUG ---
 signal ghost_turn_over

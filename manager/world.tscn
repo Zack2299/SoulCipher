@@ -13,7 +13,6 @@
 [ext_resource type="Script" uid="uid://bsnl8s6kc8wga" path="res://entities/tint/tint.gd" id="7_hggar"]
 [ext_resource type="Texture2D" uid="uid://cahn1gx385nwb" path="res://assets/ui/confirm_button_hover.png" id="8_4yxvl"]
 [ext_resource type="Script" uid="uid://bpi7g37c4olqy" path="res://scripts/player_card_screen.gd" id="9_kki0f"]
-[ext_resource type="Texture2D" uid="uid://b4edisjx2gm5n" path="res://assets/environment/tarot_table.png" id="10_dcuo7"]
 [ext_resource type="AudioStream" uid="uid://cvvt34jgnjyfb" path="res://assets/sounds/JDSherbert - Tabletop Games SFX Pack - Piece Impact - 1.mp3" id="10_qeh1x"]
 [ext_resource type="Texture2D" uid="uid://dl8ru400ggb86" path="res://assets/entities/tokens.png" id="11_qeh1x"]
 [ext_resource type="PackedScene" uid="uid://xi0qesshmf8m" path="res://ui/arrow/arrow.tscn" id="12_f6erf"]
@@ -31,6 +30,7 @@
 [ext_resource type="Texture2D" uid="uid://dmdvssbrwofnk" path="res://assets/ui/investigation_board_v3.png" id="28_e7dbp"]
 [ext_resource type="Script" uid="uid://b8xaiygn2sclb" path="res://scripts/end_round_status_screen.gd" id="28_ux4w8"]
 [ext_resource type="AudioStream" uid="uid://cdcqrnsnivqc2" path="res://assets/sounds/u_u4pf5h7zip-woosh-345977.mp3" id="29_b0ykd"]
+[ext_resource type="Texture2D" uid="uid://jkrih30pgdmd" path="res://assets/ui/card_screen_table_v2.png" id="30_ftsf3"]
 [ext_resource type="Texture2D" uid="uid://c2mfpijx2jmo4" path="res://assets/ui/progress_bar_empty.png" id="31_ftsf3"]
 [ext_resource type="Texture2D" uid="uid://c0tvgren7mu6p" path="res://assets/ui/progress_bar_outside.png" id="32_647gl"]
 [ext_resource type="Texture2D" uid="uid://blugwbds1wxcu" path="res://assets/ui/progress_bar_inside.png" id="33_ia8pi"]
@@ -317,7 +317,7 @@ stream = ExtResource("10_qeh1x")
 volume_db = -9.244
 
 [node name="BackgroundTable" type="Sprite2D" parent="PlayerCardScreen"]
-texture = ExtResource("10_dcuo7")
+texture = ExtResource("30_ftsf3")
 
 [node name="Tokens" type="Sprite2D" parent="PlayerCardScreen"]
 visible = false
