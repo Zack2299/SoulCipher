@@ -53,12 +53,17 @@ func change_round_animation():
 	
 	# animate all tokens out
 	for token in token_map.values():
-		tween.tween_property(token, "modulate:a", 0.0, 0.5)\
+		tween.tween_property(token, "modulate:a", 0.0, 1.0)\
 			.set_trans(Tween.TRANS_CUBIC)\
 			.set_ease(Tween.EASE_IN)\
 			.set_delay(delay)
 			
-		tween.tween_property(token, "scale", Vector2(3, 3), 0.5)\
+		tween.tween_property(token, "scale", Vector2.ZERO, 1.0)\
+			.set_trans(Tween.TRANS_CUBIC)\
+			.set_ease(Tween.EASE_IN)\
+			.set_delay(delay)
+			
+		tween.tween_property(token, "rotation", token.rotation + PI, 1.0)\
 			.set_trans(Tween.TRANS_CUBIC)\
 			.set_ease(Tween.EASE_IN)\
 			.set_delay(delay)
