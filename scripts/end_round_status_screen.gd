@@ -25,9 +25,9 @@ func reset_tokens():
 func display_results(solved_categories: Array):
 	var delay = 0.0
 	
-	await get_tree().create_timer(2).timeout
+	await get_tree().create_timer(1).timeout
 	
-	var count = 0
+	var count = 0 # count var makes sure solved_categories doesn't have duplicates
 	for category in token_map.keys():
 		if solved_categories.has(category):
 			count += 1
@@ -37,12 +37,14 @@ func display_results(solved_categories: Array):
 				animate_token_in(token, delay)
 				delay += 0.4 # stagger animations
 	
-	if count > 2: # making sure solved_categories doesn't have duplicates
+	if count > 2:
 		await get_tree().create_timer(4).timeout
 		await change_round_animation()
 		await get_tree().create_timer(2).timeout
-	else:
+	elif count > 0:
 		await get_tree().create_timer(5).timeout
+	else:
+		await get_tree().create_timer(3).timeout
 
 
 func change_round_animation():
