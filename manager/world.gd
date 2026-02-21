@@ -17,7 +17,9 @@ enum CollectibleType { BRONZE_COIN, SILVER_COIN, HOURGLASS }
 @onready var end_round_status_screen: Node2D = $EndRoundStatusScreen
 @onready var timer_progress_bar: TextureProgressBar = $PlayerUI/TimerProgressBar
 @onready var crystal_timer_progress_bar: TextureProgressBar = $CrystalBallRoomUI/InsideCrystalBall/TimerProgressBar
-@onready var minimap_ui: Control = $PlayerUI/MinimapUI
+#@onready var minimap_ui: Control = $PlayerUI/MinimapUI
+@onready var minimap_ui: Control = $PlayerUI/MinimapUI/SubViewport/MinimapUI
+
 
 
 @export_dir var rooms_file_path: String = "res://rooms/"

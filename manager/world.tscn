@@ -435,7 +435,6 @@ texture_progress = ExtResource("33_ia8pi")
 texture_progress_offset = Vector2(5, 5)
 
 [node name="MinimapUI" parent="PlayerUI" instance=ExtResource("35_647gl")]
-x_spacing = 70.0
 
 [node name="GhostUI" type="CanvasLayer" parent="."]
 layer = 0

@@ -2,14 +2,17 @@ extends Node2D
 
 var mansion_layout: Dictionary = {}
 
-const ORPHAN_REJECTION_THRESH = 3
+const ORPHAN_REJECTION_THRESH = 4
+
 
 func _ready() -> void:
 	multiplayer.peer_connected.connect(_on_peer_connected)
 
+
 func _on_peer_connected(id: int):
 	if multiplayer.is_server() and not mansion_layout.is_empty():
 		sync_mansion_layout.rpc_id(id, mansion_layout)
+
 
 func generate_mansion(rooms: Array[Node], attempt: int = 1):
 	if not multiplayer.is_server(): return

@@ -2,7 +2,18 @@
 
 [ext_resource type="Script" uid="uid://dpq6djsnj3uxg" path="res://manager/minimap_ui.gd" id="1_s33d4"]
 
-[node name="MinimapUI" type="Control"]
+[node name="MinimapContainer" type="SubViewportContainer"]
+texture_filter = 1
+scale = Vector2(3, 3)
+mouse_filter = 2
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(640, 360)
+render_target_update_mode = 4
+
+[node name="MinimapUI" type="Control" parent="SubViewport"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -12,7 +23,7 @@ grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_s33d4")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="SubViewport/MinimapUI"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

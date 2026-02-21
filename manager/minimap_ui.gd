@@ -9,9 +9,9 @@ var children_map: Dictionary = {}
 var subtree_width: Dictionary = {}
 
 # map visual config
-@export var node_radius: float = 12.0
-@export var x_spacing: float = 100.0
-@export var y_spacing: float = 80.0
+@export var node_radius: float = 4.0
+@export var x_spacing: float = 30.0
+@export var y_spacing: float = 26.0
 @export var line_thickness: float = 4.0
 
 
@@ -128,7 +128,7 @@ func _draw():
 	
 	var screen_center = size / 2
 	# staircase in bottom center of screen
-	var map_origin = Vector2(screen_center.x, size.y - 150) 
+	var map_origin = Vector2(screen_center.x, size.y - 50) 
 	var rooms_array = GameManager.world_node.rooms_array
 	
 	# draw hallways
@@ -145,7 +145,7 @@ func _draw():
 				if is_primary:
 					draw_line(p1, p2, Color.DARK_GRAY, line_thickness)
 				else:
-					_draw_curved_line(p1, p2, Color(0.4, 0.6, 0.9, 0.7), line_thickness - 1.0)
+					_draw_curved_line(p1, p2, Color(0.4, 0.6, 0.9, 0.7), line_thickness - 0.5)
 				
 	# draw rooms
 	for room in room_positions:
@@ -180,7 +180,7 @@ func _draw():
 		
 		# highlighted ring around player's current room
 		if is_current_room:
-			draw_circle(p, node_radius + 4, Color.GREEN, false, 3.0)
+			draw_circle(p, node_radius + 1.5, Color.GREEN, false, 1.0)
 
 
 # bezier curve helper
@@ -198,7 +198,7 @@ func _draw_curved_line(p1: Vector2, p2: Vector2, color: Color, thickness: float)
 		normal = -normal
 		
 	# push midpoint outward slightly so it doesn't cross the main trunk
-	var control = mid + (normal * 80.0)
+	var control = mid + (normal * 26.6)
 	
 	var points = PackedVector2Array()
 	var segments = 16
@@ -207,4 +207,4 @@ func _draw_curved_line(p1: Vector2, p2: Vector2, color: Color, thickness: float)
 		var q = (1.0 - t) * (1.0 - t) * p1 + 2.0 * (1.0 - t) * t * control + t * t * p2
 		points.append(q)
 		
-	draw_polyline(points, color, thickness, true)
+	draw_polyline(points, color, thickness, false)
