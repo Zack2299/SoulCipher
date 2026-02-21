@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=41 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -34,6 +34,7 @@
 [ext_resource type="Texture2D" uid="uid://c2mfpijx2jmo4" path="res://assets/ui/progress_bar_empty.png" id="31_ftsf3"]
 [ext_resource type="Texture2D" uid="uid://c0tvgren7mu6p" path="res://assets/ui/progress_bar_outside.png" id="32_647gl"]
 [ext_resource type="Texture2D" uid="uid://blugwbds1wxcu" path="res://assets/ui/progress_bar_inside.png" id="33_ia8pi"]
+[ext_resource type="PackedScene" uid="uid://bsvfx0cvpgnus" path="res://manager/minimap_ui.tscn" id="35_647gl"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a8vg4"]
 shader = ExtResource("4_ym8sf")
@@ -432,6 +433,9 @@ texture_under = ExtResource("31_ftsf3")
 texture_over = ExtResource("32_647gl")
 texture_progress = ExtResource("33_ia8pi")
 texture_progress_offset = Vector2(5, 5)
+
+[node name="MinimapUI" parent="PlayerUI" instance=ExtResource("35_647gl")]
+x_spacing = 70.0
 
 [node name="GhostUI" type="CanvasLayer" parent="."]
 layer = 0

@@ -11,14 +11,12 @@ texture = ExtResource("2_w4fyk")
 
 [node name="Relocator" parent="." index="1" instance=ExtResource("3_5snbb")]
 position = Vector2(-184, 46)
-relocator_side = 1
+relocator_side = 0
 
 [node name="Relocator2" parent="." index="2" instance=ExtResource("3_5snbb")]
 position = Vector2(-20, 48)
 relocator_side = 0
-relocator_index = 1
 
 [node name="Relocator3" parent="." index="3" instance=ExtResource("3_5snbb")]
 position = Vector2(264, 31)
-relocator_side = 0
-relocator_index = 2
+relocator_side = 1

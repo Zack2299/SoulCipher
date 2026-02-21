@@ -17,6 +17,7 @@ enum CollectibleType { BRONZE_COIN, SILVER_COIN, HOURGLASS }
 @onready var end_round_status_screen: Node2D = $EndRoundStatusScreen
 @onready var timer_progress_bar: TextureProgressBar = $PlayerUI/TimerProgressBar
 @onready var crystal_timer_progress_bar: TextureProgressBar = $CrystalBallRoomUI/InsideCrystalBall/TimerProgressBar
+@onready var minimap_ui: Control = $PlayerUI/MinimapUI
 
 
 @export_dir var rooms_file_path: String = "res://rooms/"
@@ -34,12 +35,13 @@ var havent_explored_rooms = true
 var player_card_screen_is_shown
 var has_started_searching = false
 var is_showing_crystal_ball_ui = false
+var minimap_showing = false
 
-# --- DEBUG ---
 signal ghost_turn_over
 signal player_turn_over
 
 func _input(event: InputEvent) -> void:
+	# --- DEBUG ---
 	if event.is_action_pressed("one"):
 		request_phase_change.rpc("ghost_turn_over")
 	elif event.is_action_pressed("two"):
@@ -57,6 +59,12 @@ func _input(event: InputEvent) -> void:
 					SceneTransition.reveal_hide_transition([player_ui, room_manager], [player_card_screen])
 				else:
 					SceneTransition.reveal_hide_transition([player_ui, previous_room_relocator, room_manager], [player_card_screen])
+	elif event.is_action_pressed("open_minimap"):
+		minimap_showing = not minimap_showing
+		if minimap_showing:
+			minimap_ui.open_map()
+		else:
+			minimap_ui.close_map()
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -68,7 +76,6 @@ func request_phase_change(type: String):
 		ghost_turn_over.emit()
 	elif type == "player_turn_over":
 		player_turn_over.emit()
-# --- DEBUG ---
 
 
 func _ready() -> void:
