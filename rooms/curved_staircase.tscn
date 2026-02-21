@@ -10,14 +10,14 @@
 texture = ExtResource("2_vh7r4")
 
 [node name="Relocator" parent="." index="1" instance=ExtResource("3_qc417")]
-position = Vector2(-77, -109)
+position = Vector2(-173, 97)
 relocator_side = 0
 
 [node name="Relocator2" parent="." index="2" instance=ExtResource("3_qc417")]
 position = Vector2(102, -62)
 
 [node name="Relocator3" parent="." index="3" instance=ExtResource("3_qc417")]
-position = Vector2(-165, 111)
+position = Vector2(-78, -102)
 relocator_side = 0
 
 [node name="Relocator4" parent="." index="4" instance=ExtResource("3_qc417")]

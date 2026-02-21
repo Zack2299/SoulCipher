@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bk0ra72elai2u"]
+[gd_scene load_steps=4 format=3 uid="uid://ixhm5id7tqh4"]
 
 [ext_resource type="PackedScene" uid="uid://c3uh1wgf8tmll" path="res://entities/room/room.tscn" id="1_282k6"]
 [ext_resource type="Texture2D" uid="uid://csfqiqooosreu" path="res://assets/environment/staircase.png" id="2_liuqn"]
@@ -14,7 +14,7 @@ position = Vector2(-228, -111)
 relocator_side = 0
 
 [node name="Relocator2" parent="." index="2" instance=ExtResource("3_m4j20")]
-position = Vector2(230, -112)
+position = Vector2(136, 32)
 relocator_side = 1
 
 [node name="Relocator3" parent="." index="3" instance=ExtResource("3_m4j20")]
@@ -22,5 +22,5 @@ position = Vector2(-129, 29)
 relocator_side = 0
 
 [node name="Relocator4" parent="." index="4" instance=ExtResource("3_m4j20")]
-position = Vector2(134, 31)
+position = Vector2(224, -108)
 relocator_side = 1

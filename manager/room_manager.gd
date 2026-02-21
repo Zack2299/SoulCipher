@@ -104,18 +104,28 @@ func generate_mansion(rooms: Array[Node], attempt: int = 1):
 					break
 			if placed: break
 			
-		# if loops ate every single door, force it onto the deepest room
+		# if loops ate every single door, force it onto the deepest room that actually has doors
 		if not placed and search_pool.size() > 0:
-			var forced_parent = search_pool[0]
-			var door_idx = layout_data[forced_parent].size() - 1
-			var lost_connection = layout_data[forced_parent][door_idx]
+			var forced_parent = ""
+			var door_idx = -1
 			
-			print("CRITICAL: No doors left! Forcing Crystal Ball over connection to: ", lost_connection)
+			# find the deepest room that actually has at least one relocator
+			for room_name in search_pool:
+				if layout_data[room_name].size() > 0:
+					forced_parent = room_name
+					door_idx = layout_data[room_name].size() - 1
+					break
 			
-			layout_data[forced_parent][door_idx] = "crystal_ball_room"
-			if layout_data["crystal_ball_room"].size() > 0:
-				layout_data["crystal_ball_room"][0] = forced_parent
-			all_reached_wings.append("crystal_ball_room")
+			if forced_parent != "":
+				var lost_connection = layout_data[forced_parent][door_idx]
+				print("CRITICAL: No empty doors left! Forcing Crystal Ball over connection to: ", lost_connection)
+				
+				layout_data[forced_parent][door_idx] = "crystal_ball_room"
+				if layout_data["crystal_ball_room"].size() > 0:
+					layout_data["crystal_ball_room"][0] = forced_parent
+				all_reached_wings.append("crystal_ball_room")
+			else:
+				print("FATAL: No rooms in the entire search pool have any doors!")
 
 	# reachability report
 	var all_reachable = _get_true_reachable_rooms(layout_data, "staircase")
