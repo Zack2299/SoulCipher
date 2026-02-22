@@ -1,4 +1,4 @@
-[gd_scene load_steps=41 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=43 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -8,7 +8,9 @@
 [ext_resource type="Shader" uid="uid://k1pfmdb6llbu" path="res://shader/ghost.gdshader" id="4_ym8sf"]
 [ext_resource type="AudioStream" uid="uid://ccwxpmj1d17fl" path="res://assets/sounds/JDSherbert - Ultimate UI SFX Pack - Select - 1.mp3" id="5_bi8ao"]
 [ext_resource type="Texture2D" uid="uid://bji036jqt72p5" path="res://assets/environment/ghost_room.png" id="5_hggar"]
+[ext_resource type="Texture2D" uid="uid://dp7rs6tfvptmb" path="res://assets/ui/shop_front_items.png" id="5_ia8pi"]
 [ext_resource type="Texture2D" uid="uid://c28a7yg1auif0" path="res://assets/ui/confirm_button_normal.png" id="6_1jdyk"]
+[ext_resource type="PackedScene" uid="uid://d3wsa6r1v7i3d" path="res://entities/shop_item/shop_item.tscn" id="6_r0kl2"]
 [ext_resource type="Texture2D" uid="uid://cdcfnrq5uongp" path="res://assets/ui/confirm_button_pressed.png" id="7_dcuo7"]
 [ext_resource type="Script" uid="uid://bsnl8s6kc8wga" path="res://entities/tint/tint.gd" id="7_hggar"]
 [ext_resource type="Texture2D" uid="uid://cahn1gx385nwb" path="res://assets/ui/confirm_button_hover.png" id="8_4yxvl"]
@@ -95,10 +97,25 @@ is_going_back = true
 [node name="PlayersData" type="Node2D" parent="."]
 
 [node name="Shop" type="Node2D" parent="."]
-visible = false
 
-[node name="Sprite2D" type="Sprite2D" parent="Shop"]
+[node name="ShopBackground" type="Sprite2D" parent="Shop"]
 texture = ExtResource("4_wn2f2")
+
+[node name="ShopForeground" type="Sprite2D" parent="Shop"]
+z_index = 10
+texture = ExtResource("5_ia8pi")
+
+[node name="ShopItem" parent="Shop" instance=ExtResource("6_r0kl2")]
+position = Vector2(-240, 0)
+item_type = 2
+
+[node name="ShopItem2" parent="Shop" instance=ExtResource("6_r0kl2")]
+position = Vector2(0, 40)
+item_type = 7
+
+[node name="ShopItem3" parent="Shop" instance=ExtResource("6_r0kl2")]
+position = Vector2(240, 0)
+item_type = 8
 
 [node name="CardSelect" type="Node2D" parent="."]
 visible = false

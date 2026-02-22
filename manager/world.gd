@@ -204,13 +204,13 @@ func spawn_round_collectibles():
 	var valid_rooms = rooms_array.filter(func(r): return r.name != "staircase" and r.name != "crystal_ball_room")
 	if valid_rooms.is_empty(): return
 	
-	for i in range(randi_range(3,5)):
+	for i in range(randi_range(5,10)):
 		_generate_collectible_data(CollectibleType.BRONZE_COIN, valid_rooms.pick_random())
 		
 	for i in range(randi_range(3,5)):
 		_generate_collectible_data(CollectibleType.HOURGLASS, valid_rooms.pick_random())
 		
-	for i in range(randi_range(1,2)):
+	for i in range(randi_range(1,3)):
 		_generate_collectible_data(CollectibleType.SILVER_COIN, valid_rooms.pick_random())
 
 
