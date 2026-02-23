@@ -234,7 +234,7 @@ func _generate_collectible_data(item_type: int, target_room: Node):
 
 
 @rpc("authority", "call_local", "reliable")
-func sync_spawn_collectible(item_type: int, room_idx: int, pos: Vector2, item_name: String):
+func sync_spawn_collectible(item_type: int, room_idx: int, pos: Vector2, item_name: String):	
 	var item = COLLECTIBLE_SCENE.instantiate()
 	
 	item.item_type = item_type # assign the enum type BEFORE it enters the tree
@@ -243,6 +243,10 @@ func sync_spawn_collectible(item_type: int, room_idx: int, pos: Vector2, item_na
 	item.add_to_group("collectibles")
 	if item_type == 0 or item_type == 1:
 		item.add_to_group("coins")
+	
+	# ghost can't see/pickup coins or hourglasses
+	if multiplayer.get_unique_id() == GameManager.ghost_id:
+		item.visible = false
 	
 	rooms_array[room_idx].add_child(item)
 
