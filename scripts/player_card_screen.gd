@@ -40,3 +40,9 @@ func clear_clues() -> void:
 	var clues = get_tree().get_nodes_in_group("card_screen_clues")
 	for clue in clues:
 		clue.queue_free()
+
+
+func clear_category(category: String) -> void:
+	var clues = get_tree().get_nodes_in_group(category)
+	for clue in clues:
+		clue.queue_free()

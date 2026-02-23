@@ -170,14 +170,14 @@ func _draw():
 		
 		# color coding
 		if room == "crystal_ball_room":
-			if GameManager.active_map_reveals.has("crystal_ball"):
+			if GameManager.active_map_reveals.has("crystal_ball") or GameManager.debug:
 				color = Color.TEAL
 			else:
 				color = Color.WHITE
 		#elif room == "staircase":
 			#color = Color.GOLD
 			
-		if GameManager.active_map_reveals.has("cards"):
+		if GameManager.active_map_reveals.has("cards") or GameManager.debug:
 			if clue_type == 1:
 				color = Color.CRIMSON # weapon
 			elif clue_type == 2:
@@ -194,7 +194,7 @@ func _draw():
 			draw_circle(p, node_radius + 1.0, Color.YELLOW, false, 1.0)
 		
 		# highlighted ring around player's current room
-		if is_current_room and not GameManager.active_map_reveals.is_empty():
+		if is_current_room and (not GameManager.active_map_reveals.is_empty() or GameManager.debug):
 			draw_circle(p, node_radius + 1.5, Color.GREEN, false, 1.0)
 
 

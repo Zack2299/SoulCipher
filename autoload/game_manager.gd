@@ -8,6 +8,7 @@ var world_node: World = null:
 			_connect_world_signals()
 
 # game state
+var debug = true
 var current_track: int = 1
 #var current_subround: int = 1
 var current_round: int = 1
@@ -136,6 +137,7 @@ func sync_round_results(new_solved_categories: Array, new_wrong_guesses: Array =
 	for category in new_solved_categories:
 		if not solved_categories_in_current_track.has(category):
 			solved_categories_in_current_track.append(category)
+			world_node.player_card_screen.clear_category(category)
 	
 	# add new wrong guesses to persistent list
 	for wrong_guess in new_wrong_guesses:

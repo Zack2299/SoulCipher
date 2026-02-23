@@ -180,6 +180,10 @@ func spawn_clue_to_card_screen(texture_path: String, type_index: int):
 	
 	#new_clue.remove_from_group("ghost_cards")
 	new_clue.add_to_group("card_screen_clues")
+	match type_index:
+		1: new_clue.add_to_group("weapon")
+		2: new_clue.add_to_group("suspect")
+		3: new_clue.add_to_group("location")
 	
 	var front_tex = load(texture_path)
 	
