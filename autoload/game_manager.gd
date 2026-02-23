@@ -318,6 +318,14 @@ func _ghost_turn_enter():
 	
 	to_hide.append(world_node.end_round_status_screen)
 	# to_hide.append(end_round_info)
+	
+	if multiplayer.is_server():
+		var all_types = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+		all_types.shuffle()
+		
+		var shop_items = all_types.slice(0, 3)
+		
+		world_node.shop.sync_shop_inventory.rpc(shop_items)
 
 	if game_just_started:
 		for node in to_reveal: node.visible = true

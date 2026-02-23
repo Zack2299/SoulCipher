@@ -15,7 +15,7 @@ var slot_positions = [
 ]
 
 var spawned_items: Array[Node] = []
-
+var synced_item_types: Array = []
 
 func _ready():
 	visibility_changed.connect(_on_visibility_changed)
@@ -23,20 +23,31 @@ func _ready():
 
 func _on_visibility_changed():
 	if visible:
-		_deal_new_items()
+		_spawn_synced_items()
 	else:
 		_clear_items()
 
 
-func _deal_new_items():
-	_clear_items() # just to be safe
+@rpc("authority", "call_local", "reliable")
+func sync_shop_inventory(new_items: Array):
+	synced_item_types = new_items
 	
-	var all_types = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-	all_types.shuffle()
+	# if shop is open refresh immediately
+	if visible:
+		_clear_items()
+		_spawn_synced_items()
+
+
+func _spawn_synced_items():
+	_clear_items()
 	
-	for i in range(3):
+	for i in range(synced_item_types.size()):
+		var type = synced_item_types[i]
+		
+		if type == -1: continue 
+		
 		var new_item = shop_item_scene.instantiate()
-		new_item.item_type = all_types[i]
+		new_item.item_type = type
 		new_item.position = slot_positions[i]
 		
 		new_item.purchase_requested.connect(_on_purchase_requested)
