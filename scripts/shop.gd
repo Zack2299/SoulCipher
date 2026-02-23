@@ -1,5 +1,9 @@
 extends Node2D
 
+enum ShopItemType { WEAPON, SUSPECT, LOCATION, \
+	REFRESH_CARDS, PAUSE_TIMER, PLACE_CLUE, \
+	MAP_CRYSTAL_BALL, MAP_CARDS, MAP_COINS }
+
 @export var shop_item_scene: PackedScene = preload("uid://d3wsa6r1v7i3d")
 @onready var error_audio_stream_player: AudioStreamPlayer = $ErrorAudioStreamPlayer
 @onready var purchase_audio_stream_player: AudioStreamPlayer = $PurchaseAudioStreamPlayer
@@ -25,7 +29,7 @@ func _on_visibility_changed():
 
 
 func _deal_new_items():
-	_clear_items()
+	_clear_items() # just to be safe
 	
 	var all_types = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 	all_types.shuffle()
@@ -60,9 +64,32 @@ func _on_purchase_requested(item: Node2D):
 		
 		print("Purchased item: ", item.item_type, " for ", item.cost)
 		
-		match item.item_type:
-			pass # implement functionality
+		_do_upgrade_ability(item.item_type)
 	else:
 		print("Not enough coins! Need ", item.cost, " but only have ", GameManager.coins)
 		item.reject_purchase()
 		error_audio_stream_player.play()
+
+
+func _do_upgrade_ability(item_type: int):
+	match item_type:
+		ShopItemType.WEAPON:
+			GameManager.eliminate_incorrect_clue.rpc_id(1, 1)
+		ShopItemType.SUSPECT:
+			GameManager.eliminate_incorrect_clue.rpc_id(1, 2)
+		ShopItemType.LOCATION:
+			GameManager.eliminate_incorrect_clue.rpc_id(1, 3)
+		ShopItemType.REFRESH_CARDS:
+			pass
+			#GameManager.enable_refresh_hand.rpc_id(GameManager.ghost_id)
+		ShopItemType.PAUSE_TIMER:
+			GameManager.apply_timer_pause.rpc(60.0)
+		ShopItemType.PLACE_CLUE:
+			pass
+			#GameManager.enable_phantom_mark.rpc_id(GameManager.ghost_id)
+		ShopItemType.MAP_CRYSTAL_BALL:
+			GameManager.activate_map_reveal.rpc("crystal_ball")
+		ShopItemType.MAP_CARDS:
+			GameManager.activate_map_reveal.rpc("cards")
+		ShopItemType.MAP_COINS:
+			GameManager.activate_map_reveal.rpc("coins")

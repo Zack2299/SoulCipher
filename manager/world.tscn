@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=46 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -7,8 +7,8 @@
 [ext_resource type="Script" uid="uid://c5uca0dovd8ht" path="res://scripts/card_select.gd" id="4_j0j34"]
 [ext_resource type="Texture2D" uid="uid://3klghqtw3dj" path="res://assets/environment/shop.png" id="4_wn2f2"]
 [ext_resource type="Shader" uid="uid://k1pfmdb6llbu" path="res://shader/ghost.gdshader" id="4_ym8sf"]
-[ext_resource type="AudioStream" uid="uid://6cb3fspmhvsb" path="res://assets/sounds/fs_8bit_crash.ogg" id="5_6bcjp"]
 [ext_resource type="AudioStream" uid="uid://ccwxpmj1d17fl" path="res://assets/sounds/JDSherbert - Ultimate UI SFX Pack - Select - 1.mp3" id="5_bi8ao"]
+[ext_resource type="AudioStream" uid="uid://drevqxylo5lvy" path="res://assets/sounds/JDSherbert - Ultimate UI SFX Pack - Error - 1.mp3" id="5_cwt7x"]
 [ext_resource type="Texture2D" uid="uid://bji036jqt72p5" path="res://assets/environment/ghost_room.png" id="5_hggar"]
 [ext_resource type="Texture2D" uid="uid://dp7rs6tfvptmb" path="res://assets/ui/shop_front_items.png" id="5_ia8pi"]
 [ext_resource type="Texture2D" uid="uid://c28a7yg1auif0" path="res://assets/ui/confirm_button_normal.png" id="6_1jdyk"]
@@ -39,6 +39,7 @@
 [ext_resource type="Texture2D" uid="uid://c0tvgren7mu6p" path="res://assets/ui/progress_bar_outside.png" id="32_647gl"]
 [ext_resource type="Texture2D" uid="uid://blugwbds1wxcu" path="res://assets/ui/progress_bar_inside.png" id="33_ia8pi"]
 [ext_resource type="PackedScene" uid="uid://bsvfx0cvpgnus" path="res://manager/minimap_ui.tscn" id="35_647gl"]
+[ext_resource type="Texture2D" uid="uid://chw32m3ry5joc" path="res://assets/ui/frozen_progress_bar.png" id="38_adjel"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a8vg4"]
 shader = ExtResource("4_ym8sf")
@@ -103,7 +104,7 @@ visible = false
 script = ExtResource("4_6bcjp")
 
 [node name="ErrorAudioStreamPlayer" type="AudioStreamPlayer" parent="Shop"]
-stream = ExtResource("5_6bcjp")
+stream = ExtResource("5_cwt7x")
 volume_db = -9.976
 
 [node name="PurchaseAudioStreamPlayer" type="AudioStreamPlayer" parent="Shop"]
@@ -416,7 +417,6 @@ metadata/_edit_use_anchors_ = true
 
 [node name="PlayerUI" type="CanvasLayer" parent="."]
 layer = 0
-visible = false
 
 [node name="PlayerUIHbox" type="HBoxContainer" parent="PlayerUI"]
 anchors_preset = 5
@@ -450,6 +450,11 @@ texture_under = ExtResource("31_ftsf3")
 texture_over = ExtResource("32_647gl")
 texture_progress = ExtResource("33_ia8pi")
 texture_progress_offset = Vector2(5, 5)
+
+[node name="FrozenProgressBar" type="Sprite2D" parent="PlayerUI"]
+position = Vector2(960, 1059)
+scale = Vector2(3, 3)
+texture = ExtResource("38_adjel")
 
 [node name="MinimapUI" parent="PlayerUI" instance=ExtResource("35_647gl")]
 

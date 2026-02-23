@@ -153,6 +153,8 @@ func _draw():
 		var is_current_room = (room == SceneTransition.current_room)
 		var color = Color.WHITE
 		
+		var has_coins = false
+		
 		# check physical room node for cards
 		var clue_type = -1
 		for r_node in rooms_array:
@@ -161,25 +163,38 @@ func _draw():
 				for child in r_node.get_children():
 					if child.is_in_group("world_clues"):
 						clue_type = child.card_type
-						break
+					
+					if child.is_in_group("coins"):
+						has_coins = true
 				break
 		
 		# color coding
 		if room == "crystal_ball_room":
-			color = Color.TEAL
-		elif room == "staircase":
-			color = Color.GOLD
-		elif clue_type == 1:
-			color = Color.CRIMSON # weapon
-		elif clue_type == 2:
-			color = Color.DODGER_BLUE # suspect
-		elif clue_type == 3:
-			color = Color.MEDIUM_PURPLE # location
+			if GameManager.active_map_reveals.has("crystal_ball"):
+				color = Color.TEAL
+			else:
+				color = Color.WHITE
+		#elif room == "staircase":
+			#color = Color.GOLD
+			
+		if GameManager.active_map_reveals.has("cards"):
+			if clue_type == 1:
+				color = Color.CRIMSON # weapon
+			elif clue_type == 2:
+				color = Color.DODGER_BLUE # suspect
+			elif clue_type == 3:
+				color = Color.MEDIUM_PURPLE # location
+				
+		if GameManager.active_map_reveals.has("coins") and has_coins:
+			color = Color.YELLOW
 			
 		draw_circle(p, node_radius, color)
 		
+		if GameManager.active_map_reveals.has("coins") and has_coins:
+			draw_circle(p, node_radius + 1.0, Color.YELLOW, false, 1.0)
+		
 		# highlighted ring around player's current room
-		if is_current_room:
+		if is_current_room and not GameManager.active_map_reveals.is_empty():
 			draw_circle(p, node_radius + 1.5, Color.GREEN, false, 1.0)
 
 

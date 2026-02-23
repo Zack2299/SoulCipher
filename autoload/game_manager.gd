@@ -18,8 +18,11 @@ var wrong_guesses_in_current_track: Array[String] = []
 var solved_current_track = false
 var max_turn_time: float = 240.0 # in seconds
 var current_time_remaining: float = 0.0
-var coins: int = 0
+var coins: int = 100
 var current_delta: float = 0.0
+var active_map_reveals: Array[String] = []
+var pause_time_remaining: float = 0.0
+var pause_time_length: float = 60.0
 
 # config
 var random_ghost = true
@@ -320,6 +323,11 @@ func _player_turn_enter():
 
 
 func _player_turn():
+	world_node.frozen_progress_bar.modulate.a = pause_time_remaining / pause_time_length
+	if pause_time_remaining > 0:
+		pause_time_remaining -= current_delta
+		return # skip draining actual timer while powerup active
+	
 	if current_time_remaining > 0:
 		current_time_remaining -= current_delta
 		world_node.timer_progress_bar.value = current_time_remaining / max_turn_time
@@ -355,6 +363,7 @@ func _end_round_enter():
 	print("")
 	print("----- Round ", current_round, " -----")
 	
+	_reset_powerups()
 	
 	SceneTransition.reveal_hide_transition([world_node.end_round_status_screen], [], 1.0)
 	
@@ -385,6 +394,11 @@ func _end_round_enter():
 	_reset_player_to_staircase()
 
 
+func _reset_powerups():
+	active_map_reveals.clear()
+	pause_time_remaining = 0.0
+
+
 func _end_round():	
 	pass
 
@@ -409,3 +423,44 @@ func _end_game_enter():
 
 func _end_game():
 	pass
+
+
+
+# --- SHOP POWERUP RPC FUNCTIONS ---
+@rpc("any_peer", "call_local", "reliable")
+func eliminate_incorrect_clue(type: int):
+	if not multiplayer.is_server(): return
+	
+	var category = _get_category_string(type)
+	var target_path = current_targets[current_track][category]
+	
+	var crystal_ball = world_node.crystal_ball_room_ui
+	var available_paths: Array = []
+	
+	match type:
+		1: available_paths = crystal_ball.weapon_paths
+		2: available_paths = crystal_ball.suspect_paths
+		3: available_paths = crystal_ball.location_paths
+		
+	# find random wrong path that hasnt been guessed or eliminated yet
+	var valid_wrong_paths: Array[String] = []
+	for path in available_paths:
+		if path != target_path and path != "" and not wrong_guesses_in_current_track.has(path):
+			valid_wrong_paths.append(path)
+			
+	if valid_wrong_paths.size() > 0:
+		var wrong_path = valid_wrong_paths.pick_random()
+		
+		sync_round_results.rpc([], [wrong_path])
+
+
+@rpc("any_peer", "call_local", "reliable")
+func apply_timer_pause(duration: float):
+	pause_time_length = duration
+	pause_time_remaining = duration
+
+
+@rpc("any_peer", "call_local", "reliable")
+func activate_map_reveal(reveal_type: String):
+	if not active_map_reveals.has(reveal_type):
+		active_map_reveals.append(reveal_type)

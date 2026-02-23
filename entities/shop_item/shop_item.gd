@@ -60,8 +60,8 @@ func _setup_item_data():
 			cost = 15
 			
 		ShopItemType.PAUSE_TIMER:
-			item_sprite.texture = preload("uid://diup458y4coja")
-			item_text.text = "Borrowed Time:\n\nHalt the clock for 30 seconds at the beginning of the next round."
+			item_sprite.texture = preload("uid://dhpdhj80826uf")
+			item_text.text = "Borrowed Time:\n\nFreeze the clock for 45 seconds at the beginning of the next round."
 			cost = 3
 			
 		ShopItemType.PLACE_CLUE:

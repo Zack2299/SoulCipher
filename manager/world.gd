@@ -19,6 +19,7 @@ enum CollectibleType { BRONZE_COIN, SILVER_COIN, HOURGLASS }
 @onready var crystal_timer_progress_bar: TextureProgressBar = $CrystalBallRoomUI/InsideCrystalBall/TimerProgressBar
 #@onready var minimap_ui: Control = $PlayerUI/MinimapUI
 @onready var minimap_ui: Control = $PlayerUI/MinimapUI/SubViewport/MinimapUI
+@onready var frozen_progress_bar: Sprite2D = $PlayerUI/FrozenProgressBar
 
 
 
@@ -41,6 +42,7 @@ var minimap_showing = false
 
 signal ghost_turn_over
 signal player_turn_over
+
 
 func _input(event: InputEvent) -> void:
 	# --- DEBUG ---
@@ -234,6 +236,8 @@ func sync_spawn_collectible(item_type: int, room_idx: int, pos: Vector2, item_na
 	item.name = item_name # make node paths match
 	item.position = pos
 	item.add_to_group("collectibles")
+	if item_type == 0 or item_type == 1:
+		item.add_to_group("coins")
 	
 	rooms_array[room_idx].add_child(item)
 

@@ -22,6 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_s33d4")
+x_spacing = 25.0
 
 [node name="ColorRect" type="ColorRect" parent="SubViewport/MinimapUI"]
 layout_mode = 1

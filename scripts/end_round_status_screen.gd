@@ -15,7 +15,8 @@ extends Node2D
 
 func _ready():
 	reset_tokens()
-	
+
+
 func reset_tokens():
 	for token in token_map.values():
 		token.modulate.a = 0
