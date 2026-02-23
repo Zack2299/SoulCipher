@@ -1,4 +1,4 @@
-[gd_scene load_steps=47 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=50 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -41,6 +41,9 @@
 [ext_resource type="Texture2D" uid="uid://blugwbds1wxcu" path="res://assets/ui/progress_bar_inside.png" id="33_ia8pi"]
 [ext_resource type="PackedScene" uid="uid://bsvfx0cvpgnus" path="res://manager/minimap_ui.tscn" id="35_647gl"]
 [ext_resource type="Texture2D" uid="uid://chw32m3ry5joc" path="res://assets/ui/frozen_progress_bar.png" id="38_adjel"]
+[ext_resource type="Script" uid="uid://dn3em5r6qf565" path="res://scripts/ghost_ui.gd" id="41_p5efi"]
+[ext_resource type="Texture2D" uid="uid://3ywk123annse" path="res://assets/ui/icon_ghost.png" id="43_8g14r"]
+[ext_resource type="Texture2D" uid="uid://baocy0hfwvspi" path="res://assets/ui/icon_refresh.png" id="44_1qugi"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_a8vg4"]
 shader = ExtResource("4_ym8sf")
@@ -479,6 +482,7 @@ texture = ExtResource("38_adjel")
 [node name="GhostUI" type="CanvasLayer" parent="."]
 layer = 0
 visible = false
+script = ExtResource("41_p5efi")
 
 [node name="Rays" type="ColorRect" parent="GhostUI"]
 z_as_relative = false
@@ -500,6 +504,59 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0.6117647, 0.8901961, 0.12156863)
 script = ExtResource("7_hggar")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="GhostUI"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 40.0
+offset_top = -194.0
+offset_right = 139.0
+offset_bottom = -144.0
+grow_vertical = 0
+scale = Vector2(3, 3)
+
+[node name="PlaceClueButton" type="TextureButton" parent="GhostUI/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("43_8g14r")
+
+[node name="PlaceClueLabel" type="Label" parent="GhostUI/HBoxContainer/PlaceClueButton"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = 2.0
+offset_right = 24.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "x1"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="RefreshCardsButton" type="TextureButton" parent="GhostUI/HBoxContainer"]
+layout_mode = 2
+texture_normal = ExtResource("44_1qugi")
+
+[node name="RefreshCardsLabel" type="Label" parent="GhostUI/HBoxContainer/RefreshCardsButton"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -24.0
+offset_top = 2.0
+offset_right = 24.0
+offset_bottom = 9.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "x1"
+horizontal_alignment = 1
+vertical_alignment = 2
 
 [connection signal="pressed" from="CardSelect/ConfirmButton" to="." method="_on_card_select_confirm_pressed"]
 [connection signal="mouse_clicked" from="CrystalBallRoomUI/InsideCrystalBall/Checkmark/ClickableArea" to="CrystalBallRoomUI" method="_on_clickable_area_mouse_clicked"]

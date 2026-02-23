@@ -72,6 +72,60 @@ func _get_paths_slice(tex_array: Array[Texture2D], count: int) -> Array[String]:
 	return paths
 
 
+@rpc("authority", "call_local", "reliable") 
+func refresh_cards():
+	if multiplayer.get_unique_id() != GameManager.ghost_id: return
+	
+	# REMOVE OLD CARDS
+	var removal_tween = create_tween().set_parallel(true)
+	var cards_to_remove: Array[Node] = []
+
+	for child in get_children():
+		if child.has_method("setup"): 
+			if child.card_type == CardType.GHOST:
+				# don't delete held or type card
+				if child != top_card and child != current_type_card:
+					cards_to_remove.append(child)
+					
+					# shrink and fade
+					removal_tween.tween_property(child, "scale", Vector2.ZERO, 0.25)\
+						.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
+					removal_tween.tween_property(child, "modulate:a", 0.0, 0.25)
+
+	if not cards_to_remove.is_empty():
+		await removal_tween.finished
+		for card in cards_to_remove:
+			if is_instance_valid(card):
+				card.queue_free()
+
+	# SPAWN NEW CARDS
+	var cards_needed = NUM_GHOST_CARDS
+	
+	if top_card != null:
+		cards_needed -= 1
+		
+	var spawn_tween = create_tween().set_parallel(true)
+		
+	for i in range(cards_needed):
+		if available_clues.size() > 0:
+			var new_card = add_card(CardType.GHOST, available_clues.pop_front())
+			
+			new_card.scale = Vector2.ZERO
+			new_card.modulate.a = 0.0
+			
+			var delay = i * 0.08
+			
+			# pop up
+			spawn_tween.tween_property(new_card, "scale", Vector2(1.0, 1.0), 0.4)\
+				.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)\
+				.set_delay(delay)
+				
+			# fade in
+			spawn_tween.tween_property(new_card, "modulate:a", 1.0, 0.3)\
+				.set_delay(delay)
+
+
+
 @rpc("any_peer", "call_local", "reliable")
 func sync_crystal_ball_options(s_paths: Array, w_paths: Array, l_paths: Array):
 	var crystal_ball = get_tree().root.find_child("CrystalBallRoomUI", true, false)

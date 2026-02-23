@@ -80,13 +80,11 @@ func _do_upgrade_ability(item_type: int):
 		ShopItemType.LOCATION:
 			GameManager.eliminate_incorrect_clue.rpc_id(1, 3)
 		ShopItemType.REFRESH_CARDS:
-			pass
-			#GameManager.enable_refresh_hand.rpc_id(GameManager.ghost_id)
+			GameManager.grant_ghost_powerup.rpc_id(1, "refresh_cards")
 		ShopItemType.PAUSE_TIMER:
 			GameManager.apply_timer_pause.rpc(60.0)
 		ShopItemType.PLACE_CLUE:
-			pass
-			#GameManager.enable_phantom_mark.rpc_id(GameManager.ghost_id)
+			GameManager.grant_ghost_powerup.rpc_id(1, "place_clue")
 		ShopItemType.MAP_CRYSTAL_BALL:
 			GameManager.activate_map_reveal.rpc("crystal_ball")
 		ShopItemType.MAP_CARDS:

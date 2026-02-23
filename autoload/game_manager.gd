@@ -8,7 +8,6 @@ var world_node: World = null:
 			_connect_world_signals()
 
 # game state
-var debug = true
 var current_track: int = 1
 #var current_subround: int = 1
 var current_round: int = 1
@@ -19,7 +18,7 @@ var wrong_guesses_in_current_track: Array[String] = []
 var solved_current_track = false
 var max_turn_time: float = 240.0 # in seconds
 var current_time_remaining: float = 0.0
-var coins: int = 0:
+var coins: int = 100:
 	set(value):
 		coins = value
 		world_node.coin_count_text.text = str(value)
@@ -28,7 +27,13 @@ var active_map_reveals: Array[String] = []
 var pause_time_remaining: float = 0.0
 var pause_time_length: float = 60.0
 
+var ghost_powerups: Dictionary = {
+	"refresh_cards": 0,
+	"place_clue": 0
+}
+
 # config
+var debug = true
 var random_ghost = true
 var total_rounds: int = 14
 var num_cards = 8
@@ -51,6 +56,38 @@ var current_targets: Dictionary = {
 	2: { "weapon": "", "suspect": "", "location": "" },
 	3: { "weapon": "", "suspect": "", "location": "" }
 }
+
+
+@rpc("any_peer", "call_local", "reliable")
+func grant_ghost_powerup(powerup_name: String):
+	ghost_powerups[powerup_name] += 1
+	
+	update_ghost_ui_inventory.rpc_id(ghost_id, ghost_powerups)
+
+
+@rpc("authority", "call_local", "reliable")
+func update_ghost_ui_inventory(new_inventory: Dictionary):
+	world_node.ghost_ui.update_powerup_buttons(new_inventory)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func request_consume_powerup(powerup_name: String):
+	if multiplayer.get_remote_sender_id() != ghost_id: return
+	
+	if ghost_powerups[powerup_name] > 0:
+		ghost_powerups[powerup_name] -= 1
+		
+		update_ghost_ui_inventory.rpc_id(ghost_id, ghost_powerups)
+		
+		_execute_powerup_effect(powerup_name)
+
+
+func _execute_powerup_effect(powerup_name: String):
+	match powerup_name:
+		"refresh_cards":
+			world_node.card_select.refresh_cards.rpc_id(ghost_id)
+		"place_clue":
+			pass
 
 
 @rpc("authority", "call_local", "reliable")
