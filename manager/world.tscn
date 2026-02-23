@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://i0m57dlbwrbl"]
+[gd_scene load_steps=47 format=3 uid="uid://i0m57dlbwrbl"]
 
 [ext_resource type="Script" uid="uid://coduqcdg1b1m6" path="res://manager/world.gd" id="1_gfoh4"]
 [ext_resource type="PackedScene" uid="uid://gkef1oswnf8e" path="res://entities/relocator/relocator.tscn" id="1_kmqa5"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://cdcfnrq5uongp" path="res://assets/ui/confirm_button_pressed.png" id="7_dcuo7"]
 [ext_resource type="Script" uid="uid://bsnl8s6kc8wga" path="res://entities/tint/tint.gd" id="7_hggar"]
 [ext_resource type="Texture2D" uid="uid://cahn1gx385nwb" path="res://assets/ui/confirm_button_hover.png" id="8_4yxvl"]
+[ext_resource type="Texture2D" uid="uid://bl1jq4gsj2cmb" path="res://assets/ui/coin_count_v2.png" id="9_1jlgs"]
 [ext_resource type="Script" uid="uid://bpi7g37c4olqy" path="res://scripts/player_card_screen.gd" id="9_kki0f"]
 [ext_resource type="AudioStream" uid="uid://cvvt34jgnjyfb" path="res://assets/sounds/JDSherbert - Tabletop Games SFX Pack - Piece Impact - 1.mp3" id="10_qeh1x"]
 [ext_resource type="Texture2D" uid="uid://dl8ru400ggb86" path="res://assets/entities/tokens.png" id="11_qeh1x"]
@@ -117,6 +118,22 @@ texture = ExtResource("4_wn2f2")
 [node name="ShopForeground" type="Sprite2D" parent="Shop"]
 z_index = 10
 texture = ExtResource("5_ia8pi")
+
+[node name="CoinCount" type="Node2D" parent="Shop"]
+position = Vector2(40, -152)
+
+[node name="Sprite2D" type="Sprite2D" parent="Shop/CoinCount"]
+position = Vector2(-320, -12)
+texture = ExtResource("9_1jlgs")
+
+[node name="CoinCountText" type="Label" parent="Shop/CoinCount"]
+offset_left = -330.0
+offset_top = -15.0
+offset_right = -290.0
+offset_bottom = -8.0
+text = "0"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="CardSelect" type="Node2D" parent="."]
 visible = false

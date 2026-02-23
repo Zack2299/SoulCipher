@@ -18,7 +18,10 @@ var wrong_guesses_in_current_track: Array[String] = []
 var solved_current_track = false
 var max_turn_time: float = 240.0 # in seconds
 var current_time_remaining: float = 0.0
-var coins: int = 100
+var coins: int = 0:
+	set(value):
+		coins = value
+		world_node.coin_count_text.text = str(value)
 var current_delta: float = 0.0
 var active_map_reveals: Array[String] = []
 var pause_time_remaining: float = 0.0
