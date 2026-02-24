@@ -347,6 +347,10 @@ texture_over = ExtResource("32_647gl")
 texture_progress = ExtResource("33_ia8pi")
 texture_progress_offset = Vector2(5, 5)
 
+[node name="FrozenProgressBar" type="Sprite2D" parent="CrystalBallRoomUI/InsideCrystalBall"]
+position = Vector2(0, -167)
+texture = ExtResource("38_adjel")
+
 [node name="PlayerCardScreen" type="Node2D" parent="."]
 visible = false
 script = ExtResource("9_kki0f")

@@ -312,6 +312,7 @@ func _ghost_turn_enter():
 
 	if local_id == ghost_id:
 		to_reveal.append(world_node.card_select)
+		to_hide.append(world_node.player_ui)
 	else:
 		to_reveal.append(world_node.shop)
 		to_hide.append(world_node.player_ui)
@@ -354,6 +355,7 @@ func _ghost_turn_leave():
 	if local_id == ghost_id:
 		to_hide.append(world_node.card_select)
 		to_reveal.append(world_node.ghost_ui)
+		to_reveal.append(world_node.player_ui)
 	else:
 		to_hide.append(world_node.shop)
 		to_reveal.append(world_node.player_ui)
@@ -374,6 +376,7 @@ func _player_turn_enter():
 
 func _player_turn():
 	world_node.frozen_progress_bar.modulate.a = pause_time_remaining / pause_time_length
+	world_node.crystal_ball_frozen_progress_bar.modulate.a = pause_time_remaining / pause_time_length
 	if pause_time_remaining > 0:
 		pause_time_remaining -= current_delta
 		return # skip draining actual timer while powerup active

@@ -20,6 +20,7 @@ enum CollectibleType { BRONZE_COIN, SILVER_COIN, HOURGLASS }
 #@onready var minimap_ui: Control = $PlayerUI/MinimapUI
 @onready var minimap_ui: Control = $PlayerUI/MinimapUI/SubViewport/MinimapUI
 @onready var frozen_progress_bar: Sprite2D = $PlayerUI/FrozenProgressBar
+@onready var crystal_ball_frozen_progress_bar: Sprite2D = $CrystalBallRoomUI/InsideCrystalBall/FrozenProgressBar
 @onready var coin_count_text: Label = $Shop/CoinCount/CoinCountText
 
 

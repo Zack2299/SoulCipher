@@ -84,8 +84,7 @@ func generate_mansion(rooms: Array[Node], attempt: int = 1):
 			print("SYSTEM: Mansion is entirely sealed. Dropping remaining orphans.")
 			break
 
-	# 2 return shortcuts to ensure both sides of the mansion can get back quickly
-	_add_staircase_return_shortcuts(all_reached_wings, layout_data, rooms, 2)
+	#_add_staircase_return_shortcuts(all_reached_wings, layout_data, rooms, 1)
 	_create_safe_wing_loops(all_reached_wings, layout_data)
 
 	# guarantee crystal ball
