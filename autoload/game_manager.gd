@@ -192,6 +192,14 @@ func sync_round_results(new_solved_categories: Array, new_wrong_guesses: Array =
 		current_targets[current_track] = { "weapon": "", "suspect": "", "location": "" }
 		
 		wrong_guesses_in_current_track.clear()
+		
+		# add in correct answers from previous rounds as being disabled
+		for i in range(1, current_track):
+			var old_targets = current_targets[i]
+			if old_targets["weapon"] != "": wrong_guesses_in_current_track.append(old_targets["weapon"])
+			if old_targets["suspect"] != "": wrong_guesses_in_current_track.append(old_targets["suspect"])
+			if old_targets["location"] != "": wrong_guesses_in_current_track.append(old_targets["location"])
+	
 		print("SYSTEM: Track complete! Moving to Track: ", current_track)
 	else:
 		print("SYSTEM: Track incomplete. Solved so far: ", solved_categories_in_current_track)
@@ -321,7 +329,7 @@ func _ghost_turn_enter():
 	# to_hide.append(end_round_info)
 	
 	if multiplayer.is_server():
-		var all_types = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+		var all_types = [0, 1, 2, 3, 4, 6, 7, 8] # removed 5 (place a clue)
 		all_types.shuffle()
 		
 		var shop_items = all_types.slice(0, 3)

@@ -93,6 +93,8 @@ func change_round_animation():
 
 
 func animate_token_in(token: Sprite2D, delay: float):	
+	token.scale = Vector2(5, 5)
+	
 	var tween = create_tween().set_parallel(true)
 	
 	token.z_index = 10
