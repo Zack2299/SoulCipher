@@ -39,7 +39,7 @@ var ghost_powerups: Dictionary = {
 
 # config
 var debug = true
-var random_ghost = true
+var random_ghost = false
 var total_rounds: int = 14
 var num_cards = 8
 
@@ -285,7 +285,10 @@ func _send_full_state_snapshot(target_id: int):
 		"state_name": _get_current_state_name(),
 		"shop_inventory": world_node.shop.synced_item_types if world_node else [],
 		"player_info": NetworkManager.player_info,
-		"connected_ids": NetworkManager.connected_ids
+		"connected_ids": NetworkManager.connected_ids,
+		"cb_weapons": world_node.crystal_ball_room_ui.weapon_paths,
+		"cb_suspects": world_node.crystal_ball_room_ui.suspect_paths,
+		"cb_locations": world_node.crystal_ball_room_ui.location_paths
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -307,6 +310,9 @@ func receive_full_state_snapshot(data: Dictionary):
 		await get_tree().process_frame
 	
 	print("CLIENT: Applying Snapshot for state: ", data["state_name"])
+	
+	var cb = world_node.crystal_ball_room_ui
+	cb.setup_crystal_ball(data["cb_suspects"], data["cb_weapons"], data["cb_locations"])
 	
 	if data.has("player_info"):
 		NetworkManager.player_info = data["player_info"]
@@ -343,6 +349,8 @@ func receive_full_state_snapshot(data: Dictionary):
 	world_node.coin_count_text.text = str(coins)
 	world_node.refresh_found_clues_visuals()
 
+	var local_id = multiplayer.get_unique_id()
+
 	# trigger state machine visuals
 	match data["state_name"]:
 		"ghost_turn":
@@ -351,6 +359,8 @@ func receive_full_state_snapshot(data: Dictionary):
 				world_node.shop._spawn_synced_items()
 		"player_turn":
 			state_machine.change_state(_player_turn)
+			if local_id != ghost_id:
+				world_node.player_ui.visible = true
 		"end_round":
 			state_machine.change_state(_end_round)
 		"waiting":
