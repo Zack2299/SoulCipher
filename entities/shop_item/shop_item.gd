@@ -13,6 +13,7 @@ signal purchase_requested(item_node: Node2D)
 
 @export var item_type: ShopItemType
 var cost: int
+var slot_index: int = -1
 
 var is_hovered: bool = false
 var is_purchased: bool = false
@@ -57,7 +58,7 @@ func _setup_item_data():
 		ShopItemType.REFRESH_CARDS:
 			item_sprite.texture = preload("uid://baocy0hfwvspi")
 			item_text.text = "Ethereal Shuffle:\n\nGrants the Ghost the power to redraw their hand of visions."
-			cost = 15
+			cost = 12
 			
 		ShopItemType.PAUSE_TIMER:
 			item_sprite.texture = preload("uid://dhpdhj80826uf")
@@ -77,7 +78,7 @@ func _setup_item_data():
 		ShopItemType.MAP_CARDS:
 			item_sprite.texture = preload("uid://be36fxa446r86")
 			item_text.text = "All-Seeing Eye:\n\nThe exact locations of all clue cards of the next round are illuminated on the map."
-			cost = 15
+			cost = 10
 			
 		ShopItemType.MAP_COINS:
 			item_sprite.texture = preload("uid://tukd6yhemyu1")

@@ -16,6 +16,7 @@ var slot_positions = [
 
 var spawned_items: Array[Node] = []
 var synced_item_types: Array = []
+var bought_states: Array[bool] = [false, false, false]
 
 func _ready():
 	visibility_changed.connect(_on_visibility_changed)
@@ -31,6 +32,7 @@ func _on_visibility_changed():
 @rpc("authority", "call_local", "reliable")
 func sync_shop_inventory(new_items: Array):
 	synced_item_types = new_items
+	bought_states = [false, false, false]
 	
 	# if shop is open refresh immediately
 	if visible:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dsfr0tf8o28ld"]
+[gd_scene load_steps=30 format=3 uid="uid://dsfr0tf8o28ld"]
 
 [ext_resource type="Script" uid="uid://ceykfnjt41r56" path="res://ui/lobby/lobby.gd" id="1_kamvt"]
 [ext_resource type="AudioStream" uid="uid://to4fkqb27h1h" path="res://assets/sounds/Tone2C_FifthUp.wav" id="2_1etha"]
@@ -23,6 +23,18 @@
 [ext_resource type="AudioStream" uid="uid://dv1gjbphpt4y7" path="res://assets/sounds/closing-a-book-14771.mp3" id="21_1etha"]
 [ext_resource type="Texture2D" uid="uid://byymsdsrtscvs" path="res://assets/environment/book_open.png" id="21_jcpg8"]
 [ext_resource type="AudioStream" uid="uid://dkbo3veaxmy3j" path="res://assets/sounds/freesounds123-book-opening-345808.mp3" id="21_vdu1l"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1etha"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_lky5g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6w0v2"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gjdcp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_c1dcu"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pjrra"]
 
 [node name="Lobby" type="Node2D"]
 script = ExtResource("1_kamvt")
@@ -112,6 +124,7 @@ flip_h = true
 position = Vector2(58, -138)
 
 [node name="PlayerName" type="Node2D" parent="NonSettings"]
+visible = false
 position = Vector2(0, -88)
 
 [node name="PlayerNameLineEdit" type="LineEdit" parent="NonSettings/PlayerName"]
@@ -270,6 +283,18 @@ placeholder_text = "127.0.0.1"
 alignment = 1
 expand_to_text_length = true
 
+[node name="CheckButton" type="CheckButton" parent="Settings/Settings/VBoxContainer/IPContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxEmpty_1etha")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_lky5g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_6w0v2")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_gjdcp")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_c1dcu")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_pjrra")
+text = "Auto"
+
 [node name="PortContainer" type="HBoxContainer" parent="Settings/Settings/VBoxContainer"]
 layout_mode = 2
 
@@ -289,6 +314,7 @@ caret_blink = true
 [connection signal="text_changed" from="NonSettings/PlayerName/PlayerNameLineEdit" to="." method="_on_player_name_line_edit_text_changed"]
 [connection signal="mouse_clicked" from="NonSettings/SettingsBook/ClickableArea" to="." method="_on_settings_clicked"]
 [connection signal="mouse_clicked" from="Settings/OpenBook/ClickableArea" to="." method="_on_open_book_clicked"]
+[connection signal="toggled" from="Settings/Settings/VBoxContainer/IPContainer/CheckButton" to="." method="_on_check_button_toggled"]
 
 [editable path="NonSettings/LeftArrow"]
 [editable path="NonSettings/RightArrow"]
