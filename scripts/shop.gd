@@ -30,11 +30,10 @@ func _on_visibility_changed():
 
 
 @rpc("authority", "call_local", "reliable")
-func sync_shop_inventory(new_items: Array):
+func sync_shop_inventory(new_items: Array, current_states: Array = [false, false, false]):
 	synced_item_types = new_items
-	bought_states = [false, false, false]
+	bought_states.assign(current_states) # sync to server's state
 	
-	# if shop is open refresh immediately
 	if visible:
 		_clear_items()
 		_spawn_synced_items()
@@ -85,6 +84,7 @@ func request_purchase_server(slot_idx: int, cost: int):
 
 	if GameManager.coins >= cost:
 		GameManager.coins -= cost
+		GameManager.current_shop_bought[slot_idx] = true
 		GameManager.sync_turn_state.rpc(GameManager.current_time_remaining, GameManager.coins)
 		
 		_do_upgrade_ability(synced_item_types[slot_idx])

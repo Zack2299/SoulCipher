@@ -31,6 +31,8 @@ var active_map_reveals: Array[String] = []
 var pause_time_remaining: float = 0.0
 var pause_time_length: float = 60.0
 var match_is_active: bool = false
+var current_shop_items: Array = []
+var current_shop_bought: Array[bool] = [false, false, false]
 
 var ghost_powerups: Dictionary = {
 	"refresh_cards": 0,
@@ -288,7 +290,9 @@ func _send_full_state_snapshot(target_id: int):
 		"connected_ids": NetworkManager.connected_ids,
 		"cb_weapons": world_node.crystal_ball_room_ui.weapon_paths,
 		"cb_suspects": world_node.crystal_ball_room_ui.suspect_paths,
-		"cb_locations": world_node.crystal_ball_room_ui.location_paths
+		"cb_locations": world_node.crystal_ball_room_ui.location_paths,
+		"shop_items": current_shop_items,
+		"shop_bought": current_shop_bought
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -318,6 +322,13 @@ func receive_full_state_snapshot(data: Dictionary):
 		NetworkManager.player_info = data["player_info"]
 	if data.has("connected_ids"):
 		NetworkManager.connected_ids = Array(data["connected_ids"], TYPE_INT, &"", null)
+
+
+	# retype array
+	if data.has("shop_bought"):
+		current_shop_bought = Array(data["shop_bought"], TYPE_BOOL, &"", null)
+	if world_node and world_node.shop:
+		world_node.shop.bought_states = Array(data["shop_bought"], TYPE_BOOL, &"", null)
 
 	# spawn everyone who is currently in the game
 	for id in NetworkManager.connected_ids:
