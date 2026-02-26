@@ -41,7 +41,7 @@ var ghost_powerups: Dictionary = {
 
 # config
 var debug = true
-var random_ghost = false
+var random_ghost = true
 var total_rounds: int = 14
 var num_cards = 8
 

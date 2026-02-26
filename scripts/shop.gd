@@ -8,6 +8,9 @@ enum ShopItemType { WEAPON, SUSPECT, LOCATION, \
 @onready var error_audio_stream_player: AudioStreamPlayer = $ErrorAudioStreamPlayer
 @onready var purchase_audio_stream_player: AudioStreamPlayer = $PurchaseAudioStreamPlayer
 
+var is_currently_spawning: bool = false
+
+
 var slot_positions = [
 	Vector2(-240, 0),
 	Vector2(0, 40), 
@@ -40,6 +43,11 @@ func sync_shop_inventory(new_items: Array, current_states: Array = [false, false
 
 
 func _spawn_synced_items():
+	if is_currently_spawning:
+		return
+	
+	is_currently_spawning = true
+	
 	_clear_items()
 	
 	for i in range(synced_item_types.size()):
@@ -62,6 +70,8 @@ func _spawn_synced_items():
 		
 		if i < 2:
 			await get_tree().create_timer(0.2).timeout
+			
+	is_currently_spawning = false
 
 
 func _clear_items():
