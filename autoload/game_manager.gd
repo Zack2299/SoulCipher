@@ -318,6 +318,8 @@ func receive_full_state_snapshot(data: Dictionary):
 	phase_history = data["phase_history"]
 	found_cards = data["found_cards"]
 	
+	world_node.rebuild_player_ui()
+	
 	if data.has("shop_inventory"):
 		world_node.shop.synced_item_types = data["shop_inventory"]
 	
