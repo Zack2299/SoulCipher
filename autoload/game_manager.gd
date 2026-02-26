@@ -18,7 +18,7 @@ var wrong_guesses_in_current_track: Array[String] = []
 var solved_current_track = false
 var max_turn_time: float = 240.0 # in seconds
 var current_time_remaining: float = 0.0
-var coins: int = 100:
+var coins: int = 0:
 	set(value):
 		coins = value
 		if world_node != null:
@@ -41,7 +41,7 @@ var ghost_powerups: Dictionary = {
 
 # config
 var debug = true
-var random_ghost = true
+var random_ghost = false
 var total_rounds: int = 14
 var num_cards = 8
 
@@ -599,7 +599,9 @@ func _player_turn_leave():
 
 	if local_id == ghost_id:
 		#to_reveal.append(world_node.card_select)
-		pass
+		to_hide.append(world_node.player_ui)
+		to_hide.append(world_node.crystal_ball_room_ui)
+		to_hide.append(world_node.previous_room_relocator)
 	else:
 		#to_reveal.append(world_node.shop)
 		to_hide.append(world_node.player_ui)
