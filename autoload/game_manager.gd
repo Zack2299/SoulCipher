@@ -22,6 +22,9 @@ var coins: int = 100:
 	set(value):
 		coins = value
 		world_node.coin_count_text.text = str(value)
+		
+		if multiplayer.is_server():
+			sync_coins.rpc(value)
 var current_delta: float = 0.0
 var active_map_reveals: Array[String] = []
 var pause_time_remaining: float = 0.0
@@ -525,3 +528,8 @@ func apply_timer_pause(duration: float):
 func activate_map_reveal(reveal_type: String):
 	if not active_map_reveals.has(reveal_type):
 		active_map_reveals.append(reveal_type)
+
+
+@rpc("authority", "call_remote", "reliable")
+func sync_coins(new_amount: int):
+	coins = new_amount

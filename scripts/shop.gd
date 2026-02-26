@@ -50,7 +50,11 @@ func _spawn_synced_items():
 		
 		var new_item = shop_item_scene.instantiate()
 		new_item.item_type = type
+		new_item.slot_index = i
 		new_item.position = slot_positions[i]
+		
+		if bought_states[i] == true:
+			new_item.confirm_purchase()
 		
 		new_item.purchase_requested.connect(_on_purchase_requested)
 		
@@ -69,19 +73,47 @@ func _clear_items():
 
 
 func _on_purchase_requested(item: Node2D):
-	if GameManager.coins >= item.cost:
-		GameManager.coins -= item.cost
+	request_purchase_server.rpc_id(1, item.slot_index, item.cost)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func request_purchase_server(slot_idx: int, cost: int):
+	if not multiplayer.is_server(): return
+	
+	if slot_idx < 0 or slot_idx >= synced_item_types.size(): return
+	if bought_states[slot_idx] == true: return 
+
+	if GameManager.coins >= cost:
+		GameManager.coins -= cost
+		GameManager.sync_turn_state.rpc(GameManager.current_time_remaining, GameManager.coins)
 		
-		item.confirm_purchase()
-		purchase_audio_stream_player.play()
+		_do_upgrade_ability(synced_item_types[slot_idx])
 		
-		print("Purchased item: ", item.item_type, " for ", item.cost)
+		sync_purchase_success.rpc(slot_idx)
 		
-		_do_upgrade_ability(item.item_type)
 	else:
-		print("Not enough coins! Need ", item.cost, " but only have ", GameManager.coins)
-		item.reject_purchase()
-		error_audio_stream_player.play()
+		var sender_id = multiplayer.get_remote_sender_id()
+		reject_purchase_client.rpc_id(sender_id, slot_idx)
+
+
+@rpc("authority", "call_local", "reliable")
+func sync_purchase_success(slot_idx: int):
+	bought_states[slot_idx] = true
+	purchase_audio_stream_player.play()
+	
+	for item in spawned_items:
+		if item.slot_index == slot_idx:
+			item.confirm_purchase()
+			break
+
+
+@rpc("authority", "call_local", "reliable")
+func reject_purchase_client(slot_idx: int):
+	error_audio_stream_player.play()
+	for item in spawned_items:
+		if item.slot_index == slot_idx:
+			item.reject_purchase()
+			break
 
 
 func _do_upgrade_ability(item_type: int):
