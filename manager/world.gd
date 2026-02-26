@@ -92,6 +92,13 @@ func _ready() -> void:
 	player_card_screen_is_shown = player_card_screen.visible
 	
 	load_scenes_from_folder()
+	
+	if not multiplayer.is_server():
+		room_manager.request_mansion_sync.rpc_id(1)
+		
+	if not multiplayer.is_server():
+		GameManager.request_gamestate_sync.rpc_id(1)
+	
 	spawn_rooms_to_world(loaded_scenes)
 	
 	# small delay ensures the sync_connected_ids RPC has landed on clients
@@ -353,3 +360,25 @@ func hide_crystal_ball_room_ui():
 	player_ui.visible = true
 	crystal_ball_room_ui.reset_visuals()
 	
+	
+func refresh_found_clues_visuals():
+	clear_world_clues()
+	player_card_screen.clear_clues()
+	
+	# respawn clues on the player's card screen
+	# loop through the found_cards dictionary in GameManager
+	for phase_num in GameManager.found_cards:
+		var phase_data = GameManager.found_cards[phase_num]
+		for category in phase_data:
+			var clues_in_cat = phase_data[category]
+			for clue_path in clues_in_cat:
+				var type_index = 0
+				match category:
+					"weapon": type_index = 1
+					"suspect": type_index = 2
+					"location": type_index = 3
+				
+				# only show clues for the current track or solved categories
+				spawn_clue_to_card_screen(clue_path, type_index)
+	
+	print("WORLD: Visual clue state refreshed for new player.")

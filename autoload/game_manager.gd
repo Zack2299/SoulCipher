@@ -21,7 +21,8 @@ var current_time_remaining: float = 0.0
 var coins: int = 100:
 	set(value):
 		coins = value
-		world_node.coin_count_text.text = str(value)
+		if world_node != null:
+			world_node.coin_count_text.text = str(value)
 		
 		if multiplayer.is_server():
 			sync_coins.rpc(value)
@@ -29,6 +30,7 @@ var current_delta: float = 0.0
 var active_map_reveals: Array[String] = []
 var pause_time_remaining: float = 0.0
 var pause_time_length: float = 60.0
+var match_is_active: bool = false
 
 var ghost_powerups: Dictionary = {
 	"refresh_cards": 0,
@@ -70,6 +72,9 @@ func grant_ghost_powerup(powerup_name: String):
 
 @rpc("authority", "call_local", "reliable")
 func update_ghost_ui_inventory(new_inventory: Dictionary):
+	if world_node == null: 
+		return
+	
 	world_node.ghost_ui.update_powerup_buttons(new_inventory)
 
 
@@ -224,6 +229,148 @@ func _connect_world_signals():
 func _ready():
 	state_machine = CallableStateMachine.new() 
 	_setup_states()
+	
+	multiplayer.peer_connected.connect(_on_peer_connected_game_logic)
+	multiplayer.peer_disconnected.connect(_on_peer_disconnected_game_logic)
+
+
+func _on_peer_connected_game_logic(id: int):
+	if not multiplayer.is_server(): return
+	
+	# late joiner
+	if match_is_active:
+		print("SERVER: Late joiner detected: ", id)
+		
+		NetworkManager.rpc_load_game_scene.rpc_id(id)
+		
+		# check if we need a ghost
+		if ghost_id == -1:
+			print("SERVER: Assigning late joiner as NEW GHOST")
+			ghost_id = id
+			# notify everyone (including existing players) that we have a new ghost
+			sync_ghost_update.rpc(ghost_id)
+
+
+@rpc("any_peer", "call_remote", "reliable")
+func request_gamestate_sync():
+	var sender_id = multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and match_is_active:
+		print("SERVER: Player ", sender_id, " is ready. Sending Game State Snapshot.")
+		_send_full_state_snapshot(sender_id)
+
+
+func _on_peer_disconnected_game_logic(id: int):
+	if not multiplayer.is_server() or not match_is_active: return
+	
+	if id == ghost_id:
+		print("SERVER: FATAL - The Ghost has disconnected!")
+		ghost_id = -1
+		sync_ghost_update.rpc(-1)
+		# DONT end game - essentially we are on pause until a new player joins
+
+
+func _send_full_state_snapshot(target_id: int):
+	# package everything a new player needs to know to render the UI correctly
+	var snapshot = {
+		"current_track": current_track,
+		"current_round": current_round,
+		"ghost_id": ghost_id,
+		"solved_categories": solved_categories_in_current_track,
+		"wrong_guesses": wrong_guesses_in_current_track,
+		"coins": coins,
+		"time_remaining": current_time_remaining,
+		"current_targets": current_targets,
+		"phase_history": phase_history,
+		"found_cards": found_cards,
+		"state_name": _get_current_state_name(),
+		"shop_inventory": world_node.shop.synced_item_types if world_node else []
+	}
+	
+	receive_full_state_snapshot.rpc_id(target_id, snapshot)
+
+func _get_current_state_name() -> String:    
+	var s = state_machine.current_state
+	
+	if s == "_ghost_turn": return "ghost_turn"
+	if s == "_player_turn": return "player_turn"
+	if s == "_end_round": return "end_round"
+	
+	return "waiting"
+
+
+@rpc("authority", "call_local", "reliable")
+func receive_full_state_snapshot(data: Dictionary):
+	# wait for the scene to actually exist
+	while world_node == null:
+		await get_tree().process_frame
+	
+	print("CLIENT: Applying Snapshot for state: ", data["state_name"])
+
+	# sync all data
+	current_track = data["current_track"]
+	current_round = data["current_round"]
+	ghost_id = data["ghost_id"]
+	solved_categories_in_current_track = data["solved_categories"]
+	wrong_guesses_in_current_track = data["wrong_guesses"]
+	coins = data["coins"]
+	current_time_remaining = data["time_remaining"]
+	current_targets = data["current_targets"]
+	phase_history = data["phase_history"]
+	found_cards = data["found_cards"]
+	
+	if data.has("shop_inventory"):
+		world_node.shop.synced_item_types = data["shop_inventory"]
+	
+	# update the permanent UI elements
+	world_node.coin_count_text.text = str(coins)
+	
+	# populate the card screen with clues already found
+	world_node.refresh_found_clues_visuals()
+
+	# trigger state machine visuals
+	match data["state_name"]:
+		"ghost_turn":
+			state_machine.change_state(_ghost_turn)
+			if multiplayer.get_unique_id() != ghost_id:
+				world_node.shop._spawn_synced_items()
+		"player_turn":
+			state_machine.change_state(_player_turn)
+		"end_round":
+			state_machine.change_state(_end_round)
+		"waiting":
+			state_machine.change_state(_state_waiting)
+
+
+@rpc("authority", "call_local", "reliable")
+func sync_ghost_update(new_id: int):
+	if world_node == null:
+		ghost_id = new_id
+		return
+		
+	ghost_id = new_id
+	var local_id = multiplayer.get_unique_id()
+	
+	if new_id == -1:
+		print("SYSTEM: The Ghost is gone. Waiting for a replacement...")
+		return
+
+	# if I just became the ghost (due to late join or reassignment)
+	if local_id == ghost_id:
+		print("SYSTEM: You have become the Ghost!")
+		_set_ghost_ui(true)
+		_set_player_ui(false, 0.0)
+		
+		if state_machine.current_state == "_ghost_turn":
+			world_node.card_select.visible = true
+			world_node.card_select.start() 
+			
+	else:
+		# I am not the ghost (anymore, or never was)
+		_set_ghost_ui(false)
+		world_node.card_select.visible = false
+		
+		if state_machine.current_state != "_end_round":
+			world_node.player_ui.visible = true
 
 
 func _setup_states():
@@ -244,6 +391,7 @@ func _process(delta):
 func start_match(assigned_ghost_id: int):
 	if not multiplayer.is_server():
 		return
+	match_is_active = true
 	rpc("sync_match_start", assigned_ghost_id)
 
 
@@ -305,12 +453,18 @@ func _on_waiting_leave():
 
 # --- GHOST HELPERS ---
 func _set_ghost_ui(show: bool):
+	if world_node == null: 
+		return
 	world_node.ghost_ui.visible = show
 
 
 func _set_player_ui(show: bool, wait: float = 1.0):
 	var local_id = multiplayer.get_unique_id()
 	await get_tree().create_timer(wait).timeout
+	
+	if world_node == null: 
+		return
+	
 	if local_id != ghost_id:
 		world_node.player_ui.visible = show
 

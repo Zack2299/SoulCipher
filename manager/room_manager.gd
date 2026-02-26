@@ -14,6 +14,14 @@ func _on_peer_connected(id: int):
 		sync_mansion_layout.rpc_id(id, mansion_layout)
 
 
+@rpc("any_peer", "call_remote", "reliable")
+func request_mansion_sync():
+	var sender_id = multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and not mansion_layout.is_empty():
+		print("SERVER: Sending mansion layout to player ", sender_id)
+		sync_mansion_layout.rpc_id(sender_id, mansion_layout)
+
+
 func generate_mansion(rooms: Array[Node], attempt: int = 1):
 	if not multiplayer.is_server(): return
 	await get_tree().process_frame
