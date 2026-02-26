@@ -283,7 +283,9 @@ func _send_full_state_snapshot(target_id: int):
 		"phase_history": phase_history,
 		"found_cards": found_cards,
 		"state_name": _get_current_state_name(),
-		"shop_inventory": world_node.shop.synced_item_types if world_node else []
+		"shop_inventory": world_node.shop.synced_item_types if world_node else [],
+		"player_info": NetworkManager.player_info,
+		"connected_ids": NetworkManager.connected_ids
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -305,6 +307,15 @@ func receive_full_state_snapshot(data: Dictionary):
 		await get_tree().process_frame
 	
 	print("CLIENT: Applying Snapshot for state: ", data["state_name"])
+	
+	if data.has("player_info"):
+		NetworkManager.player_info = data["player_info"]
+	if data.has("connected_ids"):
+		NetworkManager.connected_ids = Array(data["connected_ids"], TYPE_INT, &"", null)
+
+	# spawn everyone who is currently in the game
+	for id in NetworkManager.connected_ids:
+		world_node.spawn_player(id)
 
 	# sync all data
 	current_track = data["current_track"]
@@ -327,6 +338,9 @@ func receive_full_state_snapshot(data: Dictionary):
 	world_node.coin_count_text.text = str(coins)
 	
 	# populate the card screen with clues already found
+	world_node.refresh_found_clues_visuals()
+	
+	world_node.coin_count_text.text = str(coins)
 	world_node.refresh_found_clues_visuals()
 
 	# trigger state machine visuals
