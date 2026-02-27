@@ -500,8 +500,8 @@ func _on_waiting_leave():
 	if local_id == ghost_id:
 		_set_ghost_ui(true)
 		world_node.card_select.start()
-	else:
-		_set_player_ui(false)
+	#else:
+		#_set_player_ui(false)
 
 
 # --- GHOST HELPERS ---
