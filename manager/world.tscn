@@ -562,6 +562,11 @@ text = "x1"
 horizontal_alignment = 1
 vertical_alignment = 2
 
+[node name="EndGameScreen" type="Node2D" parent="."]
+visible = false
+
+[node name="EndGameSprite" type="Sprite2D" parent="EndGameScreen"]
+
 [connection signal="pressed" from="CardSelect/ConfirmButton" to="." method="_on_card_select_confirm_pressed"]
 [connection signal="mouse_clicked" from="CrystalBallRoomUI/InsideCrystalBall/Checkmark/ClickableArea" to="CrystalBallRoomUI" method="_on_clickable_area_mouse_clicked"]
 

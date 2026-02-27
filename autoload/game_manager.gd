@@ -43,6 +43,7 @@ var ghost_powerups: Dictionary = {
 var debug = true
 var random_ghost = false
 var total_rounds: int = 14
+var total_tracks: int = 1
 var num_cards = 8
 
 # phase_data[phase_index][category] = { target_path : [clue_paths] }
@@ -660,6 +661,10 @@ func _end_round_enter():
 	
 	#await get_tree().create_timer(7).timeout
 	
+	if current_round > total_rounds or (solved_current_track and current_track > total_tracks):
+		state_machine.change_state(_end_game)
+		return
+	
 	if solved_current_track:
 		world_node.crystal_ball_room_ui.reset_submissions_new_track()
 		solved_categories_in_current_track.clear()
@@ -667,10 +672,7 @@ func _end_round_enter():
 	else:
 		world_node.crystal_ball_room_ui.reset_submissions_same_track(solved_categories_in_current_track)
 	
-	if current_round > total_rounds:
-		state_machine.change_state(_end_game)
-	else:
-		state_machine.change_state(_ghost_turn)
+	state_machine.change_state(_ghost_turn)
 	
 	# reset which room the player is in to staircase
 	await get_tree().create_timer(1).timeout
@@ -696,17 +698,70 @@ func _reset_player_to_staircase():
 	SceneTransition.current_room = "staircase"
 
 
-# --- ENG GAME STATE
+func full_reset():
+	# reset progress
+	current_track = 1
+	current_round = 1
+	match_is_active = false
+	game_just_started = true
+	
+	# clear collections
+	solved_categories_in_current_track.clear()
+	wrong_guesses_in_current_track.clear()
+	active_map_reveals.clear()
+	
+	# clear dictionaries
+	phase_history = {
+		1: { "weapon": {}, "suspect": {}, "location": {} },
+		2: { "weapon": {}, "suspect": {}, "location": {} },
+		3: { "weapon": {}, "suspect": {}, "location": {} }
+	}
+	found_cards = {
+		1: { "weapon": {}, "suspect": {}, "location": {} },
+		2: { "weapon": {}, "suspect": {}, "location": {} },
+		3: { "weapon": {}, "suspect": {}, "location": {} }
+	}
+	current_targets = {
+		1: { "weapon": "", "suspect": "", "location": "" },
+		2: { "weapon": "", "suspect": "", "location": "" },
+		3: { "weapon": "", "suspect": "", "location": "" }
+	}
+	
+	# reset economy and powerups
+	coins = 0
+	ghost_powerups = {"refresh_cards": 0, "place_clue": 0}
+	current_shop_items = []
+	current_shop_bought = [false, false, false]
+	
+	# clear references
+	world_node = null 
+	ghost_id = -1
+
+
+# --- END GAME STATE
 func _end_game_enter():
 	var local_id = multiplayer.get_unique_id()
 	print("GAME MANAGER: ID [%d] entered END GAME." % local_id)
 	
-	NetworkManager.start_game_for_all()
+	SceneTransition.reveal_hide_transition([world_node.end_game_screen], [world_node.end_round_status_screen], 1.0)
+	
+	if (solved_current_track and current_track > total_tracks):
+		world_node.end_game_sprite.texture = preload("uid://datnivi1a1c4l")
+	else:
+		world_node.end_game_sprite.texture = preload("uid://c46lmw33hywuh")
+	
+	# wait for restart button from host
 
 
 func _end_game():
 	pass
 
+
+@rpc("authority", "call_local", "reliable")
+func rpc_restart_game():
+	full_reset()
+	
+	NetworkManager.rpc_load_game_scene()
 
 
 # --- SHOP POWERUP RPC FUNCTIONS ---
