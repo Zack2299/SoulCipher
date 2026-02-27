@@ -277,6 +277,11 @@ func _send_full_state_snapshot(target_id: int):
 		for p_data in world_node.get_node("PlayersData").get_children():
 			player_locations[p_data.name] = p_data.current_room
 	
+	var cb_submissions = {}
+	var cb_skip_state = []
+	if world_node and world_node.has_node("CrystalBallRoomUI"):
+		cb_submissions = world_node.crystal_ball_room_ui.submissions
+		cb_skip_state = world_node.crystal_ball_room_ui.skip_token_state
 	
 	# package everything a new player needs to know to render the UI correctly
 	var snapshot = {
@@ -297,6 +302,8 @@ func _send_full_state_snapshot(target_id: int):
 		"cb_weapons": world_node.crystal_ball_room_ui.weapon_paths,
 		"cb_suspects": world_node.crystal_ball_room_ui.suspect_paths,
 		"cb_locations": world_node.crystal_ball_room_ui.location_paths,
+		"cb_submissions": cb_submissions,
+		"cb_skip_state": cb_skip_state,
 		"shop_items": current_shop_items,
 		"shop_bought": current_shop_bought,
 		"player_locations": player_locations
@@ -324,6 +331,9 @@ func receive_full_state_snapshot(data: Dictionary):
 	
 	var cb = world_node.crystal_ball_room_ui
 	cb.setup_crystal_ball(data["cb_suspects"], data["cb_weapons"], data["cb_locations"])
+	
+	if data.has("cb_submissions"):
+		cb.sync_current_guesses(data["cb_submissions"], data["cb_skip_state"])
 	
 	if data.has("player_info"):
 		NetworkManager.player_info = data["player_info"]

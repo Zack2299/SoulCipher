@@ -294,3 +294,16 @@ func _on_location_button_pressed(path: String):
 		var tween = create_tween()
 		tween.tween_property(inside_crystal_ball_bg, "scale", Vector2(1.025, 1.025), 0.05)
 		tween.tween_property(inside_crystal_ball_bg, "scale", Vector2(1.0, 1.0), 0.1)
+
+
+func sync_current_guesses(in_submissions: Dictionary, in_skip_state: Array):
+	submissions = in_submissions
+	# cast back to int array
+	skip_token_state = Array(in_skip_state, TYPE_INT, &"", null)
+	
+	# fast-forward the token frame to the first category that hasn't been guessed yet
+	if skip_token_state.size() < NUM_TOKENS:
+		while tokens.frame in skip_token_state:
+			tokens.frame = (tokens.frame + 1) % NUM_TOKENS
+			
+	_refresh_selection_ui()
