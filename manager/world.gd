@@ -92,6 +92,13 @@ func _ready() -> void:
 	player_card_screen_is_shown = player_card_screen.visible
 	
 	load_scenes_from_folder()
+	
+	if not multiplayer.is_server():
+		room_manager.request_mansion_sync.rpc_id(1)
+		
+	if not multiplayer.is_server():
+		GameManager.request_gamestate_sync.rpc_id(1)
+	
 	spawn_rooms_to_world(loaded_scenes)
 	
 	# small delay ensures the sync_connected_ids RPC has landed on clients
@@ -306,31 +313,61 @@ func _process(_delta: float) -> void:
 		has_started_searching = true
 
 
+#func spawn_player(id: int):
+	#if players_data.has_node(str(id)): 
+		#return
+	#
+	## spawn ui
+	#var p_ui = preload("res://entities/player_container/player_container.tscn").instantiate()
+	#p_ui.name = "UI_" + str(id) 
+	#player_ui_hbox.add_child(p_ui)
+	#
+	## setup data node
+	#var p_data = preload("res://manager/player_data.tscn").instantiate()
+	#p_data.name = str(id) # name matches peer id
+	#p_data.player_id = id
+	#
+	#if multiplayer.is_server():
+		#var info = NetworkManager.player_info.get(id, {"name": "Guest", "avatar": 0})
+		#p_data.player_name = info["name"]
+		#p_data.avatar_id = info["avatar"]
+	#
+	#p_data.update_player_ui.connect(_on_update_player_ui)
+	#
+	#players_data.add_child(p_data)
+	#
+	## init ui
+	#p_ui.setup(p_data)
 func spawn_player(id: int):
 	if players_data.has_node(str(id)): 
 		return
 	
-	# spawn ui
+	# setup data node first
+	var p_data = preload("res://manager/player_data.tscn").instantiate()
+	p_data.name = str(id) 
+	p_data.player_id = id
+	
+	# ensure late-joiner knows who everyone is
+	var info = NetworkManager.player_info.get(id, {"name": "Guest", "avatar": 0})
+	p_data.player_name = info["name"]
+	p_data.avatar_id = info["avatar"]
+	
+	p_data.update_player_ui.connect(_on_update_player_ui)
+	players_data.add_child(p_data)
+
+	# spawn ui node
 	var p_ui = preload("res://entities/player_container/player_container.tscn").instantiate()
 	p_ui.name = "UI_" + str(id) 
 	player_ui_hbox.add_child(p_ui)
 	
-	# setup data node
-	var p_data = preload("res://manager/player_data.tscn").instantiate()
-	p_data.name = str(id) # name matches peer id
-	p_data.player_id = id
-	
-	if multiplayer.is_server():
-		var info = NetworkManager.player_info.get(id, {"name": "Guest", "avatar": 0})
-		p_data.player_name = info["name"]
-		p_data.avatar_id = info["avatar"]
-	
-	p_data.update_player_ui.connect(_on_update_player_ui)
-	
-	players_data.add_child(p_data)
-	
-	# init ui
+	# init ui with data
 	p_ui.setup(p_data)
+	
+	# manual visual update 
+	# (sometimes signals fire before the UI is ready; this is a safety catch)
+	_on_update_player_ui(id, p_data.avatar_id)
+	
+	print("WORLD: Spawned player %d (%s)" % [id, p_data.player_name])
 
 
 func _on_update_player_ui(id: int, avatar_index: int):
@@ -340,6 +377,16 @@ func _on_update_player_ui(id: int, avatar_index: int):
 	if ui_node and ui_node.is_inside_tree():
 		if ui_node.sprite_2d:
 			ui_node.sprite_2d.frame = avatar_index
+
+
+func despawn_player(id: int):
+	var data_node = players_data.get_node_or_null(str(id))
+	if data_node:
+		data_node.queue_free()
+		
+	var ui_node = player_ui_hbox.get_node_or_null("UI_" + str(id))
+	if ui_node:
+		ui_node.queue_free()
 
 
 func show_crystal_ball_room_ui():
@@ -353,3 +400,41 @@ func hide_crystal_ball_room_ui():
 	player_ui.visible = true
 	crystal_ball_room_ui.reset_visuals()
 	
+	
+func refresh_found_clues_visuals():
+	clear_world_clues()
+	player_card_screen.clear_clues()
+	
+	# respawn clues on the player's card screen
+	# loop through the found_cards dictionary in GameManager
+	for phase_num in GameManager.found_cards:
+		var phase_data = GameManager.found_cards[phase_num]
+		for category in phase_data:
+			var clues_in_cat = phase_data[category]
+			for clue_path in clues_in_cat:
+				var type_index = 0
+				match category:
+					"weapon": type_index = 1
+					"suspect": type_index = 2
+					"location": type_index = 3
+				
+				# only show clues for the current track or solved categories
+				spawn_clue_to_card_screen(clue_path, type_index)
+	
+	print("WORLD: Visual clue state refreshed for new player.")
+
+
+func rebuild_player_ui():
+	# clear existing UI containers
+	for child in player_ui_hbox.get_children():
+		child.queue_free()
+	
+	# respawn UI for every PlayerData node currently in the tree
+	for p_data in players_data.get_children():
+		var p_ui = preload("res://entities/player_container/player_container.tscn").instantiate()
+		p_ui.name = "UI_" + p_data.name 
+		player_ui_hbox.add_child(p_ui)
+		p_ui.setup(p_data)
+		# Force the frame update immediately
+		if p_ui.has_node("Sprite2D"):
+			p_ui.get_node("Sprite2D").frame = p_data.avatar_id

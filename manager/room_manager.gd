@@ -14,6 +14,14 @@ func _on_peer_connected(id: int):
 		sync_mansion_layout.rpc_id(id, mansion_layout)
 
 
+@rpc("any_peer", "call_remote", "reliable")
+func request_mansion_sync():
+	var sender_id = multiplayer.get_remote_sender_id()
+	if multiplayer.is_server() and not mansion_layout.is_empty():
+		print("SERVER: Sending mansion layout to player ", sender_id)
+		sync_mansion_layout.rpc_id(sender_id, mansion_layout)
+
+
 func generate_mansion(rooms: Array[Node], attempt: int = 1):
 	if not multiplayer.is_server(): return
 	await get_tree().process_frame
@@ -241,7 +249,7 @@ func _create_safe_wing_loops(wing_names: Array, layout: Dictionary):
 				var potential_targets = wing_names.filter(func(n): 
 					return n != r_name and not n in layout[r_name]
 				)
-				if not potential_targets.is_empty() and randf() > 0.4:
+				if not potential_targets.is_empty() and randf() > 0.7:
 					layout[r_name][i] = potential_targets.pick_random()
 
 

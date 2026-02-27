@@ -54,11 +54,28 @@ func _on_player_connected(id: int):
 
 func _on_player_disconnected(id: int):
 	print("Player disconnected: %d" % id)
+	
 	if multiplayer.is_server():
 		connected_ids.erase(id)
 		player_info.erase(id)
+		
+		# tell clients to update
 		sync_connected_ids.rpc(connected_ids)
 		update_player_list.rpc(player_info)
+		
+		rpc("rpc_despawn_player_everywhere", id)
+
+
+@rpc("authority", "call_local", "reliable")
+func rpc_despawn_player_everywhere(id: int):
+	if world_node:
+		world_node.despawn_player(id)
+
+
+#@rpc("authority", "call_local", "reliable")
+#func refresh_ui_on_disconnect():
+	#if GameManager.world_node:
+		#GameManager.world_node.rebuild_player_ui()
 
 
 func _on_connected_to_server():

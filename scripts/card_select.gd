@@ -20,6 +20,7 @@ const NUM_GHOST_CARDS: int = 7
 var current_phase: int = CardType.WEAPON
 var top_card: Card = null
 var current_type_card: Card = null
+var can_press_select: bool = true
 
 # these persist for entire game session
 var available_clues: Array[Texture2D] = []
@@ -189,6 +190,7 @@ func _setup_ghost_selection_ui():
 		GameManager.current_targets[GameManager.current_track][category_name] = target_texture.resource_path
 
 	current_type_card = add_card(current_phase, target_texture)
+	can_press_select = true
 
 
 func _on_selection_confirmed():
@@ -236,7 +238,8 @@ func _on_top_card_changed(card: Card):
 
 
 func _on_confirm_pressed():
-	if not top_card or not current_type_card: return
+	if not top_card or not current_type_card or not can_press_select: return
+	can_press_select = false
 	
 	confirm_button.disabled = true
 	confirm_button.visible = false
