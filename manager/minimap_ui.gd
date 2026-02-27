@@ -126,6 +126,8 @@ func _assign_positions(node: String, x_center: float, depth: int):
 func _draw():
 	if room_positions.is_empty(): return
 	
+	if not GameManager.world_node: return
+	
 	var screen_center = size / 2
 	# staircase in bottom center of screen
 	var map_origin = Vector2(screen_center.x, size.y - 50) 

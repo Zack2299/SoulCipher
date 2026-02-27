@@ -24,7 +24,7 @@ enum CollectibleType { BRONZE_COIN, SILVER_COIN, HOURGLASS }
 @onready var coin_count_text: Label = $Shop/CoinCount/CoinCountText
 @onready var end_game_sprite: Sprite2D = $EndGameScreen/EndGameSprite
 @onready var end_game_screen: Node2D = $EndGameScreen
-
+@onready var restart_game_button: Button = $EndGameScreen/RestartGameButton
 
 
 @export_dir var rooms_file_path: String = "res://rooms/"

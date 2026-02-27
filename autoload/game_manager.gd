@@ -42,8 +42,8 @@ var ghost_powerups: Dictionary = {
 # config
 var debug = true
 var random_ghost = false
-var total_rounds: int = 14
-var total_tracks: int = 1
+var total_rounds: int = 1
+var total_tracks: int = 3
 var num_cards = 8
 
 # phase_data[phase_index][category] = { target_path : [clue_paths] }
@@ -227,6 +227,7 @@ func _get_category_string(type: int) -> String:
 func _connect_world_signals():
 	world_node.ghost_turn_over.connect(_on_ghost_turn_over)
 	world_node.player_turn_over.connect(_on_player_turn_over)
+	world_node.restart_game_button.pressed.connect(_on_restart_pressed)
 
 
 func _ready():
@@ -736,6 +737,11 @@ func full_reset():
 	# clear references
 	world_node = null 
 	ghost_id = -1
+	
+	SceneTransition.current_room = "staircase"
+	
+	# reset state machine
+	state_machine.change_state(_state_waiting)
 
 
 # --- END GAME STATE
@@ -753,6 +759,10 @@ func _end_game_enter():
 	# wait for restart button from host
 
 
+func _on_restart_pressed():
+	rpc_restart_game.rpc()
+
+
 func _end_game():
 	pass
 
@@ -761,7 +771,8 @@ func _end_game():
 func rpc_restart_game():
 	full_reset()
 	
-	NetworkManager.rpc_load_game_scene()
+	if multiplayer.is_server():
+		NetworkManager.rpc_load_game_scene.rpc()
 
 
 # --- SHOP POWERUP RPC FUNCTIONS ---
