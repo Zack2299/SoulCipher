@@ -272,6 +272,12 @@ func _on_peer_disconnected_game_logic(id: int):
 
 
 func _send_full_state_snapshot(target_id: int):
+	var player_locations = {}
+	if world_node and world_node.has_node("PlayersData"):
+		for p_data in world_node.get_node("PlayersData").get_children():
+			player_locations[p_data.name] = p_data.current_room
+	
+	
 	# package everything a new player needs to know to render the UI correctly
 	var snapshot = {
 		"current_track": current_track,
@@ -292,7 +298,8 @@ func _send_full_state_snapshot(target_id: int):
 		"cb_suspects": world_node.crystal_ball_room_ui.suspect_paths,
 		"cb_locations": world_node.crystal_ball_room_ui.location_paths,
 		"shop_items": current_shop_items,
-		"shop_bought": current_shop_bought
+		"shop_bought": current_shop_bought,
+		"player_locations": player_locations
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -323,7 +330,6 @@ func receive_full_state_snapshot(data: Dictionary):
 	if data.has("connected_ids"):
 		NetworkManager.connected_ids = Array(data["connected_ids"], TYPE_INT, &"", null)
 
-
 	# retype array
 	if data.has("shop_bought"):
 		current_shop_bought = Array(data["shop_bought"], TYPE_BOOL, &"", null)
@@ -333,6 +339,16 @@ func receive_full_state_snapshot(data: Dictionary):
 	# spawn everyone who is currently in the game
 	for id in NetworkManager.connected_ids:
 		world_node.spawn_player(id)
+		
+	if data.has("player_locations"):
+		var locations = data["player_locations"]
+		for p_id_str in locations:
+			var path = NodePath(str(p_id_str))
+			var p_data = world_node.players_data.get_node_or_null(path)
+			if p_data:
+				p_data.current_room = locations[p_id_str]
+				# emit the signal so minimaps/UI instantly update
+				p_data.room_changed.emit(p_data.current_room)
 
 	# sync all data
 	current_track = data["current_track"]
