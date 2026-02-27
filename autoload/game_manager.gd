@@ -42,7 +42,7 @@ var ghost_powerups: Dictionary = {
 # config
 var debug = true
 var random_ghost = false
-var total_rounds: int = 1
+var total_rounds: int = 14
 var total_tracks: int = 3
 var num_cards = 8
 
@@ -194,7 +194,8 @@ func sync_round_results(new_solved_categories: Array, new_wrong_guesses: Array =
 	
 	# check if track is complete
 	if solved_categories_in_current_track.size() == 3:
-		current_track += 1
+		if current_track < total_tracks:
+			current_track += 1
 		solved_current_track = true
 		
 		world_node.player_card_screen.clear_clues()

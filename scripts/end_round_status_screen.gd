@@ -43,9 +43,35 @@ func display_results(solved_categories: Array):
 		await change_round_animation()
 		await get_tree().create_timer(2).timeout
 	elif count > 0:
-		await get_tree().create_timer(5).timeout
-	else:
 		await get_tree().create_timer(3).timeout
+		await update_label()
+		await get_tree().create_timer(2).timeout
+	else:
+		await get_tree().create_timer(1).timeout
+		await update_label()
+		await get_tree().create_timer(2).timeout
+
+
+func update_label():
+	var label_tween = create_tween()
+	
+	# fade out round
+	label_tween.tween_property(round_label, "modulate:a", 0.0, 0.4)\
+		.set_trans(Tween.TRANS_QUAD)\
+		.set_ease(Tween.EASE_IN)
+	
+	label_tween.tween_callback(func(): round_label.text = "ROUND " + \
+		str(GameManager.current_track) + "\nTURNS LEFT: " + \
+		str(GameManager.total_rounds - GameManager.current_round + 1))
+		
+	# pop and fade in
+	round_label.scale = Vector2(0.8, 0.8)
+	label_tween.tween_property(round_label, "modulate:a", 1.0, 0.4)
+	label_tween.parallel().tween_property(round_label, "scale", Vector2(1.0, 1.0), 0.4)\
+		.set_trans(Tween.TRANS_BACK)\
+		.set_ease(Tween.EASE_OUT)
+	
+	await label_tween.finished
 
 
 func change_round_animation():
@@ -73,23 +99,7 @@ func change_round_animation():
 		
 	await get_tree().create_timer(1).timeout
 	
-	var label_tween = create_tween()
-	
-	# fade out round
-	label_tween.tween_property(round_label, "modulate:a", 0.0, 0.4)\
-		.set_trans(Tween.TRANS_QUAD)\
-		.set_ease(Tween.EASE_IN)
-	
-	label_tween.tween_callback(func(): round_label.text = "ROUND " + str(GameManager.current_track))
-	
-	# pop and fade in
-	round_label.scale = Vector2(0.8, 0.8)
-	label_tween.tween_property(round_label, "modulate:a", 1.0, 0.4)
-	label_tween.parallel().tween_property(round_label, "scale", Vector2(1.0, 1.0), 0.4)\
-		.set_trans(Tween.TRANS_BACK)\
-		.set_ease(Tween.EASE_OUT)
-	
-	await label_tween.finished
+	await update_label()
 
 
 func animate_token_in(token: Sprite2D, delay: float):	
