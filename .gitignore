@@ -53,6 +53,7 @@ tests/data/crypto/out*
 .godot/
 *.wav.import
 *.wav.asd
+builds/
 
 ############################
 ### General build output ###

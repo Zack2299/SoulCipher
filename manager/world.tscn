@@ -381,6 +381,7 @@ visible = false
 position = Vector2(74, -98)
 
 [node name="EndRoundStatusScreen" type="Node2D" parent="."]
+visible = false
 script = ExtResource("28_ux4w8")
 
 [node name="WooshAudioStreamPlayer" type="AudioStreamPlayer" parent="EndRoundStatusScreen"]
