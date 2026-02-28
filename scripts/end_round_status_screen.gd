@@ -15,6 +15,7 @@ extends Node2D
 
 func _ready():
 	reset_tokens()
+	update_label()
 
 
 func reset_tokens():
