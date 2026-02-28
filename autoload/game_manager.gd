@@ -428,7 +428,7 @@ func sync_ghost_update(new_id: int):
 		print("SYSTEM: The Ghost is gone. Waiting for a replacement...")
 		return
 
-	# if I just became the ghost (due to late join or reassignment)
+	# if I just became the ghost (due to late join)
 	if local_id == ghost_id:
 		print("SYSTEM: You have become the Ghost!")
 		_set_ghost_ui(true)
@@ -671,7 +671,7 @@ func _end_round_enter():
 	
 	#await get_tree().create_timer(7).timeout
 	
-	if current_round > total_rounds or (solved_current_track and current_track > total_tracks):
+	if current_round > total_rounds or (solved_current_track and current_track >= total_tracks):
 		state_machine.change_state(_end_game)
 		return
 	
@@ -760,7 +760,7 @@ func _end_game_enter():
 	
 	SceneTransition.reveal_hide_transition([world_node.end_game_screen], [world_node.end_round_status_screen], 1.0)
 	
-	if (solved_current_track and current_track > total_tracks):
+	if (solved_current_track and current_track >= total_tracks):
 		world_node.end_game_sprite.texture = preload("uid://datnivi1a1c4l")
 	else:
 		world_node.end_game_sprite.texture = preload("uid://c46lmw33hywuh")
