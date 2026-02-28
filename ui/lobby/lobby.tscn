@@ -263,10 +263,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -42.0
-offset_top = -20.0
-offset_right = 42.0
-offset_bottom = 20.0
+offset_left = -90.5
+offset_top = -20.400017
+offset_right = 90.5
+offset_bottom = 71.59998
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -308,6 +308,45 @@ placeholder_text = "8080"
 alignment = 1
 expand_to_text_length = true
 caret_blink = true
+
+[node name="RoundContainer" type="HBoxContainer" parent="Settings/Settings/VBoxContainer"]
+layout_mode = 2
+
+[node name="RoundLabel" type="Label" parent="Settings/Settings/VBoxContainer/RoundContainer"]
+layout_mode = 2
+text = "Number of Rounds:"
+
+[node name="RoundLineEdit" type="LineEdit" parent="Settings/Settings/VBoxContainer/RoundContainer"]
+layout_mode = 2
+placeholder_text = "3"
+alignment = 1
+expand_to_text_length = true
+
+[node name="TurnContainer" type="HBoxContainer" parent="Settings/Settings/VBoxContainer"]
+layout_mode = 2
+
+[node name="TurnLabel" type="Label" parent="Settings/Settings/VBoxContainer/TurnContainer"]
+layout_mode = 2
+text = "Number of Turns:"
+
+[node name="TurnLineEdit" type="LineEdit" parent="Settings/Settings/VBoxContainer/TurnContainer"]
+layout_mode = 2
+placeholder_text = "14"
+alignment = 1
+expand_to_text_length = true
+
+[node name="CostContainer" type="HBoxContainer" parent="Settings/Settings/VBoxContainer"]
+layout_mode = 2
+
+[node name="CostLabel" type="Label" parent="Settings/Settings/VBoxContainer/CostContainer"]
+layout_mode = 2
+text = "Cost Multiplier:"
+
+[node name="CostLineEdit" type="LineEdit" parent="Settings/Settings/VBoxContainer/CostContainer"]
+layout_mode = 2
+placeholder_text = "1.0"
+alignment = 1
+expand_to_text_length = true
 
 [connection signal="mouse_clicked" from="NonSettings/LeftArrow/ClickableArea" to="." method="_on_left_arrow_clicked"]
 [connection signal="mouse_clicked" from="NonSettings/RightArrow/ClickableArea" to="." method="_on_right_arrow_clicked"]

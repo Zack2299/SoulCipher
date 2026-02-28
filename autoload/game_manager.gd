@@ -40,11 +40,12 @@ var ghost_powerups: Dictionary = {
 }
 
 # config
-var debug = true
+var debug = false
 var random_ghost = false
 var total_rounds: int = 14
 var total_tracks: int = 3
 var num_cards = 8
+var cost_multiplier: float = 1.0
 
 # phase_data[phase_index][category] = { target_path : [clue_paths] }
 var phase_history: Dictionary = {

@@ -84,7 +84,8 @@ func _setup_item_data():
 			item_sprite.texture = preload("uid://tukd6yhemyu1")
 			item_text.text = "Midas Gaze:\n\nThe minimap reveals the glint of all hidden coins in the mansion for the next round."
 			cost = 5
-			
+	
+	cost *= GameManager.cost_multiplier
 	cost_text.text = str(cost)
 
 

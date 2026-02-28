@@ -381,7 +381,6 @@ visible = false
 position = Vector2(74, -98)
 
 [node name="EndRoundStatusScreen" type="Node2D" parent="."]
-visible = false
 script = ExtResource("28_ux4w8")
 
 [node name="WooshAudioStreamPlayer" type="AudioStreamPlayer" parent="EndRoundStatusScreen"]
@@ -436,6 +435,7 @@ offset_right = 28.0
 offset_bottom = 3.5
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 4
 text = "ROUND 1"
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true

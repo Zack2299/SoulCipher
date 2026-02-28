@@ -15,6 +15,9 @@ extends Node2D
 @onready var port_line_edit: LineEdit = $Settings/Settings/VBoxContainer/PortContainer/PortLineEdit
 @onready var host_join_audio_stream_player: AudioStreamPlayer = $HostJoinAudioStreamPlayer
 @onready var start_audio_stream_player: AudioStreamPlayer = $StartAudioStreamPlayer
+@onready var round_line_edit: LineEdit = $Settings/Settings/VBoxContainer/RoundContainer/RoundLineEdit
+@onready var turn_line_edit: LineEdit = $Settings/Settings/VBoxContainer/TurnContainer/TurnLineEdit
+@onready var cost_line_edit: LineEdit = $Settings/Settings/VBoxContainer/CostContainer/CostLineEdit
 
 const NUM_AVATARS = 8
 const LOCAL_HOST = "127.0.0.1"
@@ -39,6 +42,14 @@ func _ready() -> void:
 	port_line_edit.placeholder_text = multiplayer_info.last_used_port
 	ip_line_edit.placeholder_text = multiplayer_info.last_used_ip
 
+
+func save_settings():
+	if round_line_edit.text:
+		GameManager.total_tracks = int(round_line_edit.text)
+	if turn_line_edit.text:
+		GameManager.total_rounds = int(turn_line_edit.text)
+	if cost_line_edit.text:
+		GameManager.cost_multiplier = float(cost_line_edit.text)
 
 
 func validate_ip_and_port() -> bool:
@@ -81,6 +92,8 @@ func get_local_ip():
 func _on_host_button_pressed():
 	if not validate_ip_and_port():
 		return
+		
+	save_settings()
 	
 	NetworkManager.host_game(int(port))
 	
@@ -104,7 +117,20 @@ func _on_join_button_pressed():
 	join_button.visible = false
 
 
+@rpc("authority", "call_remote", "reliable")
+func sync_game_settings(tracks: int, rounds: int, multiplier: float):
+	GameManager.total_tracks = tracks
+	GameManager.total_rounds = rounds
+	GameManager.cost_multiplier = multiplier
+
+
 func _on_start_button_pressed():
+	sync_game_settings.rpc(
+		GameManager.total_tracks, 
+		GameManager.total_rounds, 
+		GameManager.cost_multiplier
+	)
+	
 	NetworkManager.start_game_for_all()
 	
 	start_audio_stream_player.play()
