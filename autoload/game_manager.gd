@@ -310,7 +310,10 @@ func _send_full_state_snapshot(target_id: int):
 		"cb_skip_state": cb_skip_state,
 		"shop_items": current_shop_items,
 		"shop_bought": current_shop_bought,
-		"player_locations": player_locations
+		"player_locations": player_locations,
+		"total_rounds": total_rounds,
+		"total_tracks": total_tracks,
+		"cost_multiplier": cost_multiplier
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -332,6 +335,10 @@ func receive_full_state_snapshot(data: Dictionary):
 		await get_tree().process_frame
 	
 	print("CLIENT: Applying Snapshot for state: ", data["state_name"])
+	
+	GameManager.total_rounds = data["total_rounds"]
+	GameManager.total_tracks = data["total_tracks"]
+	GameManager.cost_multiplier = data["cost_multiplier"]
 	
 	var cb = world_node.crystal_ball_room_ui
 	cb.setup_crystal_ball(data["cb_suspects"], data["cb_weapons"], data["cb_locations"])
