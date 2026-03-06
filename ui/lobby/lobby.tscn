@@ -294,6 +294,7 @@ theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_gjdcp")
 theme_override_styles/disabled = SubResource("StyleBoxEmpty_c1dcu")
 theme_override_styles/focus = SubResource("StyleBoxEmpty_pjrra")
 text = "Auto"
+alignment = 2
 
 [node name="PortContainer" type="HBoxContainer" parent="Settings/Settings/VBoxContainer"]
 layout_mode = 2
