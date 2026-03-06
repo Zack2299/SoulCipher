@@ -117,6 +117,8 @@ func _ready() -> void:
 	card_select.visibility_changed.connect(_on_card_select_visibility_changed)
 	shop.visibility_changed.connect(_on_shop_visibility_changed)
 	
+	GameManager.coins = GameManager.coins # update visuals with setter
+	
 	var my_id = multiplayer.get_unique_id()
 	notify_server_loaded.rpc_id(1, my_id)
 

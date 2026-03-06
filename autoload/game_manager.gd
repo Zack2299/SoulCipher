@@ -16,9 +16,8 @@ var game_just_started = true
 var solved_categories_in_current_track: Array[String] = []
 var wrong_guesses_in_current_track: Array[String] = []
 var solved_current_track = false
-var max_turn_time: float = 360.0 # in seconds
 var current_time_remaining: float = 0.0
-var coins: int = 0:
+var coins: int = 10:
 	set(value):
 		coins = value
 		if world_node != null:
@@ -44,6 +43,7 @@ var debug = false
 var random_ghost = true
 var total_rounds: int = 14
 var total_tracks: int = 3
+var max_turn_time: float = 360.0 # in seconds
 var num_cards = 8
 var cost_multiplier: float = 1.0
 

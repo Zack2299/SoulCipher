@@ -18,6 +18,7 @@ extends Node2D
 @onready var round_line_edit: LineEdit = $Settings/Settings/VBoxContainer/RoundContainer/RoundLineEdit
 @onready var turn_line_edit: LineEdit = $Settings/Settings/VBoxContainer/TurnContainer/TurnLineEdit
 @onready var cost_line_edit: LineEdit = $Settings/Settings/VBoxContainer/CostContainer/CostLineEdit
+@onready var turn_duration_line_edit: LineEdit = $Settings/Settings/VBoxContainer/TurnDurationContainer/TurnDurationLineEdit
 
 const NUM_AVATARS = 8
 const LOCAL_HOST = "127.0.0.1"
@@ -50,6 +51,8 @@ func save_settings():
 		GameManager.total_rounds = int(turn_line_edit.text)
 	if cost_line_edit.text:
 		GameManager.cost_multiplier = float(cost_line_edit.text)
+	if turn_duration_line_edit.text:
+		GameManager.max_turn_time = int(turn_duration_line_edit.text)
 
 
 func validate_ip_and_port() -> bool:
@@ -155,6 +158,7 @@ func _on_settings_clicked() -> void:
 
 	
 func _on_open_book_clicked() -> void:
+	save_settings()
 	SceneTransition.reveal_hide_transition([non_settings, settings_area_2d], [settings])
 
 

@@ -335,6 +335,19 @@ placeholder_text = "14"
 alignment = 1
 expand_to_text_length = true
 
+[node name="TurnDurationContainer" type="HBoxContainer" parent="Settings/Settings/VBoxContainer"]
+layout_mode = 2
+
+[node name="TurnDurationLabel" type="Label" parent="Settings/Settings/VBoxContainer/TurnDurationContainer"]
+layout_mode = 2
+text = "Turn Duration (in seconds):"
+
+[node name="TurnDurationLineEdit" type="LineEdit" parent="Settings/Settings/VBoxContainer/TurnDurationContainer"]
+layout_mode = 2
+placeholder_text = "360"
+alignment = 1
+expand_to_text_length = true
+
 [node name="CostContainer" type="HBoxContainer" parent="Settings/Settings/VBoxContainer"]
 layout_mode = 2
 
