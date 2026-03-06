@@ -79,6 +79,10 @@ func reset_submissions_new_track():
 
 
 func _on_checkmark_clicked():
+	# ghost can't submit guesses
+	if multiplayer.get_unique_id() == GameManager.ghost_id:
+		return
+		
 	checkmark.visible = false
 	rpc_id(1, "request_submit_guess", tokens.frame, current_texture_path)
 
