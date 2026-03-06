@@ -50,12 +50,12 @@ signal player_turn_over
 var players_loaded: Array[int] = []
 
 func _input(event: InputEvent) -> void:
-	# --- DEBUG ---
-	if event.is_action_pressed("one"):
-		request_phase_change.rpc("ghost_turn_over")
-	elif event.is_action_pressed("two"):
-		request_phase_change.rpc("player_turn_over")
-		
+	## --- DEBUG ---
+	#if event.is_action_pressed("one"):
+		#request_phase_change.rpc("ghost_turn_over")
+	#elif event.is_action_pressed("two"):
+		#request_phase_change.rpc("player_turn_over")
+		#
 	if event.is_action_pressed("open_player_card_screen"):
 		if multiplayer.get_unique_id() != GameManager.ghost_id:
 			player_card_screen_is_shown = !player_card_screen_is_shown

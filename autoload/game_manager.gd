@@ -16,7 +16,7 @@ var game_just_started = true
 var solved_categories_in_current_track: Array[String] = []
 var wrong_guesses_in_current_track: Array[String] = []
 var solved_current_track = false
-var max_turn_time: float = 240.0 # in seconds
+var max_turn_time: float = 360.0 # in seconds
 var current_time_remaining: float = 0.0
 var coins: int = 0:
 	set(value):
