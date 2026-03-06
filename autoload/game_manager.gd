@@ -7,6 +7,9 @@ var world_node: World = null:
 		if world_node != null:
 			_connect_world_signals()
 
+
+const COIN_START_AMOUNT = 10
+
 # game state
 var current_track: int = 1
 #var current_subround: int = 1
@@ -17,7 +20,7 @@ var solved_categories_in_current_track: Array[String] = []
 var wrong_guesses_in_current_track: Array[String] = []
 var solved_current_track = false
 var current_time_remaining: float = 0.0
-var coins: int = 10:
+var coins: int = COIN_START_AMOUNT:
 	set(value):
 		coins = value
 		if world_node != null:
@@ -40,6 +43,7 @@ var ghost_powerups: Dictionary = {
 
 # config
 var debug = false
+var show_crystal_ball_location = true
 var random_ghost = true
 var total_rounds: int = 14
 var total_tracks: int = 3
@@ -195,8 +199,7 @@ func sync_round_results(new_solved_categories: Array, new_wrong_guesses: Array =
 	
 	# check if track is complete
 	if solved_categories_in_current_track.size() == 3:
-		if current_track < total_tracks:
-			current_track += 1
+		current_track += 1
 		solved_current_track = true
 		
 		world_node.player_card_screen.clear_clues()
@@ -560,7 +563,11 @@ func _ghost_turn_enter():
 	# to_hide.append(end_round_info)
 	
 	if multiplayer.is_server():
-		var all_types = [0, 1, 2, 3, 4, 6, 7, 8] # removed 5 (place a clue)
+		var all_types = []
+		if show_crystal_ball_location:
+			all_types = [0, 1, 2, 3, 4, 7, 8] # no place a clue or crystal ball
+		else:
+			all_types = [0, 1, 2, 3, 4, 6, 7, 8] # removed 5 (place a clue)
 		all_types.shuffle()
 		
 		var shop_items = all_types.slice(0, 3)
@@ -671,7 +678,7 @@ func _end_round_enter():
 	
 	#await get_tree().create_timer(7).timeout
 	
-	if current_round > total_rounds or (solved_current_track and current_track >= total_tracks):
+	if current_round > total_rounds or (solved_current_track and current_track > total_tracks):
 		state_machine.change_state(_end_game)
 		return
 	
@@ -738,7 +745,7 @@ func full_reset():
 	}
 	
 	# reset economy and powerups
-	coins = 0
+	coins = COIN_START_AMOUNT
 	ghost_powerups = {"refresh_cards": 0, "place_clue": 0}
 	current_shop_items = []
 	current_shop_bought = [false, false, false]
@@ -760,7 +767,7 @@ func _end_game_enter():
 	
 	SceneTransition.reveal_hide_transition([world_node.end_game_screen], [world_node.end_round_status_screen], 1.0)
 	
-	if (solved_current_track and current_track >= total_tracks):
+	if (solved_current_track and current_track > total_tracks):
 		world_node.end_game_sprite.texture = preload("uid://datnivi1a1c4l")
 	else:
 		world_node.end_game_sprite.texture = preload("uid://c46lmw33hywuh")

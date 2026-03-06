@@ -172,7 +172,7 @@ func _draw():
 		
 		# color coding
 		if room == "crystal_ball_room":
-			if GameManager.active_map_reveals.has("crystal_ball") or GameManager.debug:
+			if GameManager.active_map_reveals.has("crystal_ball") or GameManager.debug or GameManager.show_crystal_ball_location:
 				color = Color.TEAL
 			else:
 				color = Color.WHITE

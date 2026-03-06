@@ -45,11 +45,13 @@ func display_results(solved_categories: Array):
 		await get_tree().create_timer(2).timeout
 	elif count > 0:
 		await get_tree().create_timer(3).timeout
-		await update_label()
+		if GameManager.current_track <= GameManager.total_tracks:
+			await update_label()
 		await get_tree().create_timer(2).timeout
 	else:
 		await get_tree().create_timer(1).timeout
-		await update_label()
+		if GameManager.current_track <= GameManager.total_tracks:
+			await update_label()
 		await get_tree().create_timer(2).timeout
 
 
@@ -100,7 +102,8 @@ func change_round_animation():
 		
 	await get_tree().create_timer(1).timeout
 	
-	await update_label()
+	if GameManager.current_track <= GameManager.total_tracks:
+		await update_label()
 
 
 func animate_token_in(token: Sprite2D, delay: float):	
