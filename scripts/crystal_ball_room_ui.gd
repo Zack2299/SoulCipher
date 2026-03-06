@@ -80,16 +80,25 @@ func reset_submissions_new_track():
 
 func _on_checkmark_clicked():
 	checkmark.visible = false
-	rpc("send_guess_submission", tokens.frame, current_texture_path)
+	rpc_id(1, "request_submit_guess", tokens.frame, current_texture_path)
 
 
 @rpc("any_peer", "call_local", "reliable")
-func send_guess_submission(token_frame: int, texture_path: String):
+func request_submit_guess(token_frame: int, texture_path: String):
+	if not multiplayer.is_server():
+		return 
+
+	rpc("sync_guess_submission", token_frame, texture_path)
+
+
+@rpc("authority", "call_local", "reliable")
+func sync_guess_submission(token_frame: int, texture_path: String):
 	checkmark.visible = false
 	
 	submissions[token_frame + 1] = texture_path
 	
-	skip_token_state.append(token_frame)
+	if not token_frame in skip_token_state:
+		skip_token_state.append(token_frame)
 	
 	if skip_token_state.size() < 3:
 		if tokens.frame == token_frame:
@@ -97,6 +106,21 @@ func send_guess_submission(token_frame: int, texture_path: String):
 	elif multiplayer.is_server():
 		GameManager.evaluate_crystal_ball_submissions()
 		GameManager.change_game_phase.rpc("end_round")
+
+#@rpc("any_peer", "call_local", "reliable")
+#func send_guess_submission(token_frame: int, texture_path: String):
+	#checkmark.visible = false
+	#
+	#submissions[token_frame + 1] = texture_path
+	#
+	#skip_token_state.append(token_frame)
+	#
+	#if skip_token_state.size() < 3:
+		#if tokens.frame == token_frame:
+			#_on_right_arrow_clicked()
+	#elif multiplayer.is_server():
+		#GameManager.evaluate_crystal_ball_submissions()
+		#GameManager.change_game_phase.rpc("end_round")
 
 
 func _on_left_arrow_clicked():
