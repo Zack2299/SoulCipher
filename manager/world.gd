@@ -47,6 +47,7 @@ var minimap_showing = false
 signal ghost_turn_over
 signal player_turn_over
 
+var players_loaded: Array[int] = []
 
 func _input(event: InputEvent) -> void:
 	# --- DEBUG ---
@@ -110,11 +111,29 @@ func _ready() -> void:
 	for id in NetworkManager.connected_ids:
 		spawn_player(id)
 		
-	if multiplayer.is_server():
-		_server_initialize_match()
+	#if multiplayer.is_server():
+		#_server_initialize_match()
 		
 	card_select.visibility_changed.connect(_on_card_select_visibility_changed)
 	shop.visibility_changed.connect(_on_shop_visibility_changed)
+	
+	var my_id = multiplayer.get_unique_id()
+	notify_server_loaded.rpc_id(1, my_id)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func notify_server_loaded(peer_id: int):
+	if not multiplayer.is_server():
+		return
+		
+	if not players_loaded.has(peer_id):
+		players_loaded.append(peer_id)
+		print("SERVER: Player %d has loaded the world scene." % peer_id)
+		
+	# check if the number of loaded players matches the connected players
+	if players_loaded.size() == NetworkManager.connected_ids.size():
+		print("SERVER: All players loaded. Starting match!")
+		_server_initialize_match()
 
 
 func delete_orphaned_rooms(orphaned_names: Array[String]) -> void:
