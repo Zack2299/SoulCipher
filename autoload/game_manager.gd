@@ -43,7 +43,7 @@ var debug = false
 var random_ghost = true
 var total_rounds: int = 14
 var total_tracks: int = 3
-var max_turn_time: float = 240.0 # in seconds
+var max_turn_time: float = 300.0 # in seconds
 var num_cards = 8
 var cost_multiplier: float = 1.0
 
