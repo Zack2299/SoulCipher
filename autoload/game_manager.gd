@@ -788,7 +788,7 @@ func rpc_restart_game():
 	full_reset()
 	
 	if multiplayer.is_server():
-		NetworkManager.rpc_load_game_scene.rpc()
+		NetworkManager.rpc_load_game_scene_first_half.rpc()
 
 
 # --- SHOP POWERUP RPC FUNCTIONS ---
