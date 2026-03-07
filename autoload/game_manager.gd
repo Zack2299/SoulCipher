@@ -432,22 +432,23 @@ func sync_ghost_update(new_id: int):
 		return
 
 	# if I just became the ghost (due to late join)
-	if local_id == ghost_id:
-		print("SYSTEM: You have become the Ghost!")
-		_set_ghost_ui(true)
-		_set_player_ui(false, 0.0)
-		
-		if state_machine.current_state == "_ghost_turn":
-			world_node.card_select.visible = true
-			world_node.card_select.start() 
+	if local_id == new_id:
+		if local_id == ghost_id:
+			print("SYSTEM: You have become the Ghost!")
+			_set_ghost_ui(true)
+			_set_player_ui(false, 0.0)
 			
-	else:
-		# I am not the ghost (anymore, or never was)
-		_set_ghost_ui(false)
-		world_node.card_select.visible = false
-		
-		if state_machine.current_state != "_end_round":
-			world_node.player_ui.visible = true
+			if state_machine.current_state == "_ghost_turn":
+				world_node.card_select.visible = true
+				world_node.card_select.start() 
+				
+		else:
+			# I am not the ghost (anymore, or never was)
+			_set_ghost_ui(false)
+			world_node.card_select.visible = false
+			
+			if state_machine.current_state == "_player_turn":
+				world_node.player_ui.visible = true
 
 
 func _setup_states():

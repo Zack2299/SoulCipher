@@ -128,6 +128,9 @@ func notify_server_loaded(peer_id: int):
 	if not multiplayer.is_server():
 		return
 		
+	if GameManager.match_is_active:
+		return
+		
 	if not players_loaded.has(peer_id):
 		players_loaded.append(peer_id)
 		print("SERVER: Player %d has loaded the world scene." % peer_id)
