@@ -25,6 +25,8 @@ var top_card = null:
 		if top_card != null:
 			top_card_changed.emit(self)
 
+var highlight_tween: Tween
+
 # dragging variables
 var is_dragging: bool = false
 var drag_offset: Vector2 = Vector2.ZERO
@@ -169,6 +171,16 @@ func toggle_reveal(should_reveal: bool):
 	tween.tween_property(self, "scale:x", 1.0, 0.2).set_delay(0.2)
 
 
+func set_highlight(highlighted: bool) -> void:
+	if highlight_tween and highlight_tween.is_valid():
+		highlight_tween.kill()
+		
+	highlight_tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	
+	var target_color = Color(1.2, 1.2, 1.2, 1.0) if highlighted else Color(1.0, 1.0, 1.0, 1.0)
+	highlight_tween.tween_property(self, "modulate", target_color, 0.15)
+
+
 func _input(event):
 	if not is_visible_in_tree():
 		return
@@ -188,8 +200,13 @@ func _input(event):
 				# lower everyone by 1 -- keeps relative order but makes room for the new 10
 				card.z_index = max(0, card.z_index - 1)
 				
+				if card != self:
+					card.set_highlight(false)
+				
 			# put this card on top (next top one has z_index of 9)
 			z_index = 10
+			
+			set_highlight(true)
 
 			if event.button_index == MOUSE_BUTTON_LEFT:
 				is_dragging = true
