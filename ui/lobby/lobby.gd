@@ -19,6 +19,7 @@ extends Node2D
 @onready var turn_line_edit: LineEdit = $Settings/Settings/VBoxContainer/TurnContainer/TurnLineEdit
 @onready var cost_line_edit: LineEdit = $Settings/Settings/VBoxContainer/CostContainer/CostLineEdit
 @onready var turn_duration_line_edit: LineEdit = $Settings/Settings/VBoxContainer/TurnDurationContainer/TurnDurationLineEdit
+@onready var lead_line_edit: LineEdit = $Settings/Settings/VBoxContainer/LeadContainer/LeadLineEdit
 
 const NUM_AVATARS = 8
 const LOCAL_HOST = "127.0.0.1"
@@ -45,14 +46,16 @@ func _ready() -> void:
 
 
 func save_settings():
-	if round_line_edit.text:
+	if round_line_edit.text and int(round_line_edit.text) > 0:
 		GameManager.total_tracks = int(round_line_edit.text)
-	if turn_line_edit.text:
+	if turn_line_edit.text and int(turn_line_edit.text) > 0:
 		GameManager.total_rounds = int(turn_line_edit.text)
-	if cost_line_edit.text:
+	if cost_line_edit.text and float(cost_line_edit.text) > 0:
 		GameManager.cost_multiplier = float(cost_line_edit.text)
-	if turn_duration_line_edit.text:
+	if turn_duration_line_edit.text and int(turn_duration_line_edit.text) > 0:
 		GameManager.max_turn_time = int(turn_duration_line_edit.text)
+	if lead_line_edit.text and int(lead_line_edit.text) > 0:
+		GameManager.num_cards = int(lead_line_edit.text)
 
 
 func validate_ip_and_port() -> bool:
