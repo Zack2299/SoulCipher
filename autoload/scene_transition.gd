@@ -52,6 +52,25 @@ func change_scene_packed(target_scene: PackedScene, speed_scale = 3.0) -> void:
 	animation_player.speed_scale = default_speed
 
 
+func change_scene_packed_first_half(target_scene: PackedScene, speed_scale = 3.0) -> void:
+	animation_player.speed_scale = speed_scale
+	animation_player.play("fade") # fade to black
+	
+	await animation_player.animation_finished
+	
+	#woosh_audio_stream_player.play()
+	
+	# change scene (deletion)
+	get_tree().change_scene_to_packed(target_scene)
+
+
+func change_scene_packed_second_half(target_scene: PackedScene, speed_scale = 3.0) -> void:
+	animation_player.play_backwards("fade")
+	
+	await animation_player.animation_finished
+	animation_player.speed_scale = default_speed
+
+
 func reveal_hide_transition(reveal_elements: Array = [], hide_elements: Array = [], speed_scale = 3.0):
 	animation_player.speed_scale = speed_scale
 	animation_player.play("fade")

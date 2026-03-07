@@ -112,9 +112,22 @@ func sync_connected_ids(server_list: Array):
 
 func start_game_for_all():
 	if multiplayer.is_server():
-		rpc_load_game_scene.rpc()
+		rpc_load_game_scene_first_half.rpc()
 
 
+# the first function is the complete function, for late players and resets
+# the next 2 are for when we first start, where there may be a delay so we need
+# the screen to stay black for longer
 @rpc("any_peer", "call_local", "reliable")
 func rpc_load_game_scene():
 	SceneTransition.change_scene_packed(load("uid://i0m57dlbwrbl"), 1.0)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func rpc_load_game_scene_first_half():
+	SceneTransition.change_scene_packed_first_half(load("uid://i0m57dlbwrbl"), 1.0)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func rpc_load_game_scene_second_half():
+	SceneTransition.change_scene_packed_second_half(load("uid://i0m57dlbwrbl"), 1.0)

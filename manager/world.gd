@@ -168,6 +168,9 @@ func _on_shop_visibility_changed():
 
 
 func _server_initialize_match():
+	if multiplayer.is_server():
+		NetworkManager.rpc_load_game_scene_second_half.rpc()
+	
 	# ensure we have players
 	var player_ids = NetworkManager.connected_ids
 	if player_ids.is_empty():
