@@ -65,6 +65,7 @@ func change_scene_packed_first_half(target_scene: PackedScene, speed_scale = 3.0
 
 
 func change_scene_packed_second_half(target_scene: PackedScene, speed_scale = 3.0) -> void:
+	animation_player.speed_scale = speed_scale
 	animation_player.play_backwards("fade")
 	
 	await animation_player.animation_finished
