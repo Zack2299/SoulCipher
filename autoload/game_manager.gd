@@ -8,7 +8,7 @@ var world_node: World = null:
 			_connect_world_signals()
 
 
-const COIN_START_AMOUNT = 10
+const COIN_START_AMOUNT = 100
 
 # game state
 var current_track: int = 1

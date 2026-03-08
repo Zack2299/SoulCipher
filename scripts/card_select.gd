@@ -90,14 +90,15 @@ func refresh_cards():
 					
 					# shrink and fade
 					removal_tween.tween_property(child, "scale", Vector2.ZERO, 0.25)\
-						.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN)
-					removal_tween.tween_property(child, "modulate:a", 0.0, 0.25)
+						.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_IN).set_delay(0.7)
+					removal_tween.tween_property(child, "modulate:a", 0.0, 0.25).set_delay(0.7)
 
 	if not cards_to_remove.is_empty():
-		await removal_tween.finished
+		#await removal_tween.finished
 		for card in cards_to_remove:
 			if is_instance_valid(card):
 				card.burn_card()
+		await get_tree().create_timer(1.2).timeout
 
 	# SPAWN NEW CARDS
 	var cards_needed = NUM_GHOST_CARDS
