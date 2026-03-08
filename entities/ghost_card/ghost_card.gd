@@ -104,6 +104,9 @@ func _process(delta):
 	# card to card repulsion
 	var separation_vector = Vector2.ZERO
 	for other_card in get_tree().get_nodes_in_group("ghost_cards"):
+		if other_card == self or other_card.is_queued_for_deletion(): 
+			continue
+			
 		if other_card == self: continue
 		var dist = global_position.distance_to(other_card.global_position)
 		if dist < repulsion_radius:
@@ -197,6 +200,9 @@ func _input(event):
 		if is_over and _is_top_card():
 			var cards = get_tree().get_nodes_in_group("ghost_cards")
 			for card in cards:
+				if card.is_queued_for_deletion() or not card.has_method("set_highlight"):
+					continue
+				
 				# lower everyone by 1 -- keeps relative order but makes room for the new 10
 				card.z_index = max(0, card.z_index - 1)
 				
