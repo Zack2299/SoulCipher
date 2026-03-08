@@ -43,8 +43,9 @@ func start():
 	if multiplayer.get_unique_id() != GameManager.ghost_id:
 		return
 	
-	_shuffle_all()
-	_broadcast_crystal_ball_data()
+	if not GameManager.match_is_active:
+		_shuffle_all()
+		_broadcast_crystal_ball_data()
 	
 	# spawn the very first n-1 clues (visibility change spawns the nth clue)
 	for i in range(NUM_GHOST_CARDS - 1):
