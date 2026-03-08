@@ -499,7 +499,6 @@ func _force_ui_sync_for_late_joiner(state_name: String, is_ghost: bool):
 		world_node.player_ui.visible = false
 		if is_ghost:
 			world_node.ghost_ui.visible = true
-			#world_node.card_select.start()
 			world_node.card_select.visible = true
 		else:
 			world_node.ghost_ui.visible = false
@@ -510,7 +509,7 @@ func _force_ui_sync_for_late_joiner(state_name: String, is_ghost: bool):
 		world_node.card_select.visible = false
 		world_node.player_ui.visible = true
 			
-	#game_just_started = false
+	game_just_started = false
 
 
 @rpc("authority", "call_local", "reliable")
@@ -534,8 +533,8 @@ func sync_ghost_update(new_id: int):
 			_set_player_ui(false, 0.0)
 			
 			if state_machine.current_state == "_ghost_turn":
-				#world_node.card_select.start() 
 				world_node.card_select.visible = true
+				world_node.card_select.start() 
 				
 		else:
 			# I am not the ghost (anymore, or never was)
@@ -702,8 +701,6 @@ func _ghost_turn_leave():
 	else:
 		to_hide.append(world_node.shop)
 		to_reveal.append(world_node.player_ui)
-		
-	game_just_started = false
 
 	SceneTransition.reveal_hide_transition(to_reveal, to_hide, 1.0)
 
@@ -750,8 +747,6 @@ func _player_turn_leave():
 		to_hide.append(world_node.player_ui)
 		to_hide.append(world_node.crystal_ball_room_ui)
 		to_hide.append(world_node.previous_room_relocator)
-	
-	game_just_started = false
 
 	SceneTransition.reveal_hide_transition(to_reveal, to_hide, 1.0)
 
