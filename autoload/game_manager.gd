@@ -490,7 +490,6 @@ func _force_ui_sync_for_late_joiner(state_name: String, is_ghost: bool):
 		if is_ghost:
 			world_node.ghost_ui.visible = true
 			world_node.card_select.visible = true
-			world_node.card_select.start()
 		else:
 			world_node.ghost_ui.visible = false
 			world_node.shop.visible = true
