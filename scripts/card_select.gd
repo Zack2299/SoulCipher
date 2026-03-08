@@ -298,9 +298,9 @@ func spawn_clue_for_all(tex_path: String, room_idx: int, type_index: int):
 
 func _animate_removal(card: Card):
 	if not card: return
-	#var tween = create_tween().set_parallel(true)
-	#tween.tween_property(card, "modulate:a", 0.0, 0.4)
-	#tween.tween_property(card, "scale", Vector2.ZERO, 0.4)
+	var tween = create_tween().set_parallel(true)
+	tween.tween_property(card, "modulate:a", 0.0, 1.0).set_ease(Tween.EASE_IN_OUT).set_delay(0.4)
+	#tween.tween_property(card, "scale", Vector2(0.5,0.5), 2.0)
 	#await tween.finished
 	await card.burn_card()
 
