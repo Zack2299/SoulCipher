@@ -315,6 +315,18 @@ func _send_full_state_snapshot(target_id: int):
 				"pos_y": item.position.y,
 				"item_name": item.name
 			})
+			
+	var cleaned_targets = current_targets.duplicate(true)
+	var cleaned_history = phase_history.duplicate(true)
+	var cleaned_found = found_cards.duplicate(true)
+	
+	# reset only the CURRENT round's progress in the snapshot
+	if cleaned_targets.has(current_track):
+		cleaned_targets[current_track] = { "weapon": "", "suspect": "", "location": "" }
+	if cleaned_history.has(current_track):
+		cleaned_history[current_track] = { "weapon": {}, "suspect": {}, "location": {} }
+	if cleaned_found.has(current_track):
+		cleaned_found[current_track] = { "weapon": {}, "suspect": {}, "location": {} }
 	
 	# package everything a new player needs to know to render the UI correctly
 	var snapshot = {
@@ -325,9 +337,9 @@ func _send_full_state_snapshot(target_id: int):
 		"wrong_guesses": wrong_guesses_in_current_track,
 		"coins": coins,
 		"time_remaining": current_time_remaining,
-		"current_targets": current_targets,
-		"phase_history": phase_history,
-		"found_cards": found_cards,
+		"current_targets": cleaned_targets,
+		"phase_history": cleaned_history,
+		"found_cards": cleaned_found,
 		"state_name": _get_current_state_name(),
 		"shop_inventory": world_node.shop.synced_item_types if world_node else [],
 		"player_info": NetworkManager.player_info,
