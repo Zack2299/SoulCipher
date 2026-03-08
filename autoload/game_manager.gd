@@ -344,7 +344,12 @@ func _send_full_state_snapshot(target_id: int):
 		"total_tracks": total_tracks,
 		"cost_multiplier": cost_multiplier,
 		"active_clues": active_world_clues,
-		"active_collectibles": active_collectibles
+		"active_collectibles": active_collectibles,
+		"active_map_reveals": active_map_reveals,
+		"pause_time_remaining": pause_time_remaining,
+		"current_shop_items": current_shop_items,
+		"current_shop_bought": current_shop_bought,
+		"match_is_active": match_is_active
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -413,6 +418,11 @@ func receive_full_state_snapshot(data: Dictionary):
 	current_targets = data["current_targets"]
 	phase_history = data["phase_history"]
 	found_cards = data["found_cards"]
+	active_map_reveals = data["active_map_reveals"]
+	pause_time_remaining = data["pause_time_remaining"]
+	current_shop_items = data["current_shop_items"]
+	current_shop_bought = data["current_shop_bought"]
+	match_is_active = data["match_is_active"]
 	
 	world_node.rebuild_player_ui()
 	
@@ -442,21 +452,54 @@ func receive_full_state_snapshot(data: Dictionary):
 			)
 
 	var local_id = multiplayer.get_unique_id()
+	var is_ghost = (local_id == ghost_id)
 
-	# trigger state machine visuals
+	## trigger state machine visuals
+	#match data["state_name"]:
+		#"ghost_turn":
+			#state_machine.change_state(_ghost_turn)
+			#if multiplayer.get_unique_id() != ghost_id:
+				#world_node.shop._spawn_synced_items()
+		#"player_turn":
+			#state_machine.change_state(_player_turn)
+			#if local_id != ghost_id:
+				#world_node.player_ui.visible = true
+		#"end_round":
+			#state_machine.change_state(_end_round)
+		#"waiting":
+			#state_machine.change_state(_state_waiting)
+			
 	match data["state_name"]:
 		"ghost_turn":
 			state_machine.change_state(_ghost_turn)
-			if multiplayer.get_unique_id() != ghost_id:
+			if !is_ghost:
 				world_node.shop._spawn_synced_items()
 		"player_turn":
 			state_machine.change_state(_player_turn)
-			if local_id != ghost_id:
-				world_node.player_ui.visible = true
 		"end_round":
 			state_machine.change_state(_end_round)
 		"waiting":
 			state_machine.change_state(_state_waiting)
+			
+	_force_ui_sync_for_late_joiner(data["state_name"], is_ghost)
+
+
+func _force_ui_sync_for_late_joiner(state_name: String, is_ghost: bool):
+	if state_name == "ghost_turn":
+		world_node.player_ui.visible = false
+		if is_ghost:
+			world_node.ghost_ui.visible = true
+			world_node.card_select.visible = true
+			world_node.card_select.start()
+		else:
+			world_node.ghost_ui.visible = false
+			world_node.shop.visible = true
+	elif state_name == "player_turn":
+		world_node.ghost_ui.visible = false
+		world_node.shop.visible = false
+		world_node.card_select.visible = false
+		if !is_ghost:
+			world_node.player_ui.visible = true
 
 
 @rpc("authority", "call_local", "reliable")
