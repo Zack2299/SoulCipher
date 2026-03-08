@@ -123,6 +123,20 @@ func _ready() -> void:
 	notify_server_loaded.rpc_id(1, my_id)
 
 
+func spawn_specific_world_clue(clue_data: Dictionary):
+	var target_room = rooms_array[clue_data["room_idx"]]
+	var new_clue = WORLD_CLUE_SCENE.instantiate()
+	target_room.add_child(new_clue)
+	
+	new_clue.add_to_group("world_clues")
+	new_clue.card_found.connect(_on_world_clue_found)
+	
+	var front_tex = load(clue_data["texture_path"])
+	new_clue.setup(new_clue.back_spritesheet, clue_data["type_index"], front_tex, Vector2.ZERO, Rect2())
+	
+	new_clue.position = Vector2(clue_data["pos_x"], clue_data["pos_y"])
+
+
 @rpc("any_peer", "call_local", "reliable")
 func notify_server_loaded(peer_id: int):
 	if not multiplayer.is_server():

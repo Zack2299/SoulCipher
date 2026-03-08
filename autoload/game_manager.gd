@@ -8,7 +8,7 @@ var world_node: World = null:
 			_connect_world_signals()
 
 
-const COIN_START_AMOUNT = 100
+const COIN_START_AMOUNT = 10
 
 # game state
 var current_track: int = 1
@@ -290,6 +290,32 @@ func _send_full_state_snapshot(target_id: int):
 		cb_submissions = world_node.crystal_ball_room_ui.submissions
 		cb_skip_state = world_node.crystal_ball_room_ui.skip_token_state
 	
+	var active_world_clues = []
+	if world_node:
+		for clue in get_tree().get_nodes_in_group("world_clues"):
+			var room_node = clue.get_parent()
+			var room_idx = world_node.rooms_array.find(room_node)
+			active_world_clues.append({
+				"texture_path": clue.front_texture.resource_path,
+				"type_index": clue.card_type,
+				"room_idx": room_idx,
+				"pos_x": clue.position.x,
+				"pos_y": clue.position.y
+			})
+	
+	var active_collectibles = []
+	if world_node:
+		for item in get_tree().get_nodes_in_group("collectibles"):
+			var room_node = item.get_parent()
+			var room_idx = world_node.rooms_array.find(room_node)
+			active_collectibles.append({
+				"item_type": item.item_type,
+				"room_idx": room_idx,
+				"pos_x": item.position.x,
+				"pos_y": item.position.y,
+				"item_name": item.name
+			})
+	
 	# package everything a new player needs to know to render the UI correctly
 	var snapshot = {
 		"current_track": current_track,
@@ -316,7 +342,9 @@ func _send_full_state_snapshot(target_id: int):
 		"player_locations": player_locations,
 		"total_rounds": total_rounds,
 		"total_tracks": total_tracks,
-		"cost_multiplier": cost_multiplier
+		"cost_multiplier": cost_multiplier,
+		"active_clues": active_world_clues,
+		"active_collectibles": active_collectibles
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -399,6 +427,19 @@ func receive_full_state_snapshot(data: Dictionary):
 	
 	world_node.coin_count_text.text = str(coins)
 	world_node.refresh_found_clues_visuals()
+	
+	if data.has("active_clues"):
+		for clue_data in data["active_clues"]:
+			world_node.spawn_specific_world_clue(clue_data)
+	
+	if data.has("active_collectibles"):
+		for c_data in data["active_collectibles"]:
+			world_node.sync_spawn_collectible(
+				c_data["item_type"], 
+				c_data["room_idx"], 
+				Vector2(c_data["pos_x"], c_data["pos_y"]), 
+				c_data["item_name"]
+			)
 
 	var local_id = multiplayer.get_unique_id()
 
