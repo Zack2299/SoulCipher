@@ -196,7 +196,7 @@ func _draw():
 			draw_circle(p, node_radius + 1.0, Color.YELLOW, false, 1.0)
 		
 		# highlighted ring around player's current room
-		if is_current_room and (not GameManager.active_map_reveals.is_empty() or GameManager.debug):
+		if is_current_room and (not GameManager.active_map_reveals.is_empty() or GameManager.debug or GameManager.show_crystal_ball_location):
 			draw_circle(p, node_radius + 1.5, Color.GREEN, false, 1.0)
 
 
