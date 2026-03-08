@@ -97,7 +97,7 @@ func refresh_cards():
 		await removal_tween.finished
 		for card in cards_to_remove:
 			if is_instance_valid(card):
-				card.queue_free()
+				card.burn_card()
 
 	# SPAWN NEW CARDS
 	var cards_needed = NUM_GHOST_CARDS
@@ -298,11 +298,11 @@ func spawn_clue_for_all(tex_path: String, room_idx: int, type_index: int):
 
 func _animate_removal(card: Card):
 	if not card: return
-	var tween = create_tween().set_parallel(true)
-	tween.tween_property(card, "modulate:a", 0.0, 0.4)
-	tween.tween_property(card, "scale", Vector2.ZERO, 0.4)
-	await tween.finished
-	card.queue_free()
+	#var tween = create_tween().set_parallel(true)
+	#tween.tween_property(card, "modulate:a", 0.0, 0.4)
+	#tween.tween_property(card, "scale", Vector2.ZERO, 0.4)
+	#await tween.finished
+	await card.burn_card()
 
 
 func _load_textures(path: String) -> Array[Texture2D]:

@@ -1,11 +1,29 @@
-[gd_scene load_steps=5 format=3 uid="uid://vod8bkhgu1tg"]
+[gd_scene load_steps=10 format=3 uid="uid://vod8bkhgu1tg"]
 
 [ext_resource type="Script" uid="uid://31uqlqntqxm0" path="res://entities/ghost_card/ghost_card.gd" id="1_541pa"]
+[ext_resource type="Shader" uid="uid://f2tq768jm3g8" path="res://entities/ghost_card/ghost_card.gdshader" id="1_uvbu0"]
 [ext_resource type="Texture2D" uid="uid://c0c7brf3376vl" path="res://assets/cards/ghost_card_frame.png" id="2_gmeba"]
 [ext_resource type="Texture2D" uid="uid://dupwwm15bk6lp" path="res://assets/cards/ghost_card_frame_mask.png" id="2_mf53t"]
 [ext_resource type="AudioStream" uid="uid://dasex35nkujyh" path="res://assets/sounds/card_flip.wav" id="2_xmul3"]
+[ext_resource type="AudioStream" uid="uid://bv1220swrmu2l" path="res://assets/sounds/u_xjrmmgxfru-burn-flesh-01-266302.mp3" id="5_i6l2h"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_i6l2h"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_i6l2h"]
+noise = SubResource("FastNoiseLite_i6l2h")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i6l2h"]
+resource_local_to_scene = true
+shader = ExtResource("1_uvbu0")
+shader_parameter/progress = 0.0
+shader_parameter/noiseForce = 0.7
+shader_parameter/noiseTexture = SubResource("NoiseTexture2D_i6l2h")
+shader_parameter/burnColor = Color(1, 0.25882354, 0, 1)
+shader_parameter/borderWidth = 0.02
+shader_parameter/direction = 180.0
 
 [node name="GhostCard" type="Sprite2D"]
+material = SubResource("ShaderMaterial_i6l2h")
 script = ExtResource("1_541pa")
 
 [node name="Hitbox" type="ColorRect" parent="."]
@@ -29,6 +47,7 @@ metadata/_edit_use_anchors_ = true
 [node name="ClueArt" type="Sprite2D" parent="MaskLayer"]
 
 [node name="CardFrame" type="NinePatchRect" parent="."]
+use_parent_material = true
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("2_gmeba")
@@ -38,6 +57,9 @@ patch_margin_top = 6
 patch_margin_right = 7
 patch_margin_bottom = 6
 metadata/_edit_use_anchors_ = true
+
+[node name="BurnAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_i6l2h")
 
 [node name="CardFlipAudioStreamPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("2_xmul3")

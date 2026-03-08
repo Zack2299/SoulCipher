@@ -8,6 +8,7 @@ signal card_selected
 @onready var clue_art: Sprite2D = $MaskLayer/ClueArt
 @onready var card_frame: NinePatchRect = $CardFrame
 @onready var card_flip_audio_stream_player: AudioStreamPlayer = $CardFlipAudioStreamPlayer
+@onready var burn_audio_stream_player: AudioStreamPlayer = $BurnAudioStreamPlayer
 
 # config
 var front_texture: Texture2D
@@ -56,6 +57,11 @@ func _ready():
 	
 	if front_texture:
 		self.name = front_texture.resource_path.get_file().get_basename()
+	
+	if material:
+		material = material.duplicate()
+		
+		update_shader_progress(-1.5)
 
 
 func setup(back_tex: Texture2D, frame_idx: int, front_tex: Texture2D, start_pos: Vector2, spawn_rect: Rect2):
@@ -87,6 +93,33 @@ func setup(back_tex: Texture2D, frame_idx: int, front_tex: Texture2D, start_pos:
 	anchor_point = start_pos
 	global_position = start_pos
 	bounds_rect = spawn_rect
+
+
+func burn_card(custom_direction: float = -1.0):
+	if is_revealed:
+		toggle_reveal(false)
+		await get_tree().create_timer(0.4).timeout
+		
+	burn_audio_stream_player.pitch_scale = randf_range(0.9, 1.1)
+	burn_audio_stream_player.play()
+	if material and material is ShaderMaterial:
+		# if no direction provided, pick a random one
+		var dir = custom_direction if custom_direction != -1.0 else randf_range(50, 130)
+		
+		material.set_shader_parameter("direction", dir)
+		
+		var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		
+		tween.tween_method(update_shader_progress, -1.5, 1.5, 1.2)
+		
+		tween.finished.connect(func(): queue_free())
+		
+		await tween.finished
+
+
+func update_shader_progress(value: float):
+	if material:
+		material.set_shader_parameter("progress", value)
 
 
 func _process(delta):
