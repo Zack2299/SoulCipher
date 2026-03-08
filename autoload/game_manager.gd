@@ -500,6 +500,8 @@ func _force_ui_sync_for_late_joiner(state_name: String, is_ghost: bool):
 		world_node.card_select.visible = false
 		if !is_ghost:
 			world_node.player_ui.visible = true
+			
+	game_just_started = false
 
 
 @rpc("authority", "call_local", "reliable")
