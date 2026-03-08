@@ -316,17 +316,15 @@ func _send_full_state_snapshot(target_id: int):
 				"item_name": item.name
 			})
 			
-	var cleaned_targets = current_targets.duplicate(true)
-	var cleaned_history = phase_history.duplicate(true)
-	var cleaned_found = found_cards.duplicate(true)
+	var snapshot_targets = current_targets.duplicate(true)
+	var snapshot_history = phase_history.duplicate(true)
 	
-	# reset only the CURRENT round's progress in the snapshot
-	if cleaned_targets.has(current_track):
-		cleaned_targets[current_track] = { "weapon": "", "suspect": "", "location": "" }
-	if cleaned_history.has(current_track):
-		cleaned_history[current_track] = { "weapon": {}, "suspect": {}, "location": {} }
-	if cleaned_found.has(current_track):
-		cleaned_found[current_track] = { "weapon": {}, "suspect": {}, "location": {} }
+	# ONLY clean the current round data if we are actively in the Ghost's selection phase AND we're the ghost
+	if _get_current_state_name() == "ghost_turn" and target_id == ghost_id:
+		if snapshot_targets.has(current_track):
+			snapshot_targets[current_track] = { "weapon": "", "suspect": "", "location": "" }
+		if snapshot_history.has(current_track):
+			snapshot_history[current_track] = { "weapon": {}, "suspect": {}, "location": {} }
 	
 	# package everything a new player needs to know to render the UI correctly
 	var snapshot = {
@@ -337,9 +335,9 @@ func _send_full_state_snapshot(target_id: int):
 		"wrong_guesses": wrong_guesses_in_current_track,
 		"coins": coins,
 		"time_remaining": current_time_remaining,
-		"current_targets": cleaned_targets,
-		"phase_history": cleaned_history,
-		"found_cards": cleaned_found,
+		"current_targets": snapshot_targets,
+		"phase_history": snapshot_history,
+		"found_cards": found_cards,
 		"state_name": _get_current_state_name(),
 		"shop_inventory": world_node.shop.synced_item_types if world_node else [],
 		"player_info": NetworkManager.player_info,
@@ -510,8 +508,7 @@ func _force_ui_sync_for_late_joiner(state_name: String, is_ghost: bool):
 		world_node.ghost_ui.visible = false
 		world_node.shop.visible = false
 		world_node.card_select.visible = false
-		if !is_ghost:
-			world_node.player_ui.visible = true
+		world_node.player_ui.visible = true
 			
 	#game_just_started = false
 
@@ -623,9 +620,6 @@ func _on_waiting_leave():
 	if local_id == ghost_id:
 		_set_ghost_ui(true)
 		world_node.card_select.start()
-		if match_is_active:
-			world_node.card_select.visible = false
-			world_node.card_select.visible = true
 	#else:
 		#_set_player_ui(false)
 
@@ -677,6 +671,7 @@ func _ghost_turn_enter():
 		world_node.shop.sync_shop_inventory.rpc(shop_items)
 
 	if game_just_started:
+		world_node.card_select.visible = false
 		for node in to_reveal: node.visible = true
 		for node in to_hide: node.visible = false
 		game_just_started = false
