@@ -115,8 +115,8 @@ func refresh_cards():
 	for child in get_children():
 		if child.has_method("setup"): 
 			if child.card_type == CardType.GHOST:
-				# don't delete held or type card
-				if child != top_card and child != current_type_card:
+				# don't delete type card
+				if child != current_type_card:
 					cards_to_remove.append(child)
 					
 					# shrink and fade
