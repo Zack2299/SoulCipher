@@ -43,8 +43,16 @@ func start():
 	if multiplayer.get_unique_id() != GameManager.ghost_id:
 		return
 	
-	_shuffle_all()
-	_broadcast_crystal_ball_data()
+	if not GameManager.is_late_joiner:
+		_shuffle_all()
+		_broadcast_crystal_ball_data()
+	else:
+		pass
+		# TODO: instead of shuffling, update available weapons/suspectsd/locations and
+		# request clues + how many times they were popped
+		
+		# manually call visibility_changed to fix bug of it not happening on first try for late joiner
+		_on_visibility_changed()
 	
 	# spawn the very first n-1 clues (visibility change spawns the nth clue)
 	for i in range(NUM_GHOST_CARDS - 1):

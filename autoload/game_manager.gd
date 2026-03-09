@@ -41,10 +41,13 @@ var ghost_powerups: Dictionary = {
 	"place_clue": 0
 }
 
+var is_late_joiner = false
+
 # config
 var debug = false
 var show_crystal_ball_location = true
 var random_ghost = true
+var make_ghost_not_server = true
 var total_rounds: int = 14
 var total_tracks: int = 3
 var max_turn_time: float = 300.0 # in seconds
@@ -252,12 +255,19 @@ func _on_peer_connected_game_logic(id: int):
 		
 		NetworkManager.rpc_load_game_scene.rpc_id(id)
 		
+		update_late_join_status.rpc_id(id)
+		
 		# check if we need a ghost
 		if ghost_id == -1:
 			print("SERVER: Assigning late joiner as NEW GHOST")
 			ghost_id = id
 			# notify everyone (including existing players) that we have a new ghost
 			sync_ghost_update.rpc(ghost_id)
+
+
+@rpc("authority", "call_remote", "reliable")
+func update_late_join_status():
+	is_late_joiner = true
 
 
 @rpc("any_peer", "call_remote", "reliable")

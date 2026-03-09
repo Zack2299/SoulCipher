@@ -196,6 +196,10 @@ func _server_initialize_match():
 	var ghost_id = 1 # server is ghost as default
 	if GameManager.random_ghost:
 		ghost_id = player_ids[randi() % player_ids.size()]
+		
+	if GameManager.make_ghost_not_server:
+		while ghost_id == 1:
+			ghost_id = player_ids[randi() % player_ids.size()]
 	
 	print("SERVER: Match starting. Ghost: ", ghost_id)
 	
