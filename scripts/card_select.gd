@@ -133,9 +133,9 @@ func refresh_cards():
 
 	# SPAWN NEW CARDS
 	var cards_needed = NUM_GHOST_CARDS
-	
-	if top_card != null:
-		cards_needed -= 1
+	#
+	#if top_card != null:
+		#cards_needed -= 1
 		
 	var spawn_tween = create_tween().set_parallel(true)
 		
