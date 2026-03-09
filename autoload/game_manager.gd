@@ -41,7 +41,10 @@ var ghost_powerups: Dictionary = {
 	"place_clue": 0
 }
 
+# late-joining status
 var is_late_joiner = false
+var ghost_deck_backup: Dictionary = {}
+var ghost_cards_popped: int = 0
 
 # config
 var debug = false
@@ -72,6 +75,10 @@ var current_targets: Dictionary = {
 	2: { "weapon": "", "suspect": "", "location": "" },
 	3: { "weapon": "", "suspect": "", "location": "" }
 }
+
+@rpc("any_peer", "call_local", "reliable")
+func popped_ghost_card():
+	ghost_cards_popped += 1
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -369,7 +376,9 @@ func _send_full_state_snapshot(target_id: int):
 		"pause_time_remaining": pause_time_remaining,
 		"current_shop_items": current_shop_items,
 		"current_shop_bought": current_shop_bought,
-		"match_is_active": match_is_active
+		"match_is_active": match_is_active,
+		"ghost_deck_backup": ghost_deck_backup,
+		"ghost_cards_popped": ghost_cards_popped
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -426,6 +435,26 @@ func receive_full_state_snapshot(data: Dictionary):
 				p_data.current_room = locations[p_id_str]
 				# emit the signal so minimaps/UI instantly update
 				p_data.room_changed.emit(p_data.current_room)
+	
+	if data.has("ghost_deck_backup") and multiplayer.get_unique_id() == data["ghost_id"]:
+		var backup = data["ghost_deck_backup"]
+		var cs = world_node.card_select
+		
+		cs.available_weapons.clear()
+		cs.available_suspects.clear()
+		cs.available_locations.clear()
+		cs.available_clues.clear()
+		
+		for path in backup["weapons"]: cs.available_weapons.append(load(path))
+		for path in backup["suspects"]: cs.available_suspects.append(load(path))
+		for path in backup["locations"]: cs.available_locations.append(load(path))
+		for path in backup["clues"]: cs.available_clues.append(load(path))
+		
+		# pop previous rounds
+		for i in range(data["current_round"] - 1):
+			cs.available_weapons.pop_front()
+			cs.available_suspects.pop_front()
+			cs.available_locations.pop_front()
 
 	# sync all data
 	current_track = data["current_track"]
@@ -443,6 +472,7 @@ func receive_full_state_snapshot(data: Dictionary):
 	current_shop_items = data["current_shop_items"]
 	current_shop_bought = data["current_shop_bought"]
 	match_is_active = data["match_is_active"]
+	ghost_cards_popped = data["ghost_cards_popped"]
 	
 	world_node.rebuild_player_ui()
 	
@@ -519,7 +549,7 @@ func _force_ui_sync_for_late_joiner(state_name: String, is_ghost: bool):
 		world_node.card_select.visible = false
 		world_node.player_ui.visible = true
 			
-	game_just_started = false
+	#game_just_started = false
 
 
 @rpc("authority", "call_local", "reliable")
@@ -711,6 +741,8 @@ func _ghost_turn_leave():
 	else:
 		to_hide.append(world_node.shop)
 		to_reveal.append(world_node.player_ui)
+		
+	game_just_started = false
 
 	SceneTransition.reveal_hide_transition(to_reveal, to_hide, 1.0)
 
@@ -757,6 +789,8 @@ func _player_turn_leave():
 		to_hide.append(world_node.player_ui)
 		to_hide.append(world_node.crystal_ball_room_ui)
 		to_hide.append(world_node.previous_room_relocator)
+
+	game_just_started = false
 
 	SceneTransition.reveal_hide_transition(to_reveal, to_hide, 1.0)
 

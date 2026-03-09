@@ -45,20 +45,43 @@ func start():
 	
 	if not GameManager.is_late_joiner:
 		_shuffle_all()
+		
+		var w_paths = _get_all_paths(available_weapons)
+		var s_paths = _get_all_paths(available_suspects)
+		var l_paths = _get_all_paths(available_locations)
+		var c_paths = _get_all_paths(available_clues)
+		
+		backup_decks_to_server.rpc_id(1, w_paths, s_paths, l_paths, c_paths)
+		
 		_broadcast_crystal_ball_data()
 	else:
-		pass
-		# TODO: instead of shuffling, update available weapons/suspectsd/locations and
-		# request clues + how many times they were popped
-		
-		# manually call visibility_changed to fix bug of it not happening on first try for late joiner
-		_on_visibility_changed()
+		# pop ghost cards that have already been used (technically not the same state but good enough)
+		for i in range(GameManager.ghost_cards_popped - NUM_GHOST_CARDS):
+			available_clues.pop_front()
 	
 	# spawn the very first n-1 clues (visibility change spawns the nth clue)
 	for i in range(NUM_GHOST_CARDS - 1):
 		add_card(CardType.GHOST, available_clues.pop_front())
 	
 	visibility_changed.connect(_on_visibility_changed)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func backup_decks_to_server(w_paths: Array, s_paths: Array, l_paths: Array, c_paths: Array):
+	if multiplayer.is_server():
+		GameManager.ghost_deck_backup = {
+			"weapons": w_paths,
+			"suspects": s_paths,
+			"locations": l_paths,
+			"clues": c_paths
+		}
+
+
+func _get_all_paths(tex_array: Array[Texture2D]) -> Array[String]:
+	var paths: Array[String] = []
+	for tex in tex_array:
+		paths.append(tex.resource_path)
+	return paths
 
 
 func _broadcast_crystal_ball_data():
@@ -217,6 +240,9 @@ func _end_ghost_selection():
 
 func add_card(type: int, texture: Texture2D) -> Card:
 	if texture == null: return null # safety check for empty decks
+	
+	if type == CardType.GHOST:
+		GameManager.popped_ghost_card.rpc_id(1)
 	
 	var sprite_pos = spawn_zone_sprite.global_position
 	var sprite_size = spawn_zone_sprite.texture.get_size() * spawn_zone_sprite.scale
