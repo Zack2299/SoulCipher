@@ -850,7 +850,8 @@ func _reset_powerups():
 
 
 func _end_round():	
-	pass
+	if world_node.player_ui.visible:
+		world_node.player_ui.visible = false
 
 
 func _reset_player_to_staircase():
