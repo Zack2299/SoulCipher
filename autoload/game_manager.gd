@@ -451,7 +451,7 @@ func receive_full_state_snapshot(data: Dictionary):
 		for path in backup["clues"]: cs.available_clues.append(load(path))
 		
 		# pop previous rounds
-		for i in range(data["current_round"] - 1):
+		for i in range(data["current_track"] - 1):
 			cs.available_weapons.pop_front()
 			cs.available_suspects.pop_front()
 			cs.available_locations.pop_front()
