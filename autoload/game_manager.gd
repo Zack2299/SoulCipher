@@ -455,6 +455,15 @@ func receive_full_state_snapshot(data: Dictionary):
 			cs.available_weapons.pop_front()
 			cs.available_suspects.pop_front()
 			cs.available_locations.pop_front()
+		
+		# pop this rounds correct guesses
+		var solved_this_track = data["solved_categories"]
+		if "weapon" in solved_this_track:
+			cs.available_weapons.pop_front()
+		if "suspect" in solved_this_track:
+			cs.available_suspects.pop_front()
+		if "location" in solved_this_track:
+			cs.available_locations.pop_front()
 
 	# sync all data
 	current_track = data["current_track"]
