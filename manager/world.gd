@@ -451,21 +451,27 @@ func refresh_found_clues_visuals():
 	clear_world_clues()
 	player_card_screen.clear_clues()
 	
-	# respawn clues on the player's card screen
-	# loop through the found_cards dictionary in GameManager
-	for phase_num in GameManager.found_cards:
-		var phase_data = GameManager.found_cards[phase_num]
-		for category in phase_data:
-			var clues_in_cat = phase_data[category]
-			for clue_path in clues_in_cat:
-				var type_index = 0
-				match category:
-					"weapon": type_index = 1
-					"suspect": type_index = 2
-					"location": type_index = 3
-				
-				# only show clues for the current track or solved categories
-				spawn_clue_to_card_screen(clue_path, type_index)
+	# safety check to ensure the dictionary has the current track
+	if not GameManager.found_cards.has(GameManager.current_track):
+		return
+		
+	# only look at the data for the active track/round
+	var current_track_data = GameManager.found_cards[GameManager.current_track]
+	
+	for category in current_track_data:
+		# skip this category entirely if it is already solved
+		if GameManager.solved_categories_in_current_track.has(category):
+			continue
+			
+		var clues_in_cat = current_track_data[category]
+		for clue_path in clues_in_cat:
+			var type_index = 0
+			match category:
+				"weapon": type_index = 1
+				"suspect": type_index = 2
+				"location": type_index = 3
+			
+			spawn_clue_to_card_screen(clue_path, type_index)
 	
 	print("WORLD: Visual clue state refreshed for new player.")
 

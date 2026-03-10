@@ -492,8 +492,6 @@ func receive_full_state_snapshot(data: Dictionary):
 	world_node.coin_count_text.text = str(coins)
 	
 	# populate the card screen with clues already found
-	world_node.refresh_found_clues_visuals()
-	
 	world_node.coin_count_text.text = str(coins)
 	world_node.refresh_found_clues_visuals()
 	
