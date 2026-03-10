@@ -733,7 +733,8 @@ func _ghost_turn_enter():
 
 
 func _ghost_turn():
-	pass
+	if world_node.player_ui.visible:
+		world_node.player_ui.visible = false
 
 
 func _ghost_turn_leave():
