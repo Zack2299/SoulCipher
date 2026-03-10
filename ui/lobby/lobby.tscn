@@ -332,7 +332,7 @@ text = "Number of Turns:"
 
 [node name="TurnLineEdit" type="LineEdit" parent="Settings/Settings/VBoxContainer/TurnContainer"]
 layout_mode = 2
-placeholder_text = "14"
+placeholder_text = "9"
 alignment = 1
 expand_to_text_length = true
 
@@ -345,7 +345,7 @@ text = "Turn Duration (in seconds):"
 
 [node name="TurnDurationLineEdit" type="LineEdit" parent="Settings/Settings/VBoxContainer/TurnDurationContainer"]
 layout_mode = 2
-placeholder_text = "300"
+placeholder_text = "240"
 alignment = 1
 expand_to_text_length = true
 

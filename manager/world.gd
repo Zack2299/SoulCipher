@@ -487,6 +487,6 @@ func rebuild_player_ui():
 		p_ui.name = "UI_" + p_data.name 
 		player_ui_hbox.add_child(p_ui)
 		p_ui.setup(p_data)
-		# Force the frame update immediately
+		# force the frame update immediately
 		if p_ui.has_node("Sprite2D"):
 			p_ui.get_node("Sprite2D").frame = p_data.avatar_id

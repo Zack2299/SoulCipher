@@ -51,9 +51,9 @@ var debug = false
 var show_crystal_ball_location = true
 var random_ghost = true
 var make_ghost_not_server = false
-var total_rounds: int = 14
+var total_rounds: int = 9
 var total_tracks: int = 3
-var max_turn_time: float = 300.0 # in seconds
+var max_turn_time: float = 240.0 # in seconds
 var num_cards = 8
 var cost_multiplier: float = 1.0
 
