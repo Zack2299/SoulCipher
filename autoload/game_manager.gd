@@ -735,6 +735,8 @@ func _ghost_turn_enter():
 func _ghost_turn():
 	if world_node.player_ui.visible:
 		world_node.player_ui.visible = false
+	if world_node.room_manager.visible:
+		world_node.room_manager.visible = false
 
 
 func _ghost_turn_leave():
