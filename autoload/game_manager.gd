@@ -45,12 +45,14 @@ var ghost_powerups: Dictionary = {
 var is_late_joiner = false
 var ghost_deck_backup: Dictionary = {}
 var ghost_cards_popped: int = 0
+var stored_phase: int = 1
+var is_reconnected_ghost: bool = false
 
 # config
 var debug = false
 var show_crystal_ball_location = true
 var random_ghost = true
-var make_ghost_not_server = false
+var make_ghost_not_server = true
 var total_rounds: int = 9
 var total_tracks: int = 3
 var max_turn_time: float = 240.0 # in seconds
@@ -269,7 +271,7 @@ func _on_peer_connected_game_logic(id: int):
 			print("SERVER: Assigning late joiner as NEW GHOST")
 			ghost_id = id
 			# notify everyone (including existing players) that we have a new ghost
-			sync_ghost_update.rpc(ghost_id)
+			sync_ghost_update.rpc(ghost_id, stored_phase)
 
 
 @rpc("authority", "call_remote", "reliable")
@@ -378,7 +380,8 @@ func _send_full_state_snapshot(target_id: int):
 		"current_shop_bought": current_shop_bought,
 		"match_is_active": match_is_active,
 		"ghost_deck_backup": ghost_deck_backup,
-		"ghost_cards_popped": ghost_cards_popped
+		"ghost_cards_popped": ghost_cards_popped,
+		"stored_phase": stored_phase
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -482,6 +485,12 @@ func receive_full_state_snapshot(data: Dictionary):
 	current_shop_bought = data["current_shop_bought"]
 	match_is_active = data["match_is_active"]
 	ghost_cards_popped = data["ghost_cards_popped"]
+	stored_phase = data["stored_phase"]
+	
+	var local_id = multiplayer.get_unique_id()
+	var is_ghost = (local_id == ghost_id)
+	if is_ghost:
+		world_node.card_select.current_phase = stored_phase
 	
 	world_node.rebuild_player_ui()
 	
@@ -507,9 +516,6 @@ func receive_full_state_snapshot(data: Dictionary):
 				Vector2(c_data["pos_x"], c_data["pos_y"]), 
 				c_data["item_name"]
 			)
-
-	var local_id = multiplayer.get_unique_id()
-	var is_ghost = (local_id == ghost_id)
 
 	## trigger state machine visuals
 	#match data["state_name"]:
@@ -560,7 +566,7 @@ func _force_ui_sync_for_late_joiner(state_name: String, is_ghost: bool):
 
 
 @rpc("authority", "call_local", "reliable")
-func sync_ghost_update(new_id: int):
+func sync_ghost_update(new_id: int, new_stored_phase = -1):
 	if world_node == null:
 		ghost_id = new_id
 		return
@@ -575,6 +581,9 @@ func sync_ghost_update(new_id: int):
 	# if I just became the ghost (due to late join)
 	if local_id == new_id:
 		if local_id == ghost_id:
+			is_reconnected_ghost = true
+			stored_phase = new_stored_phase
+			
 			print("SYSTEM: You have become the Ghost!")
 			_set_ghost_ui(true)
 			_set_player_ui(false, 0.0)

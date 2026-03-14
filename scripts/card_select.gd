@@ -28,6 +28,7 @@ var available_weapons: Array[Texture2D] = []
 var available_suspects: Array[Texture2D] = []
 var available_locations: Array[Texture2D] = []
 
+var first_time = true
 
 func _ready():
 	confirm_button.visible = false
@@ -37,7 +38,7 @@ func _ready():
 	available_weapons = _load_textures(weapons_path)
 	available_suspects = _load_textures(suspects_path)
 	available_locations = _load_textures(locations_path)
-	
+
 
 func start():
 	if multiplayer.get_unique_id() != GameManager.ghost_id:
@@ -172,6 +173,11 @@ func sync_crystal_ball_options(s_paths: Array, w_paths: Array, l_paths: Array):
 func _on_visibility_changed():
 	if visible:
 		current_phase = CardType.WEAPON
+		#if GameManager.is_reconnected_ghost:
+		if first_time:
+			current_phase = GameManager.stored_phase
+			#GameManager.is_reconnected_ghost = false
+			first_time = false
 		if multiplayer.get_unique_id() == GameManager.ghost_id:
 			_proceed_to_next_available_phase()
 
@@ -179,6 +185,9 @@ func _on_visibility_changed():
 @rpc("any_peer", "call_local", "reliable")
 func sync_ghost_phase(new_phase: int):
 	current_phase = new_phase
+	
+	#if multiplayer.is_server():
+	GameManager.stored_phase = new_phase
 
 
 func _proceed_to_next_available_phase():
