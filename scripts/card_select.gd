@@ -209,6 +209,7 @@ func _proceed_to_next_available_phase():
 	# if not solved, set up the board for this phase
 	_setup_ghost_selection_ui()
 
+
 func _setup_ghost_selection_ui():
 	var category_name = GameManager._get_category_string(current_phase)
 	var target_path = GameManager.current_targets[GameManager.current_track][category_name]
@@ -245,6 +246,7 @@ func _on_selection_confirmed():
 func _end_ghost_selection():
 	if multiplayer.get_unique_id() == GameManager.ghost_id:
 		GameManager.world_node.request_phase_change.rpc_id(1, "ghost_turn_over")
+	sync_ghost_phase(CardType.WEAPON)
 
 
 func add_card(type: int, texture: Texture2D) -> Card:
