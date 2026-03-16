@@ -621,6 +621,8 @@ func start_match(assigned_ghost_id: int):
 		return
 	match_is_active = true
 	rpc("sync_match_start", assigned_ghost_id)
+	
+	grant_ghost_powerup.rpc_id(1, "refresh_cards")
 
 
 func _on_ghost_turn_over():
