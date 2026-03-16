@@ -381,7 +381,8 @@ func _send_full_state_snapshot(target_id: int):
 		"match_is_active": match_is_active,
 		"ghost_deck_backup": ghost_deck_backup,
 		"ghost_cards_popped": ghost_cards_popped,
-		"stored_phase": stored_phase
+		"stored_phase": stored_phase,
+		"ghost_powerups": ghost_powerups
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -491,6 +492,12 @@ func receive_full_state_snapshot(data: Dictionary):
 	var is_ghost = (local_id == ghost_id)
 	if is_ghost:
 		world_node.card_select.current_phase = stored_phase
+	
+	if data.has("ghost_powerups"):
+		ghost_powerups = data["ghost_powerups"]
+		# Update the UI if this late-joiner is actually the ghost
+		if is_ghost:
+			update_ghost_ui_inventory(ghost_powerups)
 	
 	world_node.rebuild_player_ui()
 	
