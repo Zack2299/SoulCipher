@@ -2,7 +2,7 @@ extends Node2D
 
 var mansion_layout: Dictionary = {}
 
-const ORPHAN_REJECTION_THRESH = 4
+const ORPHAN_REJECTION_THRESH = 5
 
 
 func _ready() -> void:
