@@ -919,13 +919,18 @@ func full_reset():
 	current_shop_items = []
 	current_shop_bought = [false, false, false]
 	
-	# clear references
-	world_node = null 
-	ghost_id = -1
 	
 	SceneTransition.current_room = "staircase"
 	
 	# reset state machine
+	state_machine.change_state(_state_waiting)
+	
+	# clear references
+	world_node = null 
+	ghost_id = -1
+
+
+func reset_state_machine():
 	state_machine.change_state(_state_waiting)
 
 

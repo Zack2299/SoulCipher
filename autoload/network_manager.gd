@@ -13,9 +13,36 @@ func _ready():
 	multiplayer.peer_connected.connect(_on_player_connected)
 	multiplayer.peer_disconnected.connect(_on_player_disconnected)
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
+	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 	local_username = "Player"
 	local_avatar_id = randi_range(0, 7)
+
+
+func _on_server_disconnected():
+	multiplayer.multiplayer_peer = null
+	connected_ids.clear()
+	player_info.clear()
+	world_node = null
+	
+	GameManager.reset_state_machine()
+	
+	var lobby_scene = load("uid://dsfr0tf8o28ld")
+	await SceneTransition.change_scene_packed(lobby_scene, 3.0)
+	
+	SceneTransition.room_history_queue.clear()
+	SceneTransition.previous_room = "staircase"
+	SceneTransition.current_room = "staircase"
+	SceneTransition.current_room_node = null
+	
+	GameManager.full_reset()
+
+
+func _input(event: InputEvent) -> void:
+	# --- DEBUG ---
+	if event.is_action_pressed("one"):
+		if multiplayer.multiplayer_peer != null:
+			multiplayer.multiplayer_peer.close()
 
 
 func host_game(port: int):
