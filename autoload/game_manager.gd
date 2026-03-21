@@ -1005,6 +1005,11 @@ func eliminate_incorrect_clue(type: int):
 	if valid_wrong_paths.size() > 0:
 		var wrong_path = valid_wrong_paths.pick_random()
 		
+		var clue_name = wrong_path.get_file().get_basename().replace("_", " ").capitalize()
+		var msg = "'%s' was removed." % clue_name
+		
+		MessageManager.send_to_others.rpc(msg, category, -1)
+		
 		sync_round_results.rpc([], [wrong_path])
 
 

@@ -20,9 +20,9 @@ func send(text: String, type: String = "info"):
 		"error": color = Color.RED
 		"success": color = Color.GREEN
 		"warning": color = Color.YELLOW
-		"weapon": color = Color.FIREBRICK
+		"weapon": color = Color.INDIAN_RED
 		"suspect": color = Color.SKY_BLUE
-		"location": color = Color("9d2effff") # purple
+		"location": color = Color("c195ffff") # purple
 		"ghost": color = Color.LIGHT_SEA_GREEN
 	
 	msg.set_message(text, color)

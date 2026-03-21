@@ -30,7 +30,7 @@ func _on_server_disconnected():
 	var lobby_scene = load("uid://dsfr0tf8o28ld")
 	await SceneTransition.change_scene_packed(lobby_scene, 3.0)
 	
-	MessageManager.send("Lost connection to the host.", "warning")
+	MessageManager.send("Lost connection to the host.", "error")
 	
 	SceneTransition.room_history_queue.clear()
 	SceneTransition.previous_room = "staircase"
@@ -89,7 +89,7 @@ func _on_player_disconnected(id: int):
 	print("Player disconnected: %d" % id)
 	
 	var p_name = player_info.get(id, {}).get("name", "A player")
-	MessageManager.send("%s disconnected." % p_name, "warning")
+	MessageManager.send("%s disconnected." % p_name, "error")
 	
 	if multiplayer.is_server():
 		connected_ids.erase(id)

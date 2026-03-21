@@ -191,7 +191,7 @@ func _on_connection_success():
 
 
 func reset_network_buttons():
-	MessageManager.send("Failed to connect.", "warning")
+	MessageManager.send("Failed to connect.", "error")
 	host_button.visible = true
 	join_button.visible = true
 	multiplayer.multiplayer_peer = null
