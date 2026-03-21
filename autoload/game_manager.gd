@@ -108,18 +108,22 @@ func grant_ghost_powerup(powerup_name: String):
 		
 	ghost_powerups[powerup_name] += 1
 	
-	update_ghost_ui_inventory.rpc_id(ghost_id, ghost_powerups)
+	update_ghost_ui_inventory.rpc_id(ghost_id, ghost_powerups, powerup_name)
 
 
 @rpc("authority", "call_local", "reliable")
-func update_ghost_ui_inventory(new_inventory: Dictionary):
+func update_ghost_ui_inventory(new_inventory: Dictionary, newly_granted: String = ""):
 	if world_node == null: 
 		return
 		
-	if ignore_first_powerup:
-		ignore_first_powerup = false
-	else:
-		MessageManager.send("You've been granted an Ethereal Shuffle!")
+	if newly_granted != "":
+		if ignore_first_powerup:
+			ignore_first_powerup = false
+		else:
+			if newly_granted == "refresh_cards":
+				MessageManager.send("You've been granted an Ethereal Shuffle!")
+			elif newly_granted == "place_clue":
+				MessageManager.send("You've been granted a Place Clue powerup!")
 	
 	world_node.ghost_ui.update_powerup_buttons(new_inventory)
 
