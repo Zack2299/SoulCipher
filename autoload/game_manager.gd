@@ -144,7 +144,7 @@ func record_selection(phase_num: int, card_type: int, target_path: String, clue_
 
 
 @rpc("any_peer", "call_local", "reliable")
-func sync_card_found(phase_num: int, card_type: int, clue_path: String):
+func sync_card_found(phase_num: int, card_type: int, clue_path: String, finder_id: int):
 	if not multiplayer.is_server(): return 
 	
 	var category = _get_category_string(card_type)
@@ -157,15 +157,23 @@ func sync_card_found(phase_num: int, card_type: int, clue_path: String):
 	# record
 	found_cards[phase_num][category][clue_path] = true
 	
-	spawn_clue_for_all_card_screens.rpc(phase_num, card_type, clue_path)
+	spawn_clue_for_all_card_screens.rpc(phase_num, card_type, clue_path, finder_id)
 
 
 @rpc("authority", "call_local", "reliable")
-func spawn_clue_for_all_card_screens(phase_num: int, card_type: int, clue_path: String):
+func spawn_clue_for_all_card_screens(phase_num: int, card_type: int, clue_path: String, finder_id: int):
 	var category = _get_category_string(card_type)
 	found_cards[phase_num][category][clue_path] = true # keep local client dicts in sync
 	
 	world_node.spawn_clue_to_card_screen(clue_path, card_type)
+	
+	if multiplayer.is_server():
+		var p_name = NetworkManager.player_info.get(finder_id, {}).get("name", "Someone")
+		
+		var display_category = category.capitalize() 
+		var msg = "%s found the %s clue!" % [p_name, display_category]
+		
+		MessageManager.send_to_others.rpc(msg, category, finder_id)
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -582,6 +590,7 @@ func sync_ghost_update(new_id: int, new_stored_phase = -1):
 	var local_id = multiplayer.get_unique_id()
 	
 	if new_id == -1:
+		MessageManager.send("The Ghost disconnected! Waiting for a replacement...", "error")
 		print("SYSTEM: The Ghost is gone. Waiting for a replacement...")
 		return
 

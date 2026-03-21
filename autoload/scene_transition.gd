@@ -27,6 +27,8 @@ var world_node: World = null
 
 
 func _ready() -> void:
+	layer = 101
+	
 	room_history_queue.clear()
 	room_history_queue.push_front(current_room)
 	

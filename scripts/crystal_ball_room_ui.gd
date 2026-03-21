@@ -91,6 +91,25 @@ func _on_checkmark_clicked():
 func request_submit_guess(token_frame: int, texture_path: String):
 	if not multiplayer.is_server():
 		return 
+	
+	var guesser_id = multiplayer.get_remote_sender_id()
+	var player_name = NetworkManager.player_info.get(guesser_id, {}).get("name", "A player")
+	
+	var category_name = ""
+	var msg_type = ""
+	match token_frame:
+		TokenType.WEAPON: 
+			category_name = "Weapon"
+			msg_type = "weapon"
+		TokenType.SUSPECT: 
+			category_name = "Suspect"
+			msg_type = "suspect"
+		TokenType.LOCATION: 
+			category_name = "Location"
+			msg_type = "location"
+		
+	var msg = "%s locked in the %s guess..." % [player_name, category_name]
+	MessageManager.send_to_others.rpc(msg, msg_type, guesser_id)
 
 	rpc("sync_guess_submission", token_frame, texture_path)
 

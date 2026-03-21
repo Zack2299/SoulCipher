@@ -8,7 +8,6 @@ var message_scene = preload("uid://bk22f4cvnw8u")
 func _ready() -> void:
 	layer = 100
 	
-	#container.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, 20)
 	container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 
@@ -21,5 +20,16 @@ func send(text: String, type: String = "info"):
 		"error": color = Color.RED
 		"success": color = Color.GREEN
 		"warning": color = Color.YELLOW
+		"weapon": color = Color.FIREBRICK
+		"suspect": color = Color.SKY_BLUE
+		"location": color = Color("9d2effff") # purple
 	
 	msg.set_message(text, color)
+
+
+@rpc("authority", "call_local", "reliable")
+func send_to_others(text: String, type: String, exclude_id: int):
+	if multiplayer.get_unique_id() == exclude_id:
+		return
+		
+	send(text, type)

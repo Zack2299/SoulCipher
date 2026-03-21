@@ -124,7 +124,6 @@ flip_h = true
 position = Vector2(58, -138)
 
 [node name="PlayerName" type="Node2D" parent="NonSettings"]
-visible = false
 position = Vector2(0, -88)
 
 [node name="PlayerNameLineEdit" type="LineEdit" parent="NonSettings/PlayerName"]

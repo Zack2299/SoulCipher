@@ -27,6 +27,8 @@ func _on_server_disconnected():
 	
 	GameManager.reset_state_machine()
 	
+	MessageManager.send("Lost connection to the host.", "error")
+	
 	var lobby_scene = load("uid://dsfr0tf8o28ld")
 	await SceneTransition.change_scene_packed(lobby_scene, 3.0)
 	
@@ -86,6 +88,9 @@ func _on_player_connected(id: int):
 func _on_player_disconnected(id: int):
 	print("Player disconnected: %d" % id)
 	
+	var p_name = player_info.get(id, {}).get("name", "A player")
+	MessageManager.send("%s disconnected." % p_name, "error")
+	
 	if multiplayer.is_server():
 		connected_ids.erase(id)
 		player_info.erase(id)
@@ -124,6 +129,9 @@ func register_player_info(id: int, info: Dictionary):
 		player_info[id] = info
 		update_player_list.rpc(player_info)
 		sync_connected_ids.rpc(connected_ids)
+		
+		if id != 1:
+			MessageManager.send("%s joined the lobby!" % info["name"], "success")
 
 
 @rpc("authority", "call_local", "reliable")
