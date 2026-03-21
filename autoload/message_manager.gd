@@ -33,3 +33,8 @@ func send_to_others(text: String, type: String, exclude_id: int):
 		return
 		
 	send(text, type)
+
+
+func kill_all_messages():
+	for child in container.get_children():
+		child.queue_free()

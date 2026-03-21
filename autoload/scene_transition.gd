@@ -47,6 +47,8 @@ func change_scene_packed(target_scene: PackedScene, speed_scale = 3.0) -> void:
 	# change scene (deletion)
 	get_tree().change_scene_to_packed(target_scene)
 	
+	MessageManager.kill_all_messages()
+	
 	#door_audio_stream_player.play()
 	animation_player.play_backwards("fade")
 	
@@ -64,6 +66,8 @@ func change_scene_packed_first_half(target_scene: PackedScene, speed_scale = 3.0
 	
 	# change scene (deletion)
 	get_tree().change_scene_to_packed(target_scene)
+	
+	MessageManager.kill_all_messages()
 
 
 func change_scene_packed_second_half(target_scene: PackedScene, speed_scale = 3.0) -> void:
@@ -79,6 +83,8 @@ func reveal_hide_transition(reveal_elements: Array = [], hide_elements: Array = 
 	animation_player.play("fade")
 	
 	await animation_player.animation_finished
+	
+	MessageManager.kill_all_messages()
 	
 	for node in reveal_elements:
 		if is_instance_valid(node):
