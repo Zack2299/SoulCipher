@@ -762,10 +762,18 @@ func _ghost_turn_enter():
 	
 	if multiplayer.is_server():
 		var all_types = []
-		if show_crystal_ball_location:
-			all_types = [0, 1, 2, 3, 4, 7, 8] # no place a clue or crystal ball
-		else:
-			all_types = [0, 1, 2, 3, 4, 6, 7, 8] # removed 5 (place a clue)
+		if not solved_categories_in_current_track.has("weapon"):
+			all_types.append(0) # WEAPON
+		if not solved_categories_in_current_track.has("suspect"):
+			all_types.append(1) # SUSPECT
+		if not solved_categories_in_current_track.has("location"):
+			all_types.append(2) # LOCATION
+			
+		all_types.append_array([3, 4, 7, 8])
+		
+		if not show_crystal_ball_location:
+			all_types.append(6)
+			
 		all_types.shuffle()
 		
 		var shop_items = all_types.slice(0, 3)
