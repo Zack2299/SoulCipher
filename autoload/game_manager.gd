@@ -590,7 +590,7 @@ func sync_ghost_update(new_id: int, new_stored_phase = -1):
 	var local_id = multiplayer.get_unique_id()
 	
 	if new_id == -1:
-		MessageManager.send("The Ghost disconnected! Waiting for a replacement...", "error")
+		MessageManager.send("The Ghost disconnected! Waiting for a replacement...", "warning")
 		print("SYSTEM: The Ghost is gone. Waiting for a replacement...")
 		return
 

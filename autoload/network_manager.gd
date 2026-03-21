@@ -89,7 +89,7 @@ func _on_player_disconnected(id: int):
 	print("Player disconnected: %d" % id)
 	
 	var p_name = player_info.get(id, {}).get("name", "A player")
-	MessageManager.send("%s disconnected." % p_name, "error")
+	MessageManager.send("%s disconnected." % p_name, "warning")
 	
 	if multiplayer.is_server():
 		connected_ids.erase(id)
