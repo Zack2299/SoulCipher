@@ -27,10 +27,10 @@ func _on_server_disconnected():
 	
 	GameManager.reset_state_machine()
 	
-	MessageManager.send("Lost connection to the host.", "error")
-	
 	var lobby_scene = load("uid://dsfr0tf8o28ld")
 	await SceneTransition.change_scene_packed(lobby_scene, 3.0)
+	
+	MessageManager.send("Lost connection to the host.", "warning")
 	
 	SceneTransition.room_history_queue.clear()
 	SceneTransition.previous_room = "staircase"
@@ -130,8 +130,10 @@ func register_player_info(id: int, info: Dictionary):
 		update_player_list.rpc(player_info)
 		sync_connected_ids.rpc(connected_ids)
 		
-		if id != 1:
+		if id != 1 and not GameManager.match_is_active:
 			MessageManager.send("%s joined the lobby!" % info["name"], "success")
+		elif GameManager.match_is_active:
+			MessageManager.send_to_others.rpc("%s joined the game!" % info["name"], "success", id)
 
 
 @rpc("authority", "call_local", "reliable")
