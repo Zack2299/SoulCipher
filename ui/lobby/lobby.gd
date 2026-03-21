@@ -27,6 +27,9 @@ const DEFAULT_PORT = "8080"
 var ip = LOCAL_HOST
 var port = DEFAULT_PORT
 
+var retry_count = 0
+const MAX_RETRIES = 1
+
 var multiplayer_info: MultiplayerInfo
 
 func _ready() -> void:
@@ -35,6 +38,9 @@ func _ready() -> void:
 	host_button.pressed.connect(_on_host_button_pressed)
 	join_button.pressed.connect(_on_join_button_pressed)
 	start_button.pressed.connect(_on_start_button_pressed)
+	
+	multiplayer.connection_failed.connect(_on_connection_failed)
+	multiplayer.connected_to_server.connect(_on_connection_success)
 	
 	multiplayer_info = MultiplayerInfo.load_info()
 	
@@ -115,12 +121,22 @@ func _on_join_button_pressed():
 	if not validate_ip_and_port():
 		return
 	
-	NetworkManager.join_game(ip, int(port))
-	
 	host_join_audio_stream_player.play()
 	
 	host_button.visible = false
 	join_button.visible = false
+	
+	attempt_connection()
+
+
+func attempt_connection():
+	print("Attempting to connect... Try #", retry_count + 1)
+	NetworkManager.join_game(ip, int(port))
+	
+	await get_tree().create_timer(5.0).timeout
+	
+	if multiplayer.multiplayer_peer == null or multiplayer.get_unique_id() == 0:
+		_on_connection_failed()
 
 
 @rpc("authority", "call_remote", "reliable")
@@ -128,6 +144,32 @@ func sync_game_settings(tracks: int, rounds: int, multiplier: float):
 	GameManager.total_tracks = tracks
 	GameManager.total_rounds = rounds
 	GameManager.cost_multiplier = multiplier
+
+
+func _on_connection_failed():
+	if retry_count < MAX_RETRIES - 1:
+		retry_count += 1
+		print("Connection failed. Retrying in 2 seconds...")
+		
+		# clean up failed peer before trying again
+		multiplayer.multiplayer_peer = null
+		
+		await get_tree().create_timer(2.0).timeout
+		attempt_connection()
+	else:
+		print("All retry attempts failed.")
+		reset_network_buttons()
+
+
+func _on_connection_success():
+	print("Successfully connected!")
+	retry_count = 0 # reset counter
+
+
+func reset_network_buttons():
+	host_button.visible = true
+	join_button.visible = true
+	multiplayer.multiplayer_peer = null
 
 
 func _on_start_button_pressed():
