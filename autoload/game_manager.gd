@@ -86,8 +86,18 @@ func popped_ghost_card():
 
 @rpc("any_peer", "call_local", "reliable")
 func sync_ghost_room(room_name: String):
-	if multiplayer.get_remote_sender_id() == ghost_id:
+	var sender_id = multiplayer.get_remote_sender_id()
+	
+	if sender_id == ghost_id or sender_id == 1 or sender_id == 0:
 		ghost_current_room = room_name
+		
+		if multiplayer.is_server():
+			broadcast_ghost_room.rpc(room_name)
+
+
+@rpc("authority", "call_remote", "reliable")
+func broadcast_ghost_room(room_name: String):
+	ghost_current_room = room_name
 
 
 @rpc("any_peer", "call_local", "reliable")
@@ -313,6 +323,9 @@ func _on_peer_disconnected_game_logic(id: int):
 	
 	if id == ghost_id:
 		print("SERVER: FATAL - The Ghost has disconnected!")
+		
+		sync_ghost_room.rpc("staircase")
+		
 		ghost_id = -1
 		sync_ghost_update.rpc(-1)
 		# DONT end game - essentially we are on pause until a new player joins
@@ -403,7 +416,8 @@ func _send_full_state_snapshot(target_id: int):
 		"ghost_deck_backup": ghost_deck_backup,
 		"ghost_cards_popped": ghost_cards_popped,
 		"stored_phase": stored_phase,
-		"ghost_powerups": ghost_powerups
+		"ghost_powerups": ghost_powerups,
+		"ghost_current_room": ghost_current_room
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -508,6 +522,7 @@ func receive_full_state_snapshot(data: Dictionary):
 	match_is_active = data["match_is_active"]
 	ghost_cards_popped = data["ghost_cards_popped"]
 	stored_phase = data["stored_phase"]
+	ghost_current_room = data["ghost_current_room"]
 	
 	var local_id = multiplayer.get_unique_id()
 	var is_ghost = (local_id == ghost_id)
@@ -677,6 +692,7 @@ func request_end_player_turn():
 @rpc("authority", "call_local", "reliable")
 func sync_match_start(id: int):
 	ghost_id = id
+	match_is_active = true
 	state_machine.change_state(_ghost_turn)
 
 

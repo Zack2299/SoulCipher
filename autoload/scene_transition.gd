@@ -5,7 +5,7 @@ extends CanvasLayer
 @onready var woosh_audio_stream_player: AudioStreamPlayer = $WooshAudioStreamPlayer
 @onready var door_audio_stream_player: AudioStreamPlayer = $DoorAudioStreamPlayer
 
-var last_ghost_msg_time: int = 0
+var last_ghost_msg_time: int = -30000
 var ghost_msg_cooldown_ms: int = 30000 # 30 seconds
 
 var previous_room: String = "staircase"
