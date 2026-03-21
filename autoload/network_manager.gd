@@ -40,11 +40,11 @@ func _on_server_disconnected():
 	GameManager.full_reset()
 
 
-func _input(event: InputEvent) -> void:
-	# --- DEBUG ---
-	if event.is_action_pressed("one"):
-		if multiplayer.multiplayer_peer != null:
-			multiplayer.multiplayer_peer.close()
+#func _input(event: InputEvent) -> void:
+	## --- DEBUG ---
+	#if event.is_action_pressed("one"):
+		#if multiplayer.multiplayer_peer != null:
+			#multiplayer.multiplayer_peer.close()
 
 
 func host_game(port: int):
