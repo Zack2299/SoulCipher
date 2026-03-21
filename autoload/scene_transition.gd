@@ -116,6 +116,8 @@ func reveal_hide_transition(reveal_elements: Array = [], hide_elements: Array = 
 	
 	MessageManager.kill_all_messages()
 	
+	Cursor.is_hovering = false
+	
 	for node in reveal_elements:
 		if is_instance_valid(node):
 			node.visible = true

@@ -91,6 +91,7 @@ func _setup_item_data():
 
 func _on_mouse_entered():
 	if is_purchased: return
+	if GameManager.world_node.player_card_screen_is_shown: return
 	is_hovered = true
 	Cursor.is_hovering = true
 	_update_visual_state()
@@ -120,6 +121,8 @@ func _update_visual_state():
 
 func _on_input_event(_viewport, event, _shape_idx):
 	if is_purchased: return
+	
+	if GameManager.world_node.player_card_screen_is_shown: return
 	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		purchase_requested.emit(self)
