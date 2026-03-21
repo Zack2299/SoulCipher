@@ -59,6 +59,7 @@ func host_game(port: int):
 
 
 func join_game(ip_address: String, port: int):
+	peer = ENetMultiplayerPeer.new()
 	var error = peer.create_client(ip_address, port)
 	if error != OK:
 		print("Failed to join: ", error)
