@@ -138,9 +138,14 @@ func generate_mansion(rooms: Array[Node], attempt: int = 1):
 	var all_reachable = _get_true_reachable_rooms(layout_data, "staircase")
 	
 	var orphan_count = rooms.size() - all_reachable.size()
+	var missing_crystal_ball = crystal_ball_node != null and not "crystal_ball_room" in all_reachable
 	
 	# rejection sampling
-	if orphan_count >= ORPHAN_REJECTION_THRESH and attempt < 10:
+	if missing_crystal_ball:
+		print("SYSTEM: CRITICAL FAILURE - Crystal Ball Room is unreachable!")
+		generate_mansion(rooms, attempt + 1)
+		return
+	elif orphan_count >= ORPHAN_REJECTION_THRESH and attempt < 10:
 		print("SYSTEM: Attempt %d failed (%d orphans). Re-rolling mansion layout..." % [attempt, orphan_count])
 		generate_mansion(rooms, attempt + 1)
 		return
