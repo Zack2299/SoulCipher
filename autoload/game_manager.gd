@@ -36,6 +36,7 @@ var match_is_active: bool = false
 var current_shop_items: Array = []
 var current_shop_bought: Array[bool] = [false, false, false]
 var ghost_current_room: String = "staircase"
+var ignore_first_powerup = true
 
 var ghost_powerups: Dictionary = {
 	"refresh_cards": 0,
@@ -114,6 +115,11 @@ func grant_ghost_powerup(powerup_name: String):
 func update_ghost_ui_inventory(new_inventory: Dictionary):
 	if world_node == null: 
 		return
+		
+	if ignore_first_powerup:
+		ignore_first_powerup = false
+	else:
+		MessageManager.send("You've been granted an Ethereal Shuffle!")
 	
 	world_node.ghost_ui.update_powerup_buttons(new_inventory)
 
@@ -417,7 +423,8 @@ func _send_full_state_snapshot(target_id: int):
 		"ghost_cards_popped": ghost_cards_popped,
 		"stored_phase": stored_phase,
 		"ghost_powerups": ghost_powerups,
-		"ghost_current_room": ghost_current_room
+		"ghost_current_room": ghost_current_room,
+		"ignore_first_powerup": ignore_first_powerup
 	}
 	
 	receive_full_state_snapshot.rpc_id(target_id, snapshot)
@@ -523,6 +530,7 @@ func receive_full_state_snapshot(data: Dictionary):
 	ghost_cards_popped = data["ghost_cards_popped"]
 	stored_phase = data["stored_phase"]
 	ghost_current_room = data["ghost_current_room"]
+	ignore_first_powerup = data["ignore_first_powerup"]
 	
 	var local_id = multiplayer.get_unique_id()
 	var is_ghost = (local_id == ghost_id)
