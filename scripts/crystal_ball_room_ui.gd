@@ -107,8 +107,17 @@ func request_submit_guess(token_frame: int, texture_path: String):
 		TokenType.LOCATION: 
 			category_name = "Location"
 			msg_type = "location"
+			
+	var guess_name = texture_path.get_file().get_basename().replace("_", " ").capitalize()
 		
-	var msg = "%s locked in the %s guess..." % [player_name, category_name]
+	var message_options = [
+		"%s locked in '%s' as the %s...",
+		"%s has guessed '%s' for the %s...",
+		"%s selected '%s' for the %s..."
+	]
+	var selected_format = message_options.pick_random()
+	var msg = selected_format % [player_name, guess_name, category_name]
+	
 	MessageManager.send_to_others.rpc(msg, msg_type, guesser_id)
 
 	rpc("sync_guess_submission", token_frame, texture_path)

@@ -49,7 +49,7 @@ script = ExtResource("1_juhtl")
 [node name="MarginContainer" type="MarginContainer" parent="."]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
-theme_override_constants/margin_left = 10
+theme_override_constants/margin_left = 16
 theme_override_constants/margin_right = 7
 
 [node name="Label" type="Label" parent="MarginContainer"]

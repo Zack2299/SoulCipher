@@ -44,7 +44,8 @@ var noise_time: float = 0.0
 @export var repulsion_strength: float = 5.0
 @export var border_margin: float = 50.0
 @export var border_push_strength: float = 3.0
-
+@export var center_avoidance_radius: float = 120.0
+@export var center_push_strength: float = 4.0
 
 func _ready():
 	add_to_group("ghost_cards")
@@ -157,8 +158,21 @@ func _process(delta):
 		elif global_position.y > bounds_rect.end.y - border_margin:
 			border_vector.y -= (global_position.y - (bounds_rect.end.y - border_margin))
 
+	# center repulsion (so we can see the submit button)
+	var center_vector = Vector2.ZERO
+	if bounds_rect != Rect2():
+		var room_center = bounds_rect.get_center()
+		var dist_to_center = global_position.distance_to(room_center)
+		
+		if dist_to_center < center_avoidance_radius:
+			# prevent division by zero
+			if dist_to_center == 0.0:
+				center_vector = Vector2(randf_range(-1, 1), randf_range(-1, 1)).normalized() * center_avoidance_radius
+			else:
+				center_vector = (global_position - room_center).normalized() * (center_avoidance_radius - dist_to_center)
+
 	# combined movement
-	var target_pos = anchor_point + noise_offset + (separation_vector * 0.1) + (border_vector * border_push_strength)
+	var target_pos = anchor_point + noise_offset + (separation_vector * 0.1) + (border_vector * border_push_strength) + (center_vector * center_push_strength)
 	
 	# apply movement
 	var current_lerp = 25.0 if is_dragging else repulsion_strength
