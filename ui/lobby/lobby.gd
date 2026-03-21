@@ -29,6 +29,7 @@ var port = DEFAULT_PORT
 
 var retry_count = 0
 const MAX_RETRIES = 1
+var is_attempting_connection = false
 
 var multiplayer_info: MultiplayerInfo
 
@@ -120,6 +121,9 @@ func _on_host_button_pressed():
 func _on_join_button_pressed():
 	if not validate_ip_and_port():
 		return
+		
+	retry_count = 0
+	is_attempting_connection = false
 	
 	host_join_audio_stream_player.play()
 	
@@ -130,6 +134,9 @@ func _on_join_button_pressed():
 
 
 func attempt_connection():
+	if is_attempting_connection: return
+	is_attempting_connection = true
+	
 	print("Attempting to connect... Try #", retry_count + 1)
 	NetworkManager.join_game(ip, int(port))
 	
@@ -147,6 +154,9 @@ func sync_game_settings(tracks: int, rounds: int, multiplier: float):
 
 
 func _on_connection_failed():
+	if not is_attempting_connection: return 
+	is_attempting_connection = false
+	
 	if retry_count < MAX_RETRIES - 1:
 		retry_count += 1
 		print("Connection failed. Retrying in 2 seconds...")
@@ -163,6 +173,7 @@ func _on_connection_failed():
 
 func _on_connection_success():
 	print("Successfully connected!")
+	is_attempting_connection = false
 	retry_count = 0 # reset counter
 
 
