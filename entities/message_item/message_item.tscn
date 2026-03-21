@@ -1,0 +1,64 @@
+[gd_scene load_steps=5 format=3 uid="uid://bk22f4cvnw8u"]
+
+[ext_resource type="Script" uid="uid://baoabtd4ep0j7" path="res://entities/message_item/message_item.gd" id="1_juhtl"]
+
+[sub_resource type="Animation" id="Animation_lc1kx"]
+length = 5.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.46666667, 5, 5.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_juhtl"]
+resource_name = "show_message"
+length = 7.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.53333336, 6.4333334, 6.9666667),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1axj0"]
+_data = {
+&"RESET": SubResource("Animation_lc1kx"),
+&"show_message": SubResource("Animation_juhtl")
+}
+
+[node name="MessageItem" type="PanelContainer"]
+modulate = Color(1, 1, 1, 0)
+offset_right = 18.0
+offset_bottom = 20.0
+size_flags_horizontal = 0
+script = ExtResource("1_juhtl")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_right = 7
+
+[node name="Label" type="Label" parent="MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+horizontal_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_1axj0")
+}
+autoplay = "show_message"

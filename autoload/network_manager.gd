@@ -48,6 +48,7 @@ func _input(event: InputEvent) -> void:
 func host_game(port: int):
 	var error = peer.create_server(port)
 	if error != OK:
+		MessageManager.send("Failed to host.")
 		print("Failed to host: ", error)
 		return
 		
@@ -56,6 +57,8 @@ func host_game(port: int):
 	var info = {"name": local_username, "avatar": local_avatar_id}
 	register_player_info(1, info)
 	print("Server started on port %d" % port)
+	
+	MessageManager.send("Hosting on port %d" % port + ".")
 
 
 func join_game(ip_address: String, port: int):

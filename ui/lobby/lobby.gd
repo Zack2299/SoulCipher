@@ -81,10 +81,12 @@ func validate_ip_and_port() -> bool:
 	
 	if not ip.is_valid_ip_address():
 		print("Invalid IP address")
+		MessageManager.send("Invalid IP address.")
 		return false
 
 	if not port.is_valid_int():
 		print("Invalid port")
+		MessageManager.send("Invalid port.")
 		return false
 	
 	multiplayer_info.write_info()
