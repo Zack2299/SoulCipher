@@ -20,6 +20,7 @@ extends Node2D
 @onready var cost_line_edit: LineEdit = $Settings/Settings/VBoxContainer/CostContainer/CostLineEdit
 @onready var turn_duration_line_edit: LineEdit = $Settings/Settings/VBoxContainer/TurnDurationContainer/TurnDurationLineEdit
 @onready var lead_line_edit: LineEdit = $Settings/Settings/VBoxContainer/LeadContainer/LeadLineEdit
+@onready var player_name_line_edit: LineEdit = $NonSettings/PlayerName/PlayerNameLineEdit
 
 const NUM_AVATARS = 8
 const LOCAL_HOST = "127.0.0.1"
@@ -50,6 +51,8 @@ func _ready() -> void:
 	
 	port_line_edit.placeholder_text = multiplayer_info.last_used_port
 	ip_line_edit.placeholder_text = multiplayer_info.last_used_ip
+	player_name_line_edit.placeholder_text = multiplayer_info.last_used_name
+	
 
 
 func save_settings():
@@ -78,6 +81,12 @@ func validate_ip_and_port() -> bool:
 	else:
 		port = port_line_edit.text
 		multiplayer_info.last_used_port = port
+	
+	if player_name_line_edit.text.is_empty():
+		NetworkManager.local_username = multiplayer_info.last_used_name
+	else:
+		multiplayer_info.last_used_name = NetworkManager.local_username
+		
 	
 	if not ip.is_valid_ip_address():
 		print("Invalid IP address")
@@ -139,6 +148,7 @@ func attempt_connection():
 	if is_attempting_connection: return
 	is_attempting_connection = true
 	
+	MessageManager.send("Connecting...")
 	print("Attempting to connect... Try #", retry_count + 1)
 	NetworkManager.join_game(ip, int(port))
 	
@@ -175,11 +185,13 @@ func _on_connection_failed():
 
 func _on_connection_success():
 	print("Successfully connected!")
+	MessageManager.send("Successfully connected!", "success")
 	is_attempting_connection = false
 	retry_count = 0 # reset counter
 
 
 func reset_network_buttons():
+	MessageManager.send("Failed to connect.", "warning")
 	host_button.visible = true
 	join_button.visible = true
 	multiplayer.multiplayer_peer = null
