@@ -5,6 +5,9 @@ extends CanvasLayer
 @onready var woosh_audio_stream_player: AudioStreamPlayer = $WooshAudioStreamPlayer
 @onready var door_audio_stream_player: AudioStreamPlayer = $DoorAudioStreamPlayer
 
+var last_ghost_msg_time: int = 0
+var ghost_msg_cooldown_ms: int = 30000 # 30 seconds
+
 var previous_room: String = "staircase"
 var current_room: String = "staircase":
 	set(value):
@@ -15,6 +18,12 @@ var current_room: String = "staircase":
 		else:
 			if world_node:
 				world_node.hide_crystal_ball_room_ui()
+				
+		if multiplayer.get_unique_id() == GameManager.ghost_id:
+			GameManager.sync_ghost_room.rpc(current_room)
+		elif GameManager.match_is_active and multiplayer.get_unique_id() != GameManager.ghost_id:
+			if current_room != "staircase" and current_room == GameManager.ghost_current_room:
+				_trigger_ghost_room_flavor_text()
 var current_room_node: Node
 
 
@@ -34,6 +43,27 @@ func _ready() -> void:
 	
 	previous_room = "staircase"
 	current_room = "staircase"
+
+
+func _trigger_ghost_room_flavor_text():
+	var current_time = Time.get_ticks_msec()
+	
+	if current_time - last_ghost_msg_time < ghost_msg_cooldown_ms:
+		return # hasnt been long enough
+		
+	last_ghost_msg_time = current_time
+	
+	var flavor_texts = [
+		"A sudden drop in temperature sends a shiver down your spine...",
+		"The air feels heavy here. You are not alone.",
+		"You hear a faint, unsettling whisper just out of earshot...",
+		"A freezing, unseen breath grazes the back of your neck...",
+		"A creeping dread washes over you as you enter the room."
+	]
+	
+	var msg = flavor_texts.pick_random()
+	
+	MessageManager.send(msg, "ghost")
 
 
 func change_scene_packed(target_scene: PackedScene, speed_scale = 3.0) -> void:

@@ -35,6 +35,7 @@ var pause_time_length: float = 60.0
 var match_is_active: bool = false
 var current_shop_items: Array = []
 var current_shop_bought: Array[bool] = [false, false, false]
+var ghost_current_room: String = "staircase"
 
 var ghost_powerups: Dictionary = {
 	"refresh_cards": 0,
@@ -81,6 +82,12 @@ var current_targets: Dictionary = {
 @rpc("any_peer", "call_local", "reliable")
 func popped_ghost_card():
 	ghost_cards_popped += 1
+
+
+@rpc("any_peer", "call_local", "reliable")
+func sync_ghost_room(room_name: String):
+	if multiplayer.get_remote_sender_id() == ghost_id:
+		ghost_current_room = room_name
 
 
 @rpc("any_peer", "call_local", "reliable")
