@@ -85,6 +85,9 @@ func popped_ghost_card():
 
 @rpc("any_peer", "call_local", "reliable")
 func grant_ghost_powerup(powerup_name: String):
+	if not multiplayer.is_server(): 
+		return
+		
 	ghost_powerups[powerup_name] += 1
 	
 	update_ghost_ui_inventory.rpc_id(ghost_id, ghost_powerups)
@@ -108,6 +111,9 @@ func request_consume_powerup(powerup_name: String):
 		update_ghost_ui_inventory.rpc_id(ghost_id, ghost_powerups)
 		
 		_execute_powerup_effect(powerup_name)
+		
+		var msg = "The spiritual energy in the mansion shifts..."
+		MessageManager.send_to_others.rpc(msg, "ghost", GameManager.ghost_id)
 
 
 func _execute_powerup_effect(powerup_name: String):

@@ -23,6 +23,7 @@ func send(text: String, type: String = "info"):
 		"weapon": color = Color.FIREBRICK
 		"suspect": color = Color.SKY_BLUE
 		"location": color = Color("9d2effff") # purple
+		"ghost": color = Color.LIGHT_SEA_GREEN
 	
 	msg.set_message(text, color)
 
