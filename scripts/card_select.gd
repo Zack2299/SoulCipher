@@ -40,9 +40,11 @@ func _ready():
 	available_locations = _load_textures(locations_path)
 
 
-func start():
+func start(is_late_joiner: bool = false):
 	if multiplayer.get_unique_id() != GameManager.ghost_id:
 		return
+		
+	if is_late_joiner: GameManager.is_late_joiner = true # ensure we received that we're a late joiner
 	
 	if not GameManager.is_late_joiner:
 		_shuffle_all()

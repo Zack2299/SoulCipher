@@ -646,7 +646,7 @@ func sync_ghost_update(new_id: int, new_stored_phase = -1):
 			
 			if state_machine.current_state == "_ghost_turn":
 				world_node.card_select.visible = true
-				world_node.card_select.start() 
+				world_node.card_select.start(true)
 				
 		else:
 			# I am not the ghost (anymore, or never was)
