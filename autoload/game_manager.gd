@@ -986,6 +986,8 @@ func full_reset():
 	# clear references
 	world_node = null 
 	ghost_id = -1
+	
+	ignore_first_powerup = true
 
 
 func reset_state_machine():
